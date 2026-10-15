@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Archivo de recursos de texto de la aplicación.
+    Almacena las cadenas de texto del sistema traducibles y reutilizables.
+-->
+<resources>
+    <!-- Nombre público de la aplicación en el sistema Android -->
+    <string name="app_name">AppRestaurante</string>
+</resources>
