@@ -82,6 +82,8 @@ Pantallas que tenemos que maquetar:
 * Notificaciones
 * Perfil y configuración del local.
 
+Las pantallas las estamos haciendo con figma con el agente de IA que viene integrado.
+
 —-----------------------
 
 **REQUERIMIENTOS FUNCIONALES**
