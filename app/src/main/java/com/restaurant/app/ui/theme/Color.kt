@@ -2,25 +2,32 @@ package com.restaurant.app.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-/**
- * Paleta de colores oficial de la aplicación del restaurante.
- * Define la identidad cromática utilizada en temas, botones, textos y componentes.
- */
-
-// Color primario de la marca (Tono terracota distintivo)
-val TerracottaPrimary = Color(0xFFBD4A18)
-
-// Color para elementos situados sobre el color primario (ej. texto blanco sobre botón terracota)
+// Primario: terracota vibrante
+val TerracottaPrimary = Color(0xFFC2541B)
 val OnTerracottaPrimary = Color(0xFFFFFFFF)
+val TerracottaContainer = Color(0xFFFFDBCB)
+val OnTerracottaContainer = Color(0xFF3A1100)
 
-// Colores de fondo y superficie (Tono cálido hueso para dar calidez al diseño)
-val BackgroundWarm = Color(0xFFFBF8F5)
-val SurfaceWarm = Color(0xFFFFFFFF)
+// Secundario: verde oliva
+val OliveSecondary = Color(0xFF6B7A3A)
+val OnOliveSecondary = Color(0xFFFFFFFF)
+val OliveContainer = Color(0xFFE3EBC0)
+val OnOliveContainer = Color(0xFF1C2400)
 
-// Jerarquía de colores para tipografía
-val TextPrimary = Color(0xFF1E1E1E)   // Texto principal de alto contraste (títulos)
-val TextSecondary = Color(0xFF6E6E6E) // Texto secundario (subtítulos y descripciones)
-val TextTertiary = Color(0xFF9E9E9E)  // Texto de menor jerarquía (pie de página, versiones)
+// Fondo y superficies: crema cálido
+val BackgroundCream = Color(0xFFFFFBF8)
+val SurfaceWhite = Color(0xFFFFFFFF)
 
-// Color de acento de marca (Verde hojita / detalle ecológico)
-val BrandGreen = Color(0xFF4A7C59)
+// Texto
+val TextPrimary = Color(0xFF1E1E1E)
+val TextSecondary = Color(0xFF6E6E6E)
+val TextTertiary = Color(0xFF9E9E9E)
+
+// Bordes
+val OutlineSoft = Color(0xFFE6DDD6)
+
+// Error
+val ErrorRed = Color(0xFFBA1A1A)
+
+// Degradé del Splash (sale del fondo hacia un crema-rosado)
+val SplashGradientBottom = Color(0xFFFCE9E0)

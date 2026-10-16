@@ -5,5 +5,11 @@
 -->
 <resources>
     <!-- Nombre público de la aplicación en el sistema Android -->
-    <string name="app_name">AppRestaurante</string>
+    <string name="app_name">MesaPro</string>
+    <string name="splash_tagline">Tu restaurante, en buenas manos.</string>
+    <string name="splash_description">Más tiempo para lo que importa.\nEl sabor de hacer las cosas bien.</string>
+    <string name="splash_footer_seal">HECHO PARA TU RESTAURANTE</string>
+    <string name="splash_version">Versión %1$s</string>
+    <string name="cd_brand_logo">Logo del restaurante</string>
+    <string name="cd_eco_seal">Sello ecológico</string>
 </resources>

@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    Definición del tema nativo para Android Manifest.
-    Configura el estilo base sin barra superior (NoActionBar) para dar paso a Jetpack Compose.
--->
 <resources>
-    <style name="Theme.AppRestaurante" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.AppRestaurante" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">#FFFBF8</item>
+    </style>
 </resources>

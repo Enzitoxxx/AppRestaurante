@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.restaurant.app.ui.features.splash.SplashScreen
+import com.restaurant.app.ui.navigation.AppNavHost
 import com.restaurant.app.ui.theme.AppTheme
 
 /**
@@ -28,10 +29,8 @@ class MainActivity : ComponentActivity() {
 
         // Asigna la jerarquía de composables como contenido principal de la pantalla
         setContent {
-            // Envuelve la interfaz con la paleta de colores y tipografía del tema
             AppTheme {
-                // Muestra la pantalla de bienvenida (Splash Screen) al iniciar la app
-                SplashScreen()
+                AppNavHost()
             }
         }
     }
