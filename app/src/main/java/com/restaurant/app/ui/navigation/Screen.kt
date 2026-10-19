@@ -1,6 +1,17 @@
 package com.restaurant.app.ui.navigation
 
-sealed class Screen(val route: String) {
-    data object Splash : Screen("splash")
-    data object Login : Screen("login")
+import androidx.navigation3.runtime.NavKey
+import kotlinx.serialization.Serializable
+
+@Serializable
+sealed interface Screen : NavKey {
+
+    @Serializable
+    data object Splash : Screen
+
+    @Serializable
+    data object Login : Screen
+
+    @Serializable
+    data object Home : Screen   // provisorio, hasta armar el panel del administrador
 }

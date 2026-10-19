@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Archivo de recursos de texto de la aplicación.
-    Almacena las cadenas de texto del sistema traducibles y reutilizables.
+    Por ahora los datos van a ser estaticos. Una vez que desarrollemos las base de datos
+    van a pasar a ser dinamicos. Por ahora no.
 -->
 <resources>
     <!-- Nombre público de la aplicación en el sistema Android -->
@@ -12,4 +12,19 @@
     <string name="splash_version">Versión %1$s</string>
     <string name="cd_brand_logo">Logo del restaurante</string>
     <string name="cd_eco_seal">Sello ecológico</string>
+
+    <!-- Login -->
+    <string name="login_title">Iniciar sesión</string>
+    <string name="login_subtitle">Administración · La Buena Mesa</string>
+    <string name="login_email_label">Correo electrónico</string>
+    <string name="login_password_label">Contraseña</string>
+    <string name="login_forgot_password">Olvidé mi contraseña</string>
+    <string name="login_button">Ingresar</string>
+    <string name="login_no_account">¿No tenés una cuenta?</string>
+    <string name="login_register">Registrate</string>
+    <string name="login_error_email_required">Ingresá tu correo electrónico</string>
+    <string name="login_error_email_invalid">El correo no es válido</string>
+    <string name="login_error_password_required">Ingresá tu contraseña</string>
+    <string name="cd_show_password">Mostrar contraseña</string>
+    <string name="cd_hide_password">Ocultar contraseña</string>
 </resources>

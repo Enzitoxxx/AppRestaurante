@@ -17,6 +17,10 @@ val AppTypography = Typography(
         fontFamily = Roboto, fontWeight = FontWeight.ExtraBold,
         fontSize = 28.sp, lineHeight = 34.sp
     ),
+    headlineSmall = TextStyle(                      // NUEVO para el login
+        fontFamily = Roboto, fontWeight = FontWeight.ExtraBold,
+        fontSize = 24.sp, lineHeight = 30.sp
+    ),
     titleLarge = TextStyle(
         fontFamily = Roboto, fontWeight = FontWeight.Bold,
         fontSize = 22.sp, lineHeight = 28.sp
@@ -41,4 +45,5 @@ val AppTypography = Typography(
         fontFamily = Roboto, fontWeight = FontWeight.Medium,
         fontSize = 11.sp, lineHeight = 16.sp, letterSpacing = 0.5.sp
     )
+
 )

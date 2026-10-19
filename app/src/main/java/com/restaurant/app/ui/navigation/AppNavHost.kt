@@ -1,31 +1,48 @@
 package com.restaurant.app.ui.navigation
 
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberNavBackStack
+import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
+import androidx.navigation3.ui.NavDisplay
+import com.restaurant.app.ui.features.login.LoginScreen
 import com.restaurant.app.ui.features.splash.SplashScreen
 
 @Composable
-fun AppNavHost(
-    navController: NavHostController = rememberNavController()
-) {
-    NavHost(
-        navController = navController,
-        startDestination = Screen.Splash.route
-    ) {
-        composable(Screen.Splash.route) {
-            SplashScreen(
-                onFinished = {
-                    navController.navigate(Screen.Login.route) {
-                        popUpTo(Screen.Splash.route) { inclusive = true }
+fun AppNavHost() {
+    val backStack = rememberNavBackStack(Screen.Splash)
+
+    NavDisplay(
+        backStack = backStack,
+        onBack = { backStack.removeLastOrNull() },
+        entryDecorators = listOf(
+            rememberSaveableStateHolderNavEntryDecorator(),
+            rememberViewModelStoreNavEntryDecorator()
+        ),
+        entryProvider = entryProvider {
+            entry<Screen.Splash> {
+                SplashScreen(
+                    onFinished = {
+                        backStack.add(Screen.Login)
+                        backStack.remove(Screen.Splash)
                     }
-                }
-            )
+                )
+            }
+            entry<Screen.Login> {
+                LoginScreen(
+                    onLoginSuccess = {
+                        backStack.clear()               // no se vuelve al Login con "atrás"
+                        backStack.add(Screen.Home)
+                    },
+                    onForgotPasswordClick = { /* TODO: Screen.ForgotPassword */ },
+                    onRegisterClick = { /* TODO: Screen.Register */ }
+                )
+            }
+            entry<Screen.Home> {
+                Text("Home (pendiente)")   // provisorio
+            }
         }
-        composable(Screen.Login.route) {
-            // Pantalla de Login: se agrega después
-        }
-    }
+    )
 }

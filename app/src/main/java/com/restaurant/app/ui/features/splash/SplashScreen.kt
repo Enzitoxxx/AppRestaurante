@@ -37,7 +37,6 @@ fun SplashScreen(
     SplashContent(state)
 }
 
-/** Solo dibuja la UI a partir del estado. Sin ViewModel, fácil de previsualizar. */
 @Composable
 fun SplashContent(
     state: SplashUiState,
