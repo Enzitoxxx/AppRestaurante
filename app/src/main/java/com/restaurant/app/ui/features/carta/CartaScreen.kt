@@ -1,22 +1,20 @@
 package com.restaurant.app.ui.features.carta
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -41,6 +39,7 @@ import com.restaurant.app.ui.theme.AppTheme
 @Composable
 fun CartaScreen(
     onAgregarProductoClick: () -> Unit,
+    onEditarProductoClick: (Producto) -> Unit = {},
     viewModel: CartaViewModel = viewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -49,6 +48,7 @@ fun CartaScreen(
         viewModel.events.collect { event ->
             when (event) {
                 CartaEvent.NavegarAAgregarProducto -> onAgregarProductoClick()
+                is CartaEvent.NavegarAEditarProducto -> onEditarProductoClick(event.producto)
             }
         }
     }
@@ -58,7 +58,11 @@ fun CartaScreen(
         onBusquedaChange = viewModel::onBusquedaChange,
         onCategoriaSeleccionada = viewModel::onCategoriaChange,
         onToggleDisponibilidadProducto = viewModel::onToggleDisponibilidadProducto,
-        onAgregarProductoClick = viewModel::onAgregarProductoClick
+        onAgregarProductoClick = viewModel::onAgregarProductoClick,
+        onEditarProductoClick = viewModel::onEditarProductoClick,
+        onSolicitarBajaProducto = viewModel::onSolicitarBajaProducto,
+        onCancelarBajaProducto = viewModel::onCancelarBajaProducto,
+        onConfirmarBajaProducto = viewModel::onConfirmarBajaProducto
     )
 }
 
@@ -73,10 +77,14 @@ fun CartaContent(
     onCategoriaSeleccionada: (String) -> Unit,
     onToggleDisponibilidadProducto: (String) -> Unit,
     onAgregarProductoClick: () -> Unit,
+    onEditarProductoClick: (Producto) -> Unit = {},
+    onSolicitarBajaProducto: (Producto) -> Unit = {},
+    onCancelarBajaProducto: () -> Unit = {},
+    onConfirmarBajaProducto: () -> Unit = {},
     onNavegarA: (NavegacionItem) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
-    Scaffold (
+    Scaffold(
         bottomBar = {
             AppBottomBar(
                 rutaActual = "carta",
@@ -87,7 +95,7 @@ fun CartaContent(
         Column(
             modifier = modifier
                 .fillMaxSize()
-                .padding(innerPadding) // Aplica el espacio automático para que la barra no tape el último elemento
+                .padding(innerPadding)
                 .padding(horizontal = 20.dp, vertical = 16.dp)
         ) {
             // 1. Encabezado "Carta & Menú" + Botón Naranja '+'
@@ -124,10 +132,44 @@ fun CartaContent(
                 ) { producto ->
                     CartaItemCard(
                         producto = producto,
-                        onToggleDisponibilidad = onToggleDisponibilidadProducto
+                        onToggleDisponibilidad = onToggleDisponibilidadProducto,
+                        onEditarClick = onEditarProductoClick,
+                        onBajaClick = onSolicitarBajaProducto
                     )
                 }
             }
+        }
+
+        // Diálogo Emergente (AlertDialog) de Confirmación para Baja Lógica
+        state.productoADarDeBaja?.let { producto ->
+            AlertDialog(
+                onDismissRequest = onCancelarBajaProducto,
+                title = {
+                    Text(
+                        text = "¿Dar de baja producto?",
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                },
+                text = {
+                    Text(
+                        text = "¿Estás seguro de dar de baja \"${producto.nombre}\"? Dejará de mostrarse en la carta y comandas.",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                },
+                confirmButton = {
+                    TextButton(onClick = onConfirmarBajaProducto) {
+                        Text(
+                            text = "Dar de baja",
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = onCancelarBajaProducto) {
+                        Text(text = "Cancelar")
+                    }
+                }
+            )
         }
     }
 }

@@ -18,10 +18,12 @@ fun AppTextField(
     label: String,
     value: String,
     onValueChange: (String) -> Unit,
-    leadingIcon: ImageVector,
     modifier: Modifier = Modifier,
+    leadingIcon: ImageVector? = null, //  es opcional
     errorText: String? = null,
     enabled: Boolean = true,
+    singleLine: Boolean = true,       // puede soportar multilinea
+    minLines: Int = 1,
     trailingContent: (@Composable () -> Unit)? = null,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
@@ -34,10 +36,11 @@ fun AppTextField(
         onValueChange = onValueChange,
         modifier = modifier.fillMaxWidth(),
         enabled = enabled,
-        singleLine = true,
+        singleLine = singleLine,
+        minLines = minLines,
         label = { Text(label) },
-        leadingIcon = {
-            Icon(imageVector = leadingIcon, contentDescription = null)
+        leadingIcon = leadingIcon?.let { icon ->
+            { Icon(imageVector = icon, contentDescription = null) }
         },
         trailingIcon = trailingContent,
         isError = errorText != null,

@@ -10,6 +10,7 @@ import androidx.navigation3.ui.NavDisplay
 import com.restaurant.app.ui.features.carta.CartaScreen
 import com.restaurant.app.ui.features.forgotpassword.ForgotPasswordScreen
 import com.restaurant.app.ui.features.login.LoginScreen
+import com.restaurant.app.ui.features.producto.ProductoScreen
 import com.restaurant.app.ui.features.registro.RegistroScreen
 import com.restaurant.app.ui.features.splash.SplashScreen
 
@@ -45,7 +46,17 @@ fun AppNavHost() {
             }
 
             entry<Screen.Home> {
-                Text("Home (pendiente)")   // provisorio
+                Text("Home (pendiente)")   // provisorio, para armar la pantalla del administrador
+                /*
+                CartaScreen(
+                    onAgregarProductoClick = {
+                        backStack.add(Screen.ProductoForm()) // Abre Alta de producto
+                    },
+                    onEditarProductoClick = { producto ->
+                        backStack.add(Screen.ProductoForm(productoId = producto.id)) // Abre Edición de producto
+                    }
+                )
+                */
             }
 
             entry<Screen.Registro> {
@@ -67,11 +78,22 @@ fun AppNavHost() {
                 )
             }
 
+            //Pantalla de carta
             entry<Screen.Carta> {
                 CartaScreen(
                     onAgregarProductoClick = {
-                        // TODO: Navegar a pantalla Alta de Producto (ej: Screen.AgregarProducto)
-                    }
+                        backStack.add(Screen.ProductoForm()) //Pasa/ navega al modo Alta
+                    },
+                    onEditarProductoClick = {producto -> backStack.add(Screen.ProductoForm(productoId = producto.id))} //Pasa/navega al modo Edicion
+                )
+            }
+
+            //Pantalla de Alta / Edicion
+            entry<Screen.ProductoForm> { key ->
+                ProductoScreen(
+                    productoId = key.productoId,
+                    onVolverClick = { backStack.removeLastOrNull() },
+                    onProductoGuardado = { backStack.removeLastOrNull() }
                 )
             }
         }

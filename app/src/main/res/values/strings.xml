@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Por ahora los datos van a ser estaticos. Una vez que desarrollemos las base de datos
-    van a pasar a ser dinamicos. Por ahora no.
-
+    Si yo quiero cambiar un nombre, ejemplo: El nombre de la aplicacion, vengo y cambio solamente
+    <string name="app_name">...</string> y ya se va cambiar.
     Cada clave se lee así:
      pantalla + _ + qué es + _ + detalle.
 -->
@@ -65,4 +64,19 @@
     <string name="carta_categoria_postres">Postres</string>
     <string name="carta_cd_agregar_producto">Agregar producto</string>
 
+    <!-- Alta / Edición Producto -->
+    <string name="producto_nuevo_titulo">Nuevo producto</string>
+    <string name="producto_editar_titulo">Editar producto</string>
+    <string name="producto_boton_guardar">Guardar</string>
+    <string name="producto_label_nombre">NOMBRE DEL ÍTEM</string>
+    <string name="producto_label_descripcion">DESCRIPCIÓN</string>
+    <string name="producto_label_precio">PRECIO ($ ARS)</string>
+    <string name="producto_label_categoria">CATEGORÍA</string>
+    <string name="producto_label_area">ÁREA DE PREPARACIÓN</string>
+    <string name="producto_area_cocina">Cocina</string>
+    <string name="producto_area_barra">Barra</string>
+    <string name="producto_disponible_titulo">Disponible para la venta</string>
+    <string name="producto_disponible_subtitulo">Aparecerá en la carta digital y comandas</string>
+    <string name="producto_error_nombre_requerido">Ingresá el nombre del producto</string>
+    <string name="producto_error_precio_requerido">Ingresá el precio del producto</string>
 </resources>

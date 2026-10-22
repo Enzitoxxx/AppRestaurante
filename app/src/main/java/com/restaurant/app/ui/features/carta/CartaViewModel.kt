@@ -11,8 +11,8 @@ import kotlinx.coroutines.flow.update
 
 class CartaViewModel : ViewModel() {
 
-    private  val _uiState = MutableStateFlow(CartaUiState())
-    val uiState : StateFlow<CartaUiState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(CartaUiState())
+    val uiState: StateFlow<CartaUiState> = _uiState.asStateFlow()
 
     private val _events = Channel<CartaEvent>(Channel.BUFFERED)
     val events = _events.receiveAsFlow()
@@ -21,12 +21,11 @@ class CartaViewModel : ViewModel() {
         cargarProductosFicticios()
     }
 
-    private fun cargarProductosFicticios(){
-
+    private fun cargarProductosFicticios() {
         val listaFicticia = listOf(
             Producto(
                 id = "1",
-                nombre = "Empanada de carne",
+                nombre = "Empanadas de carne",
                 categoria = "Entradas",
                 area = "Cocina",
                 precio = 2200.0,
@@ -35,14 +34,14 @@ class CartaViewModel : ViewModel() {
             Producto(
                 id = "2",
                 nombre = "Bife de chorizo con papas",
-                categoria = "Plato principales",
+                categoria = "Platos principales",
                 area = "Cocina",
                 precio = 14800.0,
                 estadoDisponible = true
             ),
             Producto(
                 id = "3",
-                nombre = "Cerveza IPA",
+                nombre = "Cerveza IPA Artesanal",
                 categoria = "Bebidas",
                 area = "Bar",
                 precio = 3500.0,
@@ -51,32 +50,32 @@ class CartaViewModel : ViewModel() {
             ),
             Producto(
                 id = "4",
-                nombre = "Flan casero",
-                categoria = "Postre",
+                nombre = "Flan casero mixto",
+                categoria = "Postres",
                 area = "Cocina",
                 precio = 3200.0,
                 estadoDisponible = true
-            ),
+            )
         )
         _uiState.update { it.copy(productos = listaFicticia) }
     }
 
-    //Funciones para actualizar el estado segun la interaccion del usuario
+    // Funciones de estado e interacción del usuario
 
-    fun onBusquedaChange(nuevaBusqueda : String){
+    fun onBusquedaChange(nuevaBusqueda: String) {
         _uiState.update { it.copy(busqueda = nuevaBusqueda) }
     }
 
-    fun onCategoriaChange(categoria : String){
+    fun onCategoriaChange(categoria: String) {
         _uiState.update { it.copy(categoriaSeleccionada = categoria) }
     }
 
-    fun onToggleDisponibilidadProducto(productoId : String){
+    fun onToggleDisponibilidadProducto(productoId: String) {
         _uiState.update { state ->
             val productosActualizados = state.productos.map { producto ->
-                if (producto.id == productoId){
+                if (producto.id == productoId) {
                     producto.copy(estadoDisponible = !producto.estadoDisponible)
-                }else{
+                } else {
                     producto
                 }
             }
@@ -84,7 +83,31 @@ class CartaViewModel : ViewModel() {
         }
     }
 
-    fun onAgregarProductoClick(){
+    fun onAgregarProductoClick() {
         _events.trySend(CartaEvent.NavegarAAgregarProducto)
+    }
+
+    fun onEditarProductoClick(producto: Producto) {
+        _events.trySend(CartaEvent.NavegarAEditarProducto(producto))
+    }
+
+    fun onSolicitarBajaProducto(producto: Producto) {
+        _uiState.update { it.copy(productoADarDeBaja = producto) }
+    }
+
+    fun onCancelarBajaProducto() {
+        _uiState.update { it.copy(productoADarDeBaja = null) }
+    }
+
+    fun onConfirmarBajaProducto() {
+        val productoAEliminar = _uiState.value.productoADarDeBaja ?: return
+
+        _uiState.update { state ->
+            val listaSinProducto = state.productos.filterNot { it.id == productoAEliminar.id }
+            state.copy(
+                productos = listaSinProducto,
+                productoADarDeBaja = null
+            )
+        }
     }
 }

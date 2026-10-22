@@ -16,13 +16,22 @@ sealed interface Screen : NavKey {
     data object Registro : Screen //Le dice a la app que existe una pantalla mas, en este caso la pantalla del registro
 
     @Serializable
+    data object ForgotPassword : Screen
+    @Serializable
     data object Home : Screen   // provisorio, hasta armar el panel del administrador
 
     @Serializable
     data object Carta : Screen
 
+    /*
+       Si productoId == null ➔ Modo Alta ("Nuevo producto").
+       Si productoId trae un ID ➔ Modo Edición ("Editar producto").
+    */
     @Serializable
-    data object ForgotPassword : Screen
+    data class ProductoForm(
+        val productoId: String? = null
+    ) : Screen
+
 }
 
 /*

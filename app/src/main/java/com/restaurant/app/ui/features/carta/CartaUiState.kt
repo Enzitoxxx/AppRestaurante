@@ -2,14 +2,14 @@ package com.restaurant.app.ui.features.carta
 
 import com.restaurant.app.data.model.Producto
 
-data class CartaUiState (
-    val busqueda : String = "",
-    val categoriaSeleccionada : String = "Todas", // Todas, Entradas, Platos, Bebidas, Postres
-    val productos : List<Producto> = emptyList(),
-    val estaCargando : Boolean = false
-
-){
-    //Listado filtrado automaticamente segun la busqueda y la categoria seleccionada
+data class CartaUiState(
+    val busqueda: String = "",
+    val categoriaSeleccionada: String = "Todas", // Todas, Entradas, Platos, Bebidas, Postres
+    val productos: List<Producto> = emptyList(),
+    val estaCargando: Boolean = false,
+    val productoADarDeBaja: Producto? = null // Si no es null, se abre el AlertDialog de confirmación
+) {
+    // Listado filtrado automáticamente según la búsqueda y la categoría seleccionada
     val productosFiltrados: List<Producto>
         get() = productos.filter { producto ->
             val coincideCategoria = categoriaSeleccionada == "Todas" ||

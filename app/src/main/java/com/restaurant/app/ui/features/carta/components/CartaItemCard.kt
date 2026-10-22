@@ -1,6 +1,7 @@
 package com.restaurant.app.ui.features.carta.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,6 +14,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.BakeryDining
+import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Fastfood
 import androidx.compose.material.icons.outlined.Icecream
 import androidx.compose.material.icons.outlined.LocalBar
@@ -20,6 +23,7 @@ import androidx.compose.material.icons.outlined.Restaurant
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
@@ -38,6 +42,8 @@ import com.restaurant.app.data.model.Producto
 fun CartaItemCard(
     producto: Producto,
     onToggleDisponibilidad: (String) -> Unit,
+    onEditarClick: (Producto) -> Unit,
+    onBajaClick: (Producto) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -70,7 +76,7 @@ fun CartaItemCard(
                 )
             }
 
-            Spacer(Modifier.width(14.dp))
+            Spacer(Modifier.width(12.dp))
 
             // Información del producto
             Column(modifier = Modifier.weight(1f)) {
@@ -112,17 +118,50 @@ fun CartaItemCard(
                 )
             }
 
-            // Switch de disponibilidad
-            Switch(
-                checked = producto.estadoDisponible,
-                onCheckedChange = { onToggleDisponibilidad(producto.id) },
-                colors = SwitchDefaults.colors(
-                    checkedThumbColor = MaterialTheme.colorScheme.onPrimary,
-                    checkedTrackColor = MaterialTheme.colorScheme.primary,
-                    uncheckedThumbColor = MaterialTheme.colorScheme.outline,
-                    uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant
+            // Acciones: Switch + Botón Editar (Lápiz) + Botón Baja (Tacho)
+            Column(
+                horizontalAlignment = Alignment.End,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Switch(
+                    checked = producto.estadoDisponible,
+                    onCheckedChange = { onToggleDisponibilidad(producto.id) },
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = MaterialTheme.colorScheme.onPrimary,
+                        checkedTrackColor = MaterialTheme.colorScheme.primary,
+                        uncheckedThumbColor = MaterialTheme.colorScheme.outline,
+                        uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant
+                    )
                 )
-            )
+
+                Row {
+                    // Botón Editar (Lápiz)
+                    IconButton(
+                        onClick = { onEditarClick(producto) },
+                        modifier = Modifier.size(32.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Edit,
+                            contentDescription = "Editar producto",
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.size(20.dp)
+                        )
+                    }
+
+                    // Botón Baja Lógica (Tacho)
+                    IconButton(
+                        onClick = { onBajaClick(producto) },
+                        modifier = Modifier.size(32.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Delete,
+                            contentDescription = "Dar de baja producto",
+                            tint = MaterialTheme.colorScheme.error,
+                            modifier = Modifier.size(20.dp)
+                        )
+                    }
+                }
+            }
         }
     }
 }
