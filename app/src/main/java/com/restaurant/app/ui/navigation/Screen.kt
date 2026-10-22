@@ -13,5 +13,8 @@ sealed interface Screen : NavKey {
     data object Login : Screen
 
     @Serializable
+    data object Registro : Screen //Le dice a la app que existe una pantalla mas, en este caso la pantalla del registro
+
+    @Serializable
     data object Home : Screen   // provisorio, hasta armar el panel del administrador
 }

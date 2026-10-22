@@ -2,6 +2,9 @@
 <!--
     Por ahora los datos van a ser estaticos. Una vez que desarrollemos las base de datos
     van a pasar a ser dinamicos. Por ahora no.
+
+    Cada clave se lee así:
+     pantalla + _ + qué es + _ + detalle.
 -->
 <resources>
     <!-- Nombre público de la aplicación en el sistema Android -->
@@ -27,4 +30,19 @@
     <string name="login_error_password_required">Ingresá tu contraseña</string>
     <string name="cd_show_password">Mostrar contraseña</string>
     <string name="cd_hide_password">Ocultar contraseña</string>
+
+    <!-- Registro -->
+    <string name="registro_titulo">Crear cuenta administradora</string>
+    <string name="registro_subtitulo">Ingresá los datos de tu establecimiento</string>
+    <string name="registro_nombre_etiqueta">Nombre y apellido</string>
+    <string name="registro_telefono_etiqueta">Teléfono móvil</string>
+    <string name="registro_restaurante_etiqueta">Nombre del restaurante</string>
+    <string name="registro_boton">Crear cuenta</string>
+    <string name="registro_ya_tengo_cuenta">¿Ya tenés cuenta?</string>
+    <string name="registro_ingresar">Ingresar</string>
+    <string name="registro_error_nombre_requerido">Ingresá tu nombre y apellido</string>
+    <string name="registro_error_telefono_requerido">Ingresá tu teléfono</string>
+    <string name="registro_error_telefono_invalido">El teléfono no es válido</string>
+    <string name="registro_error_restaurante_requerido">Ingresá el nombre del restaurante</string>
+    <string name="registro_error_contrasena_corta">La contraseña debe tener al menos 8 caracteres</string>
 </resources>
