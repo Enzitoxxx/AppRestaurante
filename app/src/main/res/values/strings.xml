@@ -55,4 +55,14 @@
     <string name="forgot_password_error_email_invalid">El correo no es válido</string>
     <string name="cd_back">Volver</string>
 
+    <!-- Carta & Menú -->
+    <string name="carta_titulo">Carta &amp; Menú</string>
+    <string name="carta_buscar_placeholder">Buscar plato o bebida…</string>
+    <string name="carta_categoria_todas">Todas</string>
+    <string name="carta_categoria_entradas">Entradas</string>
+    <string name="carta_categoria_platos">Platos</string>
+    <string name="carta_categoria_bebidas">Bebidas</string>
+    <string name="carta_categoria_postres">Postres</string>
+    <string name="carta_cd_agregar_producto">Agregar producto</string>
+
 </resources>

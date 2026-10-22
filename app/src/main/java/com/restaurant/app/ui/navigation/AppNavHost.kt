@@ -7,6 +7,7 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
+import com.restaurant.app.ui.features.carta.CartaScreen
 import com.restaurant.app.ui.features.forgotpassword.ForgotPasswordScreen
 import com.restaurant.app.ui.features.login.LoginScreen
 import com.restaurant.app.ui.features.registro.RegistroScreen
@@ -63,6 +64,14 @@ fun AppNavHost() {
                 ForgotPasswordScreen(
                     onBackClick = { backStack.removeLastOrNull() },
                     onEmailSent = { backStack.removeLastOrNull() }
+                )
+            }
+
+            entry<Screen.Carta> {
+                CartaScreen(
+                    onAgregarProductoClick = {
+                        // TODO: Navegar a pantalla Alta de Producto (ej: Screen.AgregarProducto)
+                    }
                 )
             }
         }

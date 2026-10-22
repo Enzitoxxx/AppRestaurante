@@ -19,6 +19,9 @@ sealed interface Screen : NavKey {
     data object Home : Screen   // provisorio, hasta armar el panel del administrador
 
     @Serializable
+    data object Carta : Screen
+
+    @Serializable
     data object ForgotPassword : Screen
 }
 
