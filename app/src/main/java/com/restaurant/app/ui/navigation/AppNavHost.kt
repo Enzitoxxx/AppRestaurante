@@ -7,15 +7,34 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
+import com.restaurant.app.core.designsystem.NavegacionItem
 import com.restaurant.app.ui.features.carta.CartaScreen
 import com.restaurant.app.ui.features.forgotpassword.ForgotPasswordScreen
 import com.restaurant.app.ui.features.login.LoginScreen
 import com.restaurant.app.ui.features.producto.ProductoScreen
 import com.restaurant.app.ui.features.registro.RegistroScreen
+import com.restaurant.app.ui.features.salon.SalonScreen
 import com.restaurant.app.ui.features.splash.SplashScreen
+
+/*
+   NAVIGATION 3 y BACKSTACK :
+
+   1. Navigation 3 (Jetpack Navigation 3 - Type-Safe Navigation):
+      Es la librería oficial más reciente de Google para manejar navegación en Jetpack Compose.
+      A diferencia de las versiones viejas que usaban textos ("routes") propensos a errores,
+      Navigation 3 usa objetos tipados de Kotlin (Screen.Login, Screen.Carta, Screen.ProductoForm).
+      Si cambias el nombre o propiedad de una pantalla, el compilador de Kotlin te avisa inmediatamente antes de ejecutar la app.
+
+   2. backStack (Pila de Navegación / Historial):
+      funciona exactamente como una pila de cartas (LIFO: Last In, First Out) que guarda la historia de pantallas que el usuario tiene abiertas:
+      - backStack.add(Screen.X): Agrega/Apila una nueva pantalla arriba.
+      - backStack.removeLastOrNull(): Quita la pantalla actual para volver a la anterior.
+      - backStack.clear(): Vacía todo el historial (ej: al hacer Login para no regresar atrás).
+*/
 
 @Composable
 fun AppNavHost() {
+    // Inicializa la pila de navegación comenzando en la pantalla Splash
     val backStack = rememberNavBackStack(Screen.Splash)
 
     NavDisplay(
@@ -26,6 +45,7 @@ fun AppNavHost() {
             rememberViewModelStoreNavEntryDecorator()
         ),
         entryProvider = entryProvider {
+            // Pantalla Splash
             entry<Screen.Splash> {
                 SplashScreen(
                     onFinished = {
@@ -34,31 +54,40 @@ fun AppNavHost() {
                     }
                 )
             }
+
+            // Pantalla Login
             entry<Screen.Login> {
                 LoginScreen(
                     onLoginSuccess = {
-                        backStack.clear()               // no se vuelve al Login con "atrás"
+                        backStack.clear()               // No se vuelve al Login con "atrás"
                         backStack.add(Screen.Home)
                     },
-                    onRegisterClick = { backStack.add(Screen.Registro) }, // el .add apila la nueva pantalla encima de la actual.
+                    onRegisterClick = { backStack.add(Screen.Registro) },
                     onForgotPasswordClick = { backStack.add(Screen.ForgotPassword) }
                 )
             }
 
+            // Pantalla Home (Provisorio para que arme el panel del administrador tu compañero)
             entry<Screen.Home> {
                 Text("Home (pendiente)")   // provisorio, para armar la pantalla del administrador
                 /*
-                CartaScreen(
-                    onAgregarProductoClick = {
-                        backStack.add(Screen.ProductoForm()) // Abre Alta de producto
-                    },
-                    onEditarProductoClick = { producto ->
-                        backStack.add(Screen.ProductoForm(productoId = producto.id)) // Abre Edición de producto
+                // TEMPORAL DE PRUEBAS EN DISPOSITIVO:
+                SalonScreen(
+                    onMesaClick = { },
+                    onNuevaMesaClick = { },
+                    onNavegarA = { item ->
+                        when (item) {
+                            NavegacionItem.Carta -> backStack.add(Screen.Carta)
+                            NavegacionItem.Salon -> backStack.add(Screen.Salon)
+                            NavegacionItem.Inicio -> { }
+                            else -> { }
+                        }
                     }
                 )
                 */
             }
 
+            // Pantalla Registro de Usuario
             entry<Screen.Registro> {
                 RegistroScreen(
                     onRegistroSuccess = {
@@ -71,6 +100,7 @@ fun AppNavHost() {
                 )
             }
 
+            // Pantalla Recuperar Contraseña
             entry<Screen.ForgotPassword> {
                 ForgotPasswordScreen(
                     onBackClick = { backStack.removeLastOrNull() },
@@ -78,22 +108,52 @@ fun AppNavHost() {
                 )
             }
 
-            //Pantalla de carta
+            // Pantalla Carta & Menú
             entry<Screen.Carta> {
                 CartaScreen(
                     onAgregarProductoClick = {
-                        backStack.add(Screen.ProductoForm()) //Pasa/ navega al modo Alta
+                        backStack.add(Screen.ProductoForm()) // Navega a Alta
                     },
-                    onEditarProductoClick = {producto -> backStack.add(Screen.ProductoForm(productoId = producto.id))} //Pasa/navega al modo Edicion
+                    onEditarProductoClick = { producto ->
+                        backStack.add(Screen.ProductoForm(productoId = producto.id)) // Navega a Edición
+                    },
+                    onNavegarA = { item ->
+                        when (item) {
+                            NavegacionItem.Salon -> backStack.add(Screen.Salon)
+                            NavegacionItem.Carta -> { /* Ya estamos aquí */ }
+                            NavegacionItem.Inicio -> backStack.add(Screen.Home)
+                            else -> { /* Otros ítems */ }
+                        }
+                    }
                 )
             }
 
-            //Pantalla de Alta / Edicion
+            // Pantalla Alta / Edición de Producto
             entry<Screen.ProductoForm> { key ->
                 ProductoScreen(
                     productoId = key.productoId,
                     onVolverClick = { backStack.removeLastOrNull() },
                     onProductoGuardado = { backStack.removeLastOrNull() }
+                )
+            }
+
+            // Pantalla Mapa del Salón
+            entry<Screen.Salon> {
+                SalonScreen(
+                    onMesaClick = { mesa ->
+                        // TODO: Navegar a la comanda/detalle de la mesa
+                    },
+                    onNuevaMesaClick = {
+                        // TODO: Navegar a crear nueva mesa
+                    },
+                    onNavegarA = { item ->
+                        when (item) {
+                            NavegacionItem.Carta -> backStack.add(Screen.Carta)
+                            NavegacionItem.Salon -> { /* Ya estamos aquí */ }
+                            NavegacionItem.Inicio -> backStack.add(Screen.Home)
+                            else -> { /* Otros ítems */ }
+                        }
+                    }
                 )
             }
         }

@@ -40,6 +40,7 @@ import com.restaurant.app.ui.theme.AppTheme
 fun CartaScreen(
     onAgregarProductoClick: () -> Unit,
     onEditarProductoClick: (Producto) -> Unit = {},
+    onNavegarA: (NavegacionItem) -> Unit = {},
     viewModel: CartaViewModel = viewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -62,7 +63,8 @@ fun CartaScreen(
         onEditarProductoClick = viewModel::onEditarProductoClick,
         onSolicitarBajaProducto = viewModel::onSolicitarBajaProducto,
         onCancelarBajaProducto = viewModel::onCancelarBajaProducto,
-        onConfirmarBajaProducto = viewModel::onConfirmarBajaProducto
+        onConfirmarBajaProducto = viewModel::onConfirmarBajaProducto,
+        onNavegarA = onNavegarA
     )
 }
 

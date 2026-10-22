@@ -32,6 +32,8 @@ sealed interface Screen : NavKey {
         val productoId: String? = null
     ) : Screen
 
+    @Serializable
+    data object Salon : Screen
 }
 
 /*

@@ -79,4 +79,18 @@
     <string name="producto_disponible_subtitulo">Aparecerá en la carta digital y comandas</string>
     <string name="producto_error_nombre_requerido">Ingresá el nombre del producto</string>
     <string name="producto_error_precio_requerido">Ingresá el precio del producto</string>
+
+    <!-- Mapa del Salón -->
+    <string name="salon_titulo">Mapa del Salón</string>
+    <string name="salon_resumen_formato">%1$d ocupadas · %2$d libres · %3$d cuenta</string>
+    <string name="salon_zona_todas">Todas</string>
+    <string name="salon_zona_salon">Salón</string>
+    <string name="salon_zona_patio">Patio</string>
+    <string name="salon_zona_principal">ZONA PRINCIPAL (SALÓN)</string>
+    <string name="salon_zona_exterior">ZONA EXTERIOR (PATIO)</string>
+    <string name="salon_estado_libre">LIBRE</string>
+    <string name="salon_estado_ocupada">OCUPADA</string>
+    <string name="salon_estado_cuenta">CUENTA</string>
+    <string name="salon_sin_comanda">Sin comanda</string>
+    <string name="salon_esperando_ticket">Esperando ticket</string>
 </resources>
