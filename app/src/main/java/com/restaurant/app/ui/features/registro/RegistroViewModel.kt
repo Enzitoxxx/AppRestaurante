@@ -100,7 +100,11 @@ class RegistroViewModel : ViewModel(){
             else -> null
         }
 
-        val errorTelefono = if (telefono.isBlank()) R.string.registro_error_telefono_requerido else null
+        val errorTelefono = when {
+            telefono.isBlank() -> R.string.registro_error_telefono_requerido
+            telefono.count { it.isDigit() } < 8 -> R.string.registro_error_telefono_invalido
+            else -> null
+        }
 
         val errorRestaurante = if (restaurante.isBlank()) R.string.registro_error_restaurante_requerido else null
 
