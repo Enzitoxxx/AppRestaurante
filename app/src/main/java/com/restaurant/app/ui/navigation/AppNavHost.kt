@@ -7,6 +7,7 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
+import com.restaurant.app.ui.features.forgotpassword.ForgotPasswordScreen
 import com.restaurant.app.ui.features.login.LoginScreen
 import com.restaurant.app.ui.features.registro.RegistroScreen
 import com.restaurant.app.ui.features.splash.SplashScreen
@@ -37,13 +38,15 @@ fun AppNavHost() {
                         backStack.clear()               // no se vuelve al Login con "atrás"
                         backStack.add(Screen.Home)
                     },
-                    onForgotPasswordClick = { /* TODO: Screen.ForgotPassword */ },
-                    onRegisterClick = { backStack.add(Screen.Registro) } // el .add apila la nueva pantalla encima de la actual.
+                    onRegisterClick = { backStack.add(Screen.Registro) }, // el .add apila la nueva pantalla encima de la actual.
+                    onForgotPasswordClick = { backStack.add(Screen.ForgotPassword) }
                 )
             }
+
             entry<Screen.Home> {
                 Text("Home (pendiente)")   // provisorio
             }
+
             entry<Screen.Registro> {
                 RegistroScreen(
                     onRegistroSuccess = {
@@ -53,6 +56,13 @@ fun AppNavHost() {
                     onLoginClick = {
                         backStack.removeLastOrNull()
                     }
+                )
+            }
+
+            entry<Screen.ForgotPassword> {
+                ForgotPasswordScreen(
+                    onBackClick = { backStack.removeLastOrNull() },
+                    onEmailSent = { backStack.removeLastOrNull() }
                 )
             }
         }

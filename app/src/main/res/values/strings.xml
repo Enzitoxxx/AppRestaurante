@@ -45,4 +45,14 @@
     <string name="registro_error_telefono_invalido">El teléfono no es válido</string>
     <string name="registro_error_restaurante_requerido">Ingresá el nombre del restaurante</string>
     <string name="registro_error_contrasena_corta">La contraseña debe tener al menos 8 caracteres</string>
+
+    <!-- Recuperar Contraseña -->
+    <string name="forgot_password_title">Recuperar contraseña</string>
+    <string name="forgot_password_subtitle">Ingresá tu correo electrónico registrado y te enviaremos las instrucciones para restablecer tu clave de acceso.</string>
+    <string name="forgot_password_email_label">CORREO ELECTRÓNICO</string>
+    <string name="forgot_password_button">Enviar enlace de recuperación</string>
+    <string name="forgot_password_error_email_required">Ingresá tu correo electrónico</string>
+    <string name="forgot_password_error_email_invalid">El correo no es válido</string>
+    <string name="cd_back">Volver</string>
+
 </resources>
