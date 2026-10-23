@@ -82,7 +82,8 @@ Pantallas que tenemos que maquetar:
 * Notificaciones
 * Perfil y configuración del local.
 
-Las pantallas las estamos haciendo con figma con el agente de IA que viene integrado.
+Las pantallas las hicimos con stitch con el agente de IA que viene integrado.
+https://stitch.withgoogle.com/projects/8973033932582192990
 
 —-----------------------
 
