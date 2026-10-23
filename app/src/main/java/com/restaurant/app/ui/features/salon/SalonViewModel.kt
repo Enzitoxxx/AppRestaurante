@@ -24,7 +24,7 @@ class SalonViewModel : ViewModel() {
 
     private fun cargarMesasFicticias() {
         val listaMesas = listOf(
-            // salon
+            // Salón
             Mesa(
                 id = "1",
                 numero = "Mesa 01",
@@ -61,7 +61,7 @@ class SalonViewModel : ViewModel() {
                 consumoTotal = 34100.0
             ),
 
-            // patio
+            // Patio
             Mesa(
                 id = "5",
                 numero = "Mesa 05",
@@ -92,5 +92,29 @@ class SalonViewModel : ViewModel() {
 
     fun onNuevaMesaClick() {
         _events.trySend(SalonEvent.NuevaMesa)
+    }
+
+    fun onEditarMesaClick(mesa: Mesa) {
+        _events.trySend(SalonEvent.EditarMesa(mesa))
+    }
+
+    fun onSolicitarBajaMesa(mesa: Mesa) {
+        _uiState.update { it.copy(mesaADarDeBaja = mesa) }
+    }
+
+    fun onCancelarBajaMesa() {
+        _uiState.update { it.copy(mesaADarDeBaja = null) }
+    }
+
+    fun onConfirmarBajaMesa() {
+        val mesaAEliminar = _uiState.value.mesaADarDeBaja ?: return
+
+        _uiState.update { state ->
+            val listaSinMesa = state.mesas.filterNot { it.id == mesaAEliminar.id }
+            state.copy(
+                mesas = listaSinMesa,
+                mesaADarDeBaja = null
+            )
+        }
     }
 }

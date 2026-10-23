@@ -6,7 +6,8 @@ import com.restaurant.app.data.model.Mesa
 data class SalonUiState(
     val zonaSeleccionada: String = "Todas", // "Todas", "Salón", "Patio"
     val mesas: List<Mesa> = emptyList(),
-    val estaCargando: Boolean = false
+    val estaCargando: Boolean = false,
+    val mesaADarDeBaja: Mesa? = null // Si no es null, abre el AlertDialog de confirmación
 ) {
     // Totales calculados automáticamente para el resumen superior
     val ocupadasCount: Int get() = mesas.count { it.estado == EstadoMesa.OCUPADA }

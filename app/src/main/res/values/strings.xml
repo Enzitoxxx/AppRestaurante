@@ -93,4 +93,16 @@
     <string name="salon_estado_cuenta">CUENTA</string>
     <string name="salon_sin_comanda">Sin comanda</string>
     <string name="salon_esperando_ticket">Esperando ticket</string>
+
+
+    <!-- Mesa -->
+    <string name="mesa_form_titulo">Configuración de Mesa</string>
+    <string name="mesa_form_label_numero">NÚMERO O CÓDIGO DE MESA</string>
+    <string name="mesa_form_label_capacidad">CAPACIDAD MÁXIMA (PERSONAS)</string>
+    <string name="mesa_form_capacidad_formato">%1$d comensales</string>
+    <string name="mesa_form_label_zona">ZONA DEL RESTAURANTE</string>
+    <string name="mesa_form_zona_salon_subtitulo">Interior climatizado</string>
+    <string name="mesa_form_zona_patio_subtitulo">Al aire libre</string>
+    <string name="mesa_form_boton_guardar">Guardar mesa</string>
+    <string name="mesa_form_error_numero_requerido">Ingresá el número o código de la mesa</string>
 </resources>

@@ -11,6 +11,7 @@ import com.restaurant.app.core.designsystem.NavegacionItem
 import com.restaurant.app.ui.features.carta.CartaScreen
 import com.restaurant.app.ui.features.forgotpassword.ForgotPasswordScreen
 import com.restaurant.app.ui.features.login.LoginScreen
+import com.restaurant.app.ui.features.mesa.MesaFormScreen
 import com.restaurant.app.ui.features.producto.ProductoScreen
 import com.restaurant.app.ui.features.registro.RegistroScreen
 import com.restaurant.app.ui.features.salon.SalonScreen
@@ -67,24 +68,27 @@ fun AppNavHost() {
                 )
             }
 
-            // Pantalla Home (Provisorio para que arme el panel del administrador tu compañero)
+            // Pantalla Home (TEMPORAL PARA PRUEBAS EN DISPOSITIVO MOSTRANDO EL SALÓN Y SUS MESAS)
             entry<Screen.Home> {
-                Text("Home (pendiente)")   // provisorio, para armar la pantalla del administrador
-                /*
-                // TEMPORAL DE PRUEBAS EN DISPOSITIVO:
                 SalonScreen(
-                    onMesaClick = { },
-                    onNuevaMesaClick = { },
+                    onMesaClick = { mesa ->
+                        backStack.add(Screen.MesaForm(mesaId = mesa.id))
+                    },
+                    onEditarMesaClick = { mesa ->
+                        backStack.add(Screen.MesaForm(mesaId = mesa.id))
+                    },
+                    onNuevaMesaClick = {
+                        backStack.add(Screen.MesaForm())
+                    },
                     onNavegarA = { item ->
                         when (item) {
                             NavegacionItem.Carta -> backStack.add(Screen.Carta)
-                            NavegacionItem.Salon -> backStack.add(Screen.Salon)
-                            NavegacionItem.Inicio -> { }
-                            else -> { }
+                            NavegacionItem.Salon -> { /* Ya estamos aquí */ }
+                            NavegacionItem.Inicio -> { /* Inicio */ }
+                            else -> { /* Otros */ }
                         }
                     }
                 )
-                */
             }
 
             // Pantalla Registro de Usuario
@@ -143,8 +147,11 @@ fun AppNavHost() {
                     onMesaClick = { mesa ->
                         // TODO: Navegar a la comanda/detalle de la mesa
                     },
+                    onEditarMesaClick = { mesa ->
+                        backStack.add(Screen.MesaForm(mesaId = mesa.id)) // Editar mesa
+                    },
                     onNuevaMesaClick = {
-                        // TODO: Navegar a crear nueva mesa
+                        backStack.add(Screen.MesaForm()) // Alta mesa
                     },
                     onNavegarA = { item ->
                         when (item) {
@@ -154,6 +161,14 @@ fun AppNavHost() {
                             else -> { /* Otros ítems */ }
                         }
                     }
+                )
+            }
+
+            // Pantalla Configuración de Mesa
+            entry<Screen.MesaForm> { key ->
+                MesaFormScreen(
+                    onVolverClick = { backStack.removeLastOrNull() },
+                    onMesaGuardada = { backStack.removeLastOrNull() }
                 )
             }
         }

@@ -16,10 +16,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -41,11 +44,12 @@ import com.restaurant.app.ui.theme.AppTheme
 
 /**
  * PANTALLA MAPA DEL SALÓN
- * Conectada al SalonViewModel: observa el estado de las mesas y escucha eventos de apertura.
+ * Conectada al SalonViewModel: observa el estado de las mesas y escucha eventos de apertura, edición y baja.
  */
 @Composable
 fun SalonScreen(
     onMesaClick: (Mesa) -> Unit = {},
+    onEditarMesaClick: (Mesa) -> Unit = {},
     onNuevaMesaClick: () -> Unit = {},
     onNavegarA: (NavegacionItem) -> Unit = {},
     viewModel: SalonViewModel = viewModel()
@@ -56,6 +60,7 @@ fun SalonScreen(
         viewModel.events.collect { event ->
             when (event) {
                 is SalonEvent.AbrirMesa -> onMesaClick(event.mesa)
+                is SalonEvent.EditarMesa -> onEditarMesaClick(event.mesa)
                 SalonEvent.NuevaMesa -> onNuevaMesaClick()
             }
         }
@@ -65,6 +70,10 @@ fun SalonScreen(
         state = state,
         onZonaSeleccionada = viewModel::onZonaSeleccionada,
         onMesaClick = viewModel::onMesaClick,
+        onEditarMesaClick = viewModel::onEditarMesaClick,
+        onSolicitarBajaMesa = viewModel::onSolicitarBajaMesa,
+        onCancelarBajaMesa = viewModel::onCancelarBajaMesa,
+        onConfirmarBajaMesa = viewModel::onConfirmarBajaMesa,
         onNuevaMesaClick = viewModel::onNuevaMesaClick,
         onNavegarA = onNavegarA
     )
@@ -79,7 +88,11 @@ fun SalonContent(
     state: SalonUiState,
     onZonaSeleccionada: (String) -> Unit,
     onMesaClick: (Mesa) -> Unit,
-    onNuevaMesaClick: () -> Unit,
+    onEditarMesaClick: (Mesa) -> Unit = {},
+    onSolicitarBajaMesa: (Mesa) -> Unit = {},
+    onCancelarBajaMesa: () -> Unit = {},
+    onConfirmarBajaMesa: () -> Unit = {},
+    onNuevaMesaClick: () -> Unit = {},
     onNavegarA: (NavegacionItem) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
@@ -149,12 +162,16 @@ fun SalonContent(
                             MesaCard(
                                 mesa = par[0],
                                 onMesaClick = onMesaClick,
+                                onEditarClick = onEditarMesaClick,
+                                onBajaClick = onSolicitarBajaMesa,
                                 modifier = Modifier.weight(1f)
                             )
                             if (par.size > 1) {
                                 MesaCard(
                                     mesa = par[1],
                                     onMesaClick = onMesaClick,
+                                    onEditarClick = onEditarMesaClick,
+                                    onBajaClick = onSolicitarBajaMesa,
                                     modifier = Modifier.weight(1f)
                                 )
                             } else {
@@ -185,12 +202,16 @@ fun SalonContent(
                             MesaCard(
                                 mesa = par[0],
                                 onMesaClick = onMesaClick,
+                                onEditarClick = onEditarMesaClick,
+                                onBajaClick = onSolicitarBajaMesa,
                                 modifier = Modifier.weight(1f)
                             )
                             if (par.size > 1) {
                                 MesaCard(
                                     mesa = par[1],
                                     onMesaClick = onMesaClick,
+                                    onEditarClick = onEditarMesaClick,
+                                    onBajaClick = onSolicitarBajaMesa,
                                     modifier = Modifier.weight(1f)
                                 )
                             } else {
@@ -200,6 +221,38 @@ fun SalonContent(
                         Spacer(Modifier.height(12.dp))
                     }
                 }
+            }
+
+            // Diálogo Emergente (AlertDialog) de Confirmación para Baja Lógica de la Mesa
+            state.mesaADarDeBaja?.let { mesa ->
+                AlertDialog(
+                    onDismissRequest = onCancelarBajaMesa,
+                    title = {
+                        Text(
+                            text = "¿Dar de baja mesa?",
+                            style = MaterialTheme.typography.titleLarge
+                        )
+                    },
+                    text = {
+                        Text(
+                            text = "¿Estás seguro de dar de baja la ${mesa.numero}? Dejará de mostrarse en el mapa del salón.",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    },
+                    confirmButton = {
+                        TextButton(onClick = onConfirmarBajaMesa) {
+                            Text(
+                                text = "Dar de baja",
+                                color = MaterialTheme.colorScheme.error
+                            )
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(onClick = onCancelarBajaMesa) {
+                            Text(text = "Cancelar")
+                        }
+                    }
+                )
             }
         }
     }

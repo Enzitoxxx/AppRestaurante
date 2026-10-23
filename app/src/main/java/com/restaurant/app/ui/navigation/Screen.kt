@@ -34,6 +34,11 @@ sealed interface Screen : NavKey {
 
     @Serializable
     data object Salon : Screen
+
+    @Serializable
+    data class MesaForm(
+        val mesaId: String? = null
+    ) : Screen
 }
 
 /*

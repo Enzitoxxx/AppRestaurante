@@ -10,13 +10,17 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.ReceiptLong
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,6 +39,8 @@ import com.restaurant.app.data.model.Mesa
 fun MesaCard(
     mesa: Mesa,
     onMesaClick: (Mesa) -> Unit,
+    onEditarClick: (Mesa) -> Unit = {},
+    onBajaClick: (Mesa) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val (colorBorde, colorFondoCard, colorBadgeFondo, textoBadge) = obtenerEstiloMesa(mesa.estado)
@@ -82,90 +88,128 @@ fun MesaCard(
 
             Spacer(Modifier.height(10.dp))
 
-            // Fila Inferior: Detalles (Personas, Mozo, Total de consumo)
-            when (mesa.estado) {
-                EstadoMesa.LIBRE -> {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            imageVector = Icons.Outlined.Person,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.padding(end = 4.dp)
-                        )
-                        Text(
-                            text = "${mesa.capacidadPersonas} personas",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                    if (mesa.detalleEstado != null) {
-                        Spacer(Modifier.height(2.dp))
-                        Text(
-                            text = mesa.detalleEstado,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
-                        )
-                    }
-                }
-
-                EstadoMesa.OCUPADA -> {
-                    if (mesa.mozoAsignado != null) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(
-                                imageVector = Icons.Outlined.Person,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                modifier = Modifier.padding(end = 4.dp)
-                            )
-                            Text(
-                                text = mesa.mozoAsignado,
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
+            // Fila Inferior: Detalles + Acciones (Lápiz y X / Tacho) en la esquina inferior derecha
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.Bottom
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    when (mesa.estado) {
+                        EstadoMesa.LIBRE -> {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Person,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    modifier = Modifier.padding(end = 4.dp)
+                                )
+                                Text(
+                                    text = "${mesa.capacidadPersonas} personas",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                            if (mesa.detalleEstado != null) {
+                                Spacer(Modifier.height(2.dp))
+                                Text(
+                                    text = mesa.detalleEstado,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                                )
+                            }
                         }
-                    } else {
-                        Text(
-                            text = "${mesa.capacidadPersonas} personas",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
 
-                    if (mesa.consumoTotal != null) {
-                        Spacer(Modifier.height(4.dp))
-                        val precioFormateado = String.format(java.util.Locale.GERMANY, "%,d", mesa.consumoTotal.toLong())
-                        Text(
-                            text = "$ $precioFormateado",
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.primary
-                        )
+                        EstadoMesa.OCUPADA -> {
+                            if (mesa.mozoAsignado != null) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Icon(
+                                        imageVector = Icons.Outlined.Person,
+                                        contentDescription = null,
+                                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        modifier = Modifier.padding(end = 4.dp)
+                                    )
+                                    Text(
+                                        text = mesa.mozoAsignado,
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                            } else {
+                                Text(
+                                    text = "${mesa.capacidadPersonas} personas",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+
+                            if (mesa.consumoTotal != null) {
+                                Spacer(Modifier.height(4.dp))
+                                val precioFormateado = String.format(java.util.Locale.GERMANY, "%,d", mesa.consumoTotal.toLong())
+                                Text(
+                                    text = "$ $precioFormateado",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                            }
+                        }
+
+                        EstadoMesa.CUENTA -> {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(
+                                    imageVector = Icons.Outlined.ReceiptLong,
+                                    contentDescription = null,
+                                    tint = Color(0xFFD97706),
+                                    modifier = Modifier.padding(end = 4.dp)
+                                )
+                                Text(
+                                    text = mesa.detalleEstado ?: "Esperando ticket",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = Color(0xFFD97706)
+                                )
+                            }
+
+                            if (mesa.consumoTotal != null) {
+                                Spacer(Modifier.height(4.dp))
+                                val precioFormateado = String.format(java.util.Locale.GERMANY, "%,d", mesa.consumoTotal.toLong())
+                                Text(
+                                    text = "$ $precioFormateado",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color(0xFFD97706)
+                                )
+                            }
+                        }
                     }
                 }
 
-                EstadoMesa.CUENTA -> {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                // Acciones: Lápiz (Editar) y X (Baja lógica)
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(0.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    IconButton(
+                        onClick = { onEditarClick(mesa) },
+                        modifier = Modifier.size(28.dp)
+                    ) {
                         Icon(
-                            imageVector = Icons.Outlined.ReceiptLong,
-                            contentDescription = null,
-                            tint = Color(0xFFD97706),
-                            modifier = Modifier.padding(end = 4.dp)
-                        )
-                        Text(
-                            text = mesa.detalleEstado ?: "Esperando ticket",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = Color(0xFFD97706)
+                            imageVector = Icons.Outlined.Edit,
+                            contentDescription = "Editar mesa",
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.size(18.dp)
                         )
                     }
 
-                    if (mesa.consumoTotal != null) {
-                        Spacer(Modifier.height(4.dp))
-                        val precioFormateado = String.format(java.util.Locale.GERMANY, "%,d", mesa.consumoTotal.toLong())
-                        Text(
-                            text = "$ $precioFormateado",
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold,
-                            color = Color(0xFFD97706)
+                    IconButton(
+                        onClick = { onBajaClick(mesa) },
+                        modifier = Modifier.size(28.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Close,
+                            contentDescription = "Dar de baja mesa",
+                            tint = MaterialTheme.colorScheme.error,
+                            modifier = Modifier.size(20.dp)
                         )
                     }
                 }
