@@ -32,8 +32,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.restaurant.app.R
-import com.restaurant.app.data.model.EstadoMesa
-import com.restaurant.app.data.model.Mesa
+import com.restaurant.app.domain.model.EstadoMesa
+import com.restaurant.app.domain.model.Mesa
 
 @Composable
 fun MesaCard(

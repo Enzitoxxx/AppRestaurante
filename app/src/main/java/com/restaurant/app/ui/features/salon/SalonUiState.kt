@@ -1,7 +1,7 @@
 package com.restaurant.app.ui.features.salon
 
-import com.restaurant.app.data.model.EstadoMesa
-import com.restaurant.app.data.model.Mesa
+import com.restaurant.app.domain.model.EstadoMesa
+import com.restaurant.app.domain.model.Mesa
 
 data class SalonUiState(
     val zonaSeleccionada: String = "Todas", // "Todas", "Salón", "Patio"

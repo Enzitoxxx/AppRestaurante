@@ -1,16 +1,21 @@
 package com.restaurant.app.ui.features.salon
 
 import androidx.lifecycle.ViewModel
-import com.restaurant.app.data.model.EstadoMesa
-import com.restaurant.app.data.model.Mesa
+import androidx.lifecycle.viewModelScope
+import com.restaurant.app.data.repository.MesaRepositoryDatos
+import com.restaurant.app.domain.model.Mesa
+import com.restaurant.app.domain.repository.MesaRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class SalonViewModel : ViewModel() {
+class SalonViewModel(
+    private val mesaRepository: MesaRepository = MesaRepositoryDatos()
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SalonUiState())
     val uiState: StateFlow<SalonUiState> = _uiState.asStateFlow()
@@ -19,67 +24,12 @@ class SalonViewModel : ViewModel() {
     val events = _events.receiveAsFlow()
 
     init {
-        cargarMesasFicticias()
-    }
-
-    private fun cargarMesasFicticias() {
-        val listaMesas = listOf(
-            // Salón
-            Mesa(
-                id = "1",
-                numero = "Mesa 01",
-                zona = "Salón",
-                capacidadPersonas = 4,
-                estado = EstadoMesa.LIBRE,
-                detalleEstado = "Sin comanda"
-            ),
-            Mesa(
-                id = "2",
-                numero = "Mesa 02",
-                zona = "Salón",
-                capacidadPersonas = 2,
-                estado = EstadoMesa.OCUPADA,
-                mozoAsignado = "Camila G.",
-                consumoTotal = 18200.0
-            ),
-            Mesa(
-                id = "3",
-                numero = "Mesa 03",
-                zona = "Salón",
-                capacidadPersonas = 4,
-                estado = EstadoMesa.OCUPADA,
-                mozoAsignado = "Camila G.",
-                consumoTotal = 28600.0
-            ),
-            Mesa(
-                id = "4",
-                numero = "Mesa 04",
-                zona = "Salón",
-                capacidadPersonas = 4,
-                estado = EstadoMesa.CUENTA,
-                detalleEstado = "Esperando ticket",
-                consumoTotal = 34100.0
-            ),
-
-            // Patio
-            Mesa(
-                id = "5",
-                numero = "Mesa 05",
-                zona = "Patio",
-                capacidadPersonas = 2,
-                estado = EstadoMesa.LIBRE
-            ),
-            Mesa(
-                id = "6",
-                numero = "Mesa 06",
-                zona = "Patio",
-                capacidadPersonas = 6,
-                estado = EstadoMesa.OCUPADA,
-                consumoTotal = 42000.0
-            )
-        )
-
-        _uiState.update { it.copy(mesas = listaMesas) }
+        // Escuchamos las mesas del repositorio en tiempo real
+        viewModelScope.launch {
+            mesaRepository.observarMesas().collect { listaMesas ->
+                _uiState.update { it.copy(mesas = listaMesas) }
+            }
+        }
     }
 
     fun onZonaSeleccionada(zona: String) {
@@ -108,13 +58,9 @@ class SalonViewModel : ViewModel() {
 
     fun onConfirmarBajaMesa() {
         val mesaAEliminar = _uiState.value.mesaADarDeBaja ?: return
-
-        _uiState.update { state ->
-            val listaSinMesa = state.mesas.filterNot { it.id == mesaAEliminar.id }
-            state.copy(
-                mesas = listaSinMesa,
-                mesaADarDeBaja = null
-            )
+        viewModelScope.launch {
+            mesaRepository.eliminarMesa(mesaAEliminar.id)
+            _uiState.update { it.copy(mesaADarDeBaja = null) }
         }
     }
 }

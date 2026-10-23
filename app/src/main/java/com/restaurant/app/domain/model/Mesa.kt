@@ -1,4 +1,4 @@
-package com.restaurant.app.data.model
+package com.restaurant.app.domain.model
 
 enum class EstadoMesa {
     LIBRE,      // Verde

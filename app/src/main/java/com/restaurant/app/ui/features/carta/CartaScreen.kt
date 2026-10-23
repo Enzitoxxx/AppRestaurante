@@ -25,7 +25,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.restaurant.app.core.designsystem.AppBottomBar
 import com.restaurant.app.core.designsystem.NavegacionItem
-import com.restaurant.app.data.model.Producto
+import com.restaurant.app.domain.model.Producto
 import com.restaurant.app.ui.features.carta.components.CartaCategoryFilter
 import com.restaurant.app.ui.features.carta.components.CartaHeader
 import com.restaurant.app.ui.features.carta.components.CartaItemCard

@@ -36,7 +36,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.restaurant.app.data.model.Producto
+import com.restaurant.app.domain.model.Producto
 
 @Composable
 fun CartaItemCard(

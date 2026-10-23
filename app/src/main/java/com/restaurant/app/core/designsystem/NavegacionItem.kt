@@ -26,6 +26,7 @@ sealed class NavegacionItem(
             get() = listOf(Inicio, Salon, Carta, Personal, Mas)
     }
 
-    /**Con get() =, la lista se calcula justo en el momento en que
+    /*
+    Con get() =, la lista se calcula justo en el momento en que
      se necesita, asegurando que Inicio, Salon, Carta, etc., ya existan en memoria y no sean null.*/
 }

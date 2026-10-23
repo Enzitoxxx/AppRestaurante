@@ -1,4 +1,4 @@
-package com.restaurant.app.data.model
+package com.restaurant.app.domain.model
 
 //En esta clase vamos a tener todos los productos que van a estar en la carta
 //Ejemplo: Entradas, Plato principal, bebidas, postres, etc

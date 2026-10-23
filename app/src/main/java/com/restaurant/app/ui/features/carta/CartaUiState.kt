@@ -1,6 +1,6 @@
 package com.restaurant.app.ui.features.carta
 
-import com.restaurant.app.data.model.Producto
+import com.restaurant.app.domain.model.Producto
 
 data class CartaUiState(
     val busqueda: String = "",

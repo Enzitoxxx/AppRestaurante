@@ -8,7 +8,7 @@ import com.restaurant.app.ui.features.splash.SplashScreen
 import com.restaurant.app.ui.navigation.AppNavHost
 import com.restaurant.app.ui.theme.AppTheme
 
-/**
+/*
  * Actividad principal (Activity) y punto de entrada de la aplicación.
  *
  * Responsabilidades:
@@ -18,7 +18,7 @@ import com.restaurant.app.ui.theme.AppTheme
  */
 class MainActivity : ComponentActivity() {
 
-    /**
+    /*
      * Método de ciclo de vida invocado cuando la actividad se inicia por primera vez.
      */
     override fun onCreate(savedInstanceState: Bundle?) {

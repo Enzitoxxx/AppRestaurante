@@ -3,7 +3,6 @@ package com.restaurant.app.ui.features.salon
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -35,8 +34,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.restaurant.app.R
 import com.restaurant.app.core.designsystem.AppBottomBar
 import com.restaurant.app.core.designsystem.NavegacionItem
-import com.restaurant.app.data.model.EstadoMesa
-import com.restaurant.app.data.model.Mesa
+import com.restaurant.app.domain.model.EstadoMesa
+import com.restaurant.app.domain.model.Mesa
 import com.restaurant.app.ui.features.salon.components.MesaCard
 import com.restaurant.app.ui.features.salon.components.SalonHeader
 import com.restaurant.app.ui.features.salon.components.ZonaHeader

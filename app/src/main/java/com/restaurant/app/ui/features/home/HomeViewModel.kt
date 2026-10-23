@@ -17,7 +17,7 @@ class HomeViewModel : ViewModel() {
 
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
-    /**Genera automaticamente la fecha de hoy*/
+    /*Genera automaticamente la fecha de hoy*/
     private fun obtenerFechaActualFormateada(): String {
         val formatter = SimpleDateFormat("d 'de' MMM. yyyy", Locale("es", "AR"))
         return formatter.format(Date())
@@ -25,7 +25,7 @@ class HomeViewModel : ViewModel() {
 }
 
 
-    /** ViewModel --> encargado de manejar los datos y logica de la pantalla
+    /* ViewModel --> encargado de manejar los datos y logica de la pantalla
      Ej: En la pantalla home necesitamos mostrar el nombre, fecha, ventas del dia, etc, del restaurante.
      El HomeUiState contiene esos datos completos y el HomeViewModel se encarga de
      preparalos y actualizarlos.
