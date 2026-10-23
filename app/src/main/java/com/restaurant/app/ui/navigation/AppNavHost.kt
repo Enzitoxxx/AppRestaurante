@@ -1,5 +1,6 @@
 package com.restaurant.app.ui.navigation
 
+
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
@@ -16,6 +17,7 @@ import com.restaurant.app.ui.features.producto.ProductoScreen
 import com.restaurant.app.ui.features.registro.RegistroScreen
 import com.restaurant.app.ui.features.salon.SalonScreen
 import com.restaurant.app.ui.features.splash.SplashScreen
+import com.restaurant.app.ui.features.home.HomeScreen
 
 /*
    NAVIGATION 3 y BACKSTACK :
@@ -30,7 +32,7 @@ import com.restaurant.app.ui.features.splash.SplashScreen
       funciona exactamente como una pila de cartas (LIFO: Last In, First Out) que guarda la historia de pantallas que el usuario tiene abiertas:
       - backStack.add(Screen.X): Agrega/Apila una nueva pantalla arriba.
       - backStack.removeLastOrNull(): Quita la pantalla actual para volver a la anterior.
-      - backStack.clear(): Vacía todo el historial (ej: al hacer Login para no regresar atrás).
+      - backStack.clear(): Vacía tod el historial (ej: al hacer Login para no regresar atrás).
 */
 
 @Composable
@@ -68,24 +70,24 @@ fun AppNavHost() {
                 )
             }
 
-            // Pantalla Home (TEMPORAL PARA PRUEBAS EN DISPOSITIVO MOSTRANDO EL SALÓN Y SUS MESAS)
+            // Pantalla Home / Dashboard del administrador
             entry<Screen.Home> {
-                SalonScreen(
-                    onMesaClick = { mesa ->
-                        backStack.add(Screen.MesaForm(mesaId = mesa.id))
-                    },
-                    onEditarMesaClick = { mesa ->
-                        backStack.add(Screen.MesaForm(mesaId = mesa.id))
-                    },
-                    onNuevaMesaClick = {
-                        backStack.add(Screen.MesaForm())
-                    },
+                HomeScreen(
+                    // Maneja las opciones seleccionadas en la barra de navegación
                     onNavegarA = { item ->
                         when (item) {
+
+                            // Abre la pantalla de carta y productos
                             NavegacionItem.Carta -> backStack.add(Screen.Carta)
-                            NavegacionItem.Salon -> { /* Ya estamos aquí */ }
-                            NavegacionItem.Inicio -> { /* Inicio */ }
-                            else -> { /* Otros */ }
+
+                            // Abre el mapa del salón y sus mesas
+                            NavegacionItem.Salon -> backStack.add(Screen.Salon)
+
+                            // Ya estamos en Inicio, por eso no hacemos nada
+                            NavegacionItem.Inicio -> { /* Ya estamos en Home */ }
+
+                            // Opciones todavía no implementadas
+                            else -> { }
                         }
                     }
                 )

@@ -94,7 +94,6 @@
     <string name="salon_sin_comanda">Sin comanda</string>
     <string name="salon_esperando_ticket">Esperando ticket</string>
 
-
     <!-- Mesa -->
     <string name="mesa_form_titulo">Configuración de Mesa</string>
     <string name="mesa_form_label_numero">NÚMERO O CÓDIGO DE MESA</string>
@@ -105,4 +104,19 @@
     <string name="mesa_form_zona_patio_subtitulo">Al aire libre</string>
     <string name="mesa_form_boton_guardar">Guardar mesa</string>
     <string name="mesa_form_error_numero_requerido">Ingresá el número o código de la mesa</string>
+
+    <!-- Dashboard / Home -->
+    <string name="home_panel_admin">PANEL ADMINISTRADOR</string>
+    <string name="home_sales_today_title">Ventas de hoy (%1$s)</string>
+    <string name="home_transactions_count">%1$d transacciones registradas</string>
+    <string name="home_open_orders_label">Pedidos abiertos</string>
+    <string name="home_open_orders_subtitle">Comandas en cocina</string>
+    <string name="home_occupied_tables_label">Mesas ocupadas</string>
+    <string name="home_occupancy_subtitle">%1$d%% de ocupación</string>
+    <string name="home_top_dishes_title">Platos más vendidos del día</string>
+    <string name="home_top_dishes_badge">Top Ventas</string>
+    <string name="home_units_sold">%1$d unidades vendidas</string>
+    <string name="cd_notifications">Notificaciones</string>
+
+
 </resources>

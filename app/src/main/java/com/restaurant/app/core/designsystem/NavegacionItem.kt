@@ -20,6 +20,12 @@ sealed class NavegacionItem(
     data object Mas : NavegacionItem("mas", "Más", Icons.Outlined.MoreHoriz)
 
     companion object {
-        val items = listOf(Inicio, Salon, Carta, Personal, Mas)
+        // Al usar 'get() =', Kotlin evalúa la lista cuando ya se crearon los objetos
+        // Se usa 'get()' para cargar los objetos de navegación una vez creados en memoria y evitar que se lean como 'null' al iniciar la app.
+        val items: List<NavegacionItem>
+            get() = listOf(Inicio, Salon, Carta, Personal, Mas)
     }
+
+    /**Con get() =, la lista se calcula justo en el momento en que
+     se necesita, asegurando que Inicio, Salon, Carta, etc., ya existan en memoria y no sean null.*/
 }
