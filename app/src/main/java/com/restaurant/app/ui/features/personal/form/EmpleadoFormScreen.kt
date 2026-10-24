@@ -30,6 +30,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.restaurant.app.R
 import com.restaurant.app.core.designsystem.PrimaryButton
 import com.restaurant.app.ui.features.personal.form.components.CredencialesCard
+import com.restaurant.app.ui.features.personal.form.components.EmpleadoActivoCard
 import com.restaurant.app.ui.features.personal.form.components.EmpleadoFormFields
 import com.restaurant.app.ui.features.personal.form.components.EmpleadoFormHeader
 import com.restaurant.app.ui.theme.AppTheme
@@ -48,16 +49,7 @@ fun EmpleadoFormScreen(
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(empleadoId) {
-        if (empleadoId != null) {
-            viewModel.cargarEmpleadoParaEdicion(
-                nombre = "Camila Gómez",
-                telefono = "+54 9 11 2345-6789",
-                correo = "camila@labuenamesa.com.ar",
-                rol = "Camarero / Mozo",
-                turno = "Turno Noche",
-                asignacion = "Salón Principal"
-            )
-        }
+        if (empleadoId != null) viewModel.cargarEmpleado(empleadoId)
     }
 
     LaunchedEffect(Unit) {
@@ -77,6 +69,7 @@ fun EmpleadoFormScreen(
         onRolChange = viewModel::onRolChange,
         onTurnoChange = viewModel::onTurnoChange,
         onAsignacionChange = viewModel::onAsignacionChange,
+        onActivoChange = viewModel::onActivoChange,
         onVolverClick = viewModel::onVolverClick,
         onGuardarClick = viewModel::onGuardarClick
     )
@@ -95,6 +88,7 @@ fun EmpleadoFormContent(
     onRolChange: (String) -> Unit,
     onTurnoChange: (String) -> Unit = {},
     onAsignacionChange: (String) -> Unit = {},
+    onActivoChange: (Boolean) -> Unit = {},
     onVolverClick: () -> Unit,
     onGuardarClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -133,6 +127,14 @@ fun EmpleadoFormContent(
                 onTurnoChange = onTurnoChange,
                 onAsignacionChange = onAsignacionChange
             )
+            // Interruptor Activo: solo al editar
+            if (state.esEdicion) {
+                Spacer(Modifier.height(16.dp))
+                EmpleadoActivoCard(
+                    activo = state.estaActivo,
+                    onActivoChange = onActivoChange
+                )
+            }
 
             Spacer(Modifier.height(20.dp))
 

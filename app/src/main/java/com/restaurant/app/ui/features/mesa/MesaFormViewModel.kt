@@ -2,48 +2,64 @@ package com.restaurant.app.ui.features.mesa
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.restaurant.app.R
+import com.restaurant.app.data.Repositorios
+import com.restaurant.app.domain.model.EstadoMesa
+import com.restaurant.app.domain.model.Mesa
+import com.restaurant.app.domain.repository.MesaRepository
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import  com.restaurant.app.R
-
+import java.util.UUID
 
 /*
-    1.Permite cambiar el número o código de la mesa.
-    2.Incrementa (+) y decrementa (-) la capacidad de comensales (con un límite mínimo de 1 persona).
-    3.Selecciona la zona (Salón o Patio).
-    4.Precarga los datos existentes si se entra en modo Edición.
-    5.Valida que el número de mesa no esté vacío al presionar "Guardar mesa".
+    1. Permite cambiar el número de la mesa (solo dígitos).
+    2. Incrementa (+) y decrementa (-) la capacidad, con mínimo de 1 persona.
+    3. Selecciona la zona (Salón o Patio).
+    4. En modo Edición, carga la mesa desde el repositorio.
+    5. Valida: número obligatorio, mayor a cero y no repetido (RF09).
+    6. Guarda en el repositorio y avisa con MesaFormEvent.
 */
-class MesaFormViewModel : ViewModel() {
+class MesaFormViewModel(
+    private val repositorio: MesaRepository = Repositorios.mesas
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MesaFormUiState())
-    val uiState : StateFlow<MesaFormUiState> = _uiState.asStateFlow()
+    val uiState: StateFlow<MesaFormUiState> = _uiState.asStateFlow()
 
     private val _events = Channel<MesaFormEvent>(Channel.BUFFERED)
     val events = _events.receiveAsFlow()
 
-    //Aquii precargamos los datos para el modo Edicion
-    fun cargarMesaParaEdicion(numero : String, capacidad : Int, zona: String){
-        _uiState.update {
-            it.copy(
-                numeroOMesaCodigo = numero,
-                capacidadPersonas = capacidad,
-                zonaSeleccionada = zona,
-                esEdicion = true
-            )
+    // null = mesa nueva. Con valor = la mesa que se está editando.
+    private var mesaOriginal: Mesa? = null
+
+    // MODO EDICIÓN: busca la mesa en el repositorio y precarga el formulario
+    fun cargarMesa(id: String) {
+        if (mesaOriginal?.id == id) return   // ya se cargó: no pisar lo que el usuario edita
+        viewModelScope.launch {
+            val mesa = repositorio.obtenerMesa(id) ?: return@launch
+            mesaOriginal = mesa
+            _uiState.update {
+                it.copy(
+                    numeroOMesaCodigo = mesa.numero.toString(),
+                    capacidadPersonas = mesa.capacidadPersonas,
+                    zonaSeleccionada = mesa.zona,
+                    esEdicion = true
+                )
+            }
         }
     }
 
-    //Funciones para actualizar el estado segun interaccion del usuario.
-
     fun onNumeroChange(value: String) {
-        _uiState.update { it.copy(numeroOMesaCodigo = value, errorNumero = null) }
+        // Solo permite ingresar dígitos
+        if (value.all { it.isDigit() }) {
+            _uiState.update { it.copy(numeroOMesaCodigo = value, errorNumero = null) }
+        }
     }
 
     fun onIncrementarCapacidad() {
@@ -69,23 +85,50 @@ class MesaFormViewModel : ViewModel() {
         val state = _uiState.value
         if (state.estaCargando) return
 
-        val numero = state.numeroOMesaCodigo.trim()
-
-        // Validación: El número o código de mesa es obligatorio
-        val errorNumero = if (numero.isBlank()) R.string.mesa_form_error_numero_requerido else null
-
-        if (errorNumero != null) {
-            _uiState.update { it.copy(errorNumero = errorNumero) }
-            return
-        }
-
-        // Simulamos el guardado en segundo plano (asíncrono)
         viewModelScope.launch {
             _uiState.update { it.copy(estaCargando = true) }
-            delay(1000) // Simulación de llamada a BD / servidor
+
+            val texto = state.numeroOMesaCodigo.trim()
+            val errorNumero = validarNumero(texto)
+            if (errorNumero != null) {
+                _uiState.update { it.copy(estaCargando = false, errorNumero = errorNumero) }
+                return@launch
+            }
+
+            val numero = texto.toInt()
+            val original = mesaOriginal
+
+            val mesa = original?.copy(
+                // Edición: cambia solo lo del formulario y conserva estado, mozo y consumo
+                numero = numero,
+                zona = state.zonaSeleccionada,
+                capacidadPersonas = state.capacidadPersonas
+            ) ?: Mesa(
+                // Alta: mesa nueva, libre y con id nuevo
+                id = UUID.randomUUID().toString(),
+                numero = numero,
+                zona = state.zonaSeleccionada,
+                capacidadPersonas = state.capacidadPersonas,
+                estado = EstadoMesa.LIBRE
+            )
+
+            repositorio.guardarMesa(mesa)
+
             _uiState.update { it.copy(estaCargando = false) }
             _events.send(MesaFormEvent.MesaGuardada)
         }
     }
 
+    // Devuelve el id del texto de error, o null si el número es válido
+    private suspend fun validarNumero(texto: String): Int? {
+        if (texto.isBlank()) return R.string.mesa_form_error_numero_requerido
+
+        val numero = texto.toIntOrNull()
+        if (numero == null || numero <= 0) return R.string.mesa_form_error_numero_mayor_cero
+
+        // No repetido: ninguna OTRA mesa puede tener ese número
+        val mesas = repositorio.observarMesas().first()
+        val repetido = mesas.any { it.numero == numero && it.id != mesaOriginal?.id }
+        return if (repetido) R.string.mesa_form_error_numero_repetido else null
+    }
 }

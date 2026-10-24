@@ -2,8 +2,10 @@ package com.restaurant.app.ui.features.personal
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.restaurant.app.data.repository.PersonalRepositoryDatos
+import com.restaurant.app.data.Repositorios
+//import com.restaurant.app.data.repository.PersonalRepositoryDatos
 import com.restaurant.app.domain.model.Empleado
+import com.restaurant.app.domain.repository.MesaRepository
 import com.restaurant.app.domain.repository.PersonalRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,7 +16,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class PersonalViewModel(
-    private val personalRepository: PersonalRepository = PersonalRepositoryDatos()
+    //private val personalRepository: PersonalRepository = PersonalRepositoryDatos()
+    private val personalRepository: PersonalRepository = Repositorios.personal,
+    private val mesaRepository: MesaRepository = Repositorios.mesas
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(PersonalUiState())
@@ -53,9 +57,10 @@ class PersonalViewModel(
     }
 
     fun onConfirmarBajaEmpleado() {
-        val empleadoAEliminar = _uiState.value.empleadoADarDeBaja ?: return
+        val empleado = _uiState.value.empleadoADarDeBaja ?: return
         viewModelScope.launch {
-            personalRepository.eliminarEmpleado(empleadoAEliminar.id)
+            personalRepository.guardarEmpleado(empleado.copy(estaActivo = false))
+            mesaRepository.liberarMesasFueraDeZona(empleado.id, null)   // le quitamos todas las mesas
             _uiState.update { it.copy(empleadoADarDeBaja = null) }
         }
     }

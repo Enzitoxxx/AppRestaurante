@@ -43,12 +43,12 @@ fun ZonaRestauranteCards(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             // Tarjeta Salón
-            val esSalon = zonaSeleccionada.contains("Salón", ignoreCase = true) || zonaSeleccionada.contains("Salon", ignoreCase = true)
+            val esSalon = zonaSeleccionada.equals("Salon", ignoreCase = true)
             TarjetaZona(
                 titulo = stringResource(R.string.salon_zona_salon),
                 subtitulo = stringResource(R.string.mesa_form_zona_salon_subtitulo),
                 seleccionado = esSalon,
-                onClick = { onZonaChange("Salón") },
+                onClick = { onZonaChange("Salon") },
                 modifier = Modifier.weight(1f)
             )
 

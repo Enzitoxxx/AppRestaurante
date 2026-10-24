@@ -79,6 +79,7 @@
     <string name="producto_disponible_subtitulo">Aparecerá en la carta digital y comandas</string>
     <string name="producto_error_nombre_requerido">Ingresá el nombre del producto</string>
     <string name="producto_error_precio_requerido">Ingresá el precio del producto</string>
+    <string name="producto_error_precio_mayor_cero">El precio debe ser mayor a cero</string>
 
     <!-- Mapa del Salón -->
     <string name="salon_titulo">Mapa del Salón</string>
@@ -94,16 +95,19 @@
     <string name="salon_sin_comanda">Sin comanda</string>
     <string name="salon_esperando_ticket">Esperando ticket</string>
 
+
     <!-- Mesa -->
     <string name="mesa_form_titulo">Configuración de Mesa</string>
-    <string name="mesa_form_label_numero">NÚMERO O CÓDIGO DE MESA</string>
+    <string name="mesa_form_label_numero">NÚMERO DE MESA</string>
     <string name="mesa_form_label_capacidad">CAPACIDAD MÁXIMA (PERSONAS)</string>
     <string name="mesa_form_capacidad_formato">%1$d comensales</string>
     <string name="mesa_form_label_zona">ZONA DEL RESTAURANTE</string>
     <string name="mesa_form_zona_salon_subtitulo">Interior climatizado</string>
     <string name="mesa_form_zona_patio_subtitulo">Al aire libre</string>
     <string name="mesa_form_boton_guardar">Guardar mesa</string>
-    <string name="mesa_form_error_numero_requerido">Ingresá el número o código de la mesa</string>
+    <string name="mesa_form_error_numero_requerido">Ingresá el número de la mesa</string>
+    <string name="mesa_form_error_numero_mayor_cero">El número debe ser mayor a cero</string>
+    <string name="mesa_form_error_numero_repetido">Ya existe una mesa con ese número</string>
 
     <!-- Dashboard / Home -->
     <string name="home_panel_admin">PANEL ADMINISTRADOR</string>
@@ -140,6 +144,9 @@
     <string name="empleado_form_error_nombre">Ingresá el nombre y apellido</string>
     <string name="empleado_form_error_telefono">Ingresá el teléfono móvil</string>
     <string name="empleado_form_error_correo">Ingresá un correo electrónico válido</string>
+    <string name="empleado_form_error_correo_repetido">Ya existe un empleado con ese correo</string>
+    <string name="empleado_form_activo_titulo">Empleado activo</string>
+    <string name="empleado_form_activo_subtitulo">Si lo desactivás, no podrá iniciar sesión, pero se conserva su historial.</string>
 
     <!-- Asignación de Mesas -->
     <string name="asignacion_titulo">Asignación de Mesas</string>
@@ -149,4 +156,6 @@
     <string name="asignacion_boton_confirmar_cero">Confirmar asignación</string>
     <string name="asignacion_boton_confirmar_uno">Confirmar asignación (1 mesa)</string>
     <string name="asignacion_boton_confirmar_varias">Confirmar asignación (%1$d mesas)</string>
+    <string name="salon_a_cargo_formato">A cargo: %1$s</string>
+    <string name="asignacion_asignada_a_formato">Asignada a %1$s</string>
 </resources>

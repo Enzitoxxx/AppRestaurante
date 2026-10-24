@@ -28,7 +28,7 @@ fun SalonHeader(
     onZonaSeleccionada: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val zonas = listOf("Salón", "Patio")
+    val zonas = listOf("Salon", "Patio")
 
     Row(
         modifier = modifier.fillMaxWidth(),

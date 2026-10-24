@@ -49,17 +49,16 @@ import com.restaurant.app.ui.theme.AppTheme
  */
 @Composable
 fun AsignacionMesasScreen(
-    nombreEmpleado: String = "Camila Gómez",
-    rolEmpleado: String = "Camarera",
+    empleadoId: String,
     onVolverClick: () -> Unit = {},
     onAsignacionGuardada: () -> Unit = {},
     viewModel: AsignacionMesasViewModel = viewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
-    // Carga el nombre y rol del camarero al iniciar
-    LaunchedEffect(nombreEmpleado, rolEmpleado) {
-        viewModel.cargarEmpleado(nombreEmpleado, rolEmpleado)
+    // Carga el empleado y sus mesas al abrir la pantalla
+    LaunchedEffect(empleadoId) {
+        viewModel.cargarEmpleado(empleadoId)
     }
 
     // Escucha eventos únicos de una sola vez
@@ -129,11 +128,12 @@ fun AsignacionMesasContent(
             Spacer(Modifier.height(12.dp))
 
             // 3. Lista de Mesas Seleccionables con Checkbox
-            state.mesasDisponibles.forEach { mesa ->
+            state.mesasVisibles.forEach { mesa ->
                 MesaSeleccionableCard(
                     mesa = mesa,
                     estaSeleccionada = state.idsMesasSeleccionadas.contains(mesa.id),
-                    onToggleSeleccion = onToggleMesaSeleccionada
+                    onToggleSeleccion = onToggleMesaSeleccionada,
+                    asignadaA = state.asignadaAOtro(mesa)
                 )
                 Spacer(Modifier.height(10.dp))
             }
@@ -167,11 +167,11 @@ private fun AsignacionMesasScreenPreview() {
                 nombreEmpleado = "Camila Gómez",
                 rolEmpleado = "Camarera",
                 mesasDisponibles = listOf(
-                    Mesa("1", "Mesa 01", "Salón", 4, EstadoMesa.LIBRE),
-                    Mesa("2", "Mesa 02", "Salón", 4, EstadoMesa.OCUPADA),
-                    Mesa("3", "Mesa 03", "Salón", 6, EstadoMesa.OCUPADA),
-                    Mesa("4", "Mesa 04", "Salón", 2, EstadoMesa.CUENTA),
-                    Mesa("5", "Mesa 05", "Patio", 2, EstadoMesa.LIBRE)
+                    Mesa("1", 1, "Salon", 4, EstadoMesa.LIBRE),
+                    Mesa("2", 2, "Salon", 4, EstadoMesa.OCUPADA),
+                    Mesa("3", 3, "Salon", 6, EstadoMesa.OCUPADA),
+                    Mesa("4", 4, "Salon", 2, EstadoMesa.CUENTA),
+                    Mesa("5", 5, "Patio", 2, EstadoMesa.LIBRE)
                 ),
                 idsMesasSeleccionadas = setOf("1", "2", "3")
             ),

@@ -169,6 +169,7 @@ fun AppNavHost() {
             // Pantalla Configuración de Mesa
             entry<Screen.MesaForm> { key ->
                 MesaFormScreen(
+                    mesaId = key.mesaId,
                     onVolverClick = { backStack.removeLastOrNull() },
                     onMesaGuardada = { backStack.removeLastOrNull() }
                 )
@@ -184,11 +185,7 @@ fun AppNavHost() {
                         backStack.add(Screen.EmpleadoForm(empleadoId = empleado.id)) // Navega a Editar Datos Empleado
                     },
                     onAsignarMesasClick = { empleado ->
-                        backStack.add(Screen.AsignacionMesas(
-                            empleadoId = empleado.id,
-                            nombreEmpleado = empleado.nombre,
-                            rolEmpleado = empleado.rol
-                        )) // Navega a Asignación de Mesas
+                        backStack.add(Screen.AsignacionMesas(empleadoId = empleado.id))
                     },
                     onNavegarA = { item ->
                         when (item) {
@@ -214,8 +211,7 @@ fun AppNavHost() {
             // Pantalla Asignación de Mesas a Camarero/Mozo
             entry<Screen.AsignacionMesas> { key ->
                 AsignacionMesasScreen(
-                    nombreEmpleado = key.nombreEmpleado,
-                    rolEmpleado = key.rolEmpleado,
+                    empleadoId = key.empleadoId,
                     onVolverClick = { backStack.removeLastOrNull() },
                     onAsignacionGuardada = { backStack.removeLastOrNull() }
                 )

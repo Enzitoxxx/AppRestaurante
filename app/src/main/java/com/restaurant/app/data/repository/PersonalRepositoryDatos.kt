@@ -17,15 +17,19 @@ class PersonalRepositoryDatos : PersonalRepository {
                 rol = "Cocinero",
                 turno = "Turno Mañana",
                 asignacion = "Cocina",
-                estaActivo = true
+                estaActivo = true,
+                telefono = "+54 9 381 555-0101",
+                correo = "lisandro@labuenamesa.com.ar"
             ),
             Empleado(
                 id = "2",
                 nombre = "Camila Gómez",
-                rol = "Camarera",
+                rol = "Camarero / Mozo",
                 turno = "Turno Noche",
                 asignacion = "Salón Principal",
-                estaActivo = true
+                estaActivo = true,
+                telefono = "+54 9 11 2345-6789",
+                correo = "camila@labuenamesa.com.ar"
             ),
             Empleado(
                 id = "3",
@@ -33,7 +37,9 @@ class PersonalRepositoryDatos : PersonalRepository {
                 rol = "Bartender",
                 turno = "Turno Noche",
                 asignacion = "Barra",
-                estaActivo = false
+                estaActivo = false,
+                telefono = "+54 9 381 555-0103",
+                correo = "carlos@labuenamesa.com.ar"
             )
         )
     )

@@ -3,16 +3,30 @@ package com.restaurant.app.ui.features.personal.form
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.restaurant.app.R
+import com.restaurant.app.data.Repositorios
+import com.restaurant.app.domain.model.Empleado
+import com.restaurant.app.domain.repository.MesaRepository
+import com.restaurant.app.domain.repository.PersonalRepository
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.UUID
 
-class EmpleadoFormViewModel : ViewModel() {
+/*
+    1. Recibe los cambios de cada campo y genera el usuario a partir del nombre.
+    2. En modo Edición, carga el empleado desde el repositorio.
+    3. Valida: nombre y teléfono obligatorios, correo válido y no repetido .
+    4. Guarda en el repositorio (alta o edición) y avisa con EmpleadoFormEvent.
+*/
+class EmpleadoFormViewModel(
+    private val repositorio: PersonalRepository = Repositorios.personal,
+    private val mesaRepository: MesaRepository = Repositorios.mesas
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(EmpleadoFormUiState())
     val uiState: StateFlow<EmpleadoFormUiState> = _uiState.asStateFlow()
@@ -20,38 +34,38 @@ class EmpleadoFormViewModel : ViewModel() {
     private val _events = Channel<EmpleadoFormEvent>(Channel.BUFFERED)
     val events = _events.receiveAsFlow()
 
-    // Precarga datos para MODO EDICIÓN
-    fun cargarEmpleadoParaEdicion(
-        nombre: String,
-        telefono: String,
-        correo: String,
-        rol: String,
-        turno: String = "Turno Mañana",
-        asignacion: String = "Salón Principal"
-    ) {
-        val usuario = generarUsuario(nombre)
-        _uiState.update {
-            it.copy(
-                nombre = nombre,
-                telefono = telefono,
-                correo = correo,
-                rol = rol,
-                turno = turno,
-                asignacion = asignacion,
-                usuarioGenerado = usuario,
-                claveTemporalGenerada = "Mesa2026!",
-                esEdicion = true
-            )
+    // null = empleado nuevo. Con valor = el empleado que se está editando.
+    private var empleadoOriginal: Empleado? = null
+
+    // modo edicion: busca el empleado en el repositorio y precarga el formulario
+    fun cargarEmpleado(id: String) {
+        if (empleadoOriginal?.id == id) return   // ya se cargó: no pisar lo que el usuario edita
+        viewModelScope.launch {
+            val empleado = repositorio.obtenerEmpleado(id) ?: return@launch
+            empleadoOriginal = empleado
+            _uiState.update {
+                it.copy(
+                    nombre = empleado.nombre,
+                    telefono = empleado.telefono,
+                    correo = empleado.correo,
+                    rol = empleado.rol,
+                    turno = empleado.turno,
+                    asignacion = empleado.asignacion,
+                    usuarioGenerado = generarUsuario(empleado.nombre),
+                    claveTemporalGenerada = CLAVE_TEMPORAL,
+                    estaActivo = empleado.estaActivo,
+                    esEdicion = true
+                )
+            }
         }
     }
 
     fun onNombreChange(value: String) {
-        val usuarioNuevo = generarUsuario(value)
         _uiState.update {
             it.copy(
                 nombre = value,
-                usuarioGenerado = usuarioNuevo,
-                claveTemporalGenerada = if (value.isNotBlank()) "Mesa2026!" else "",
+                usuarioGenerado = generarUsuario(value),
+                claveTemporalGenerada = if (value.isNotBlank()) CLAVE_TEMPORAL else "",
                 errorNombre = null
             )
         }
@@ -83,6 +97,10 @@ class EmpleadoFormViewModel : ViewModel() {
         _uiState.update { it.copy(asignacion = value) }
     }
 
+    fun onActivoChange(value: Boolean) {
+        _uiState.update { it.copy(estaActivo = value) }
+    }
+
     fun onVolverClick() {
         _events.trySend(EmpleadoFormEvent.Volver)
     }
@@ -95,32 +113,75 @@ class EmpleadoFormViewModel : ViewModel() {
         val telefono = state.telefono.trim()
         val correo = state.correo.trim()
 
-        // Validaciones del formulario
-        val errorNombre = if (nombre.isBlank()) R.string.empleado_form_error_nombre else null
-        val errorTelefono = if (telefono.isBlank()) R.string.empleado_form_error_telefono else null
-        val errorCorreo = when {
-            correo.isBlank() -> R.string.empleado_form_error_correo
-            !EMAIL_REGEX.matches(correo) -> R.string.login_error_email_invalid
-            else -> null
-        }
-
-        if (errorNombre != null || errorTelefono != null || errorCorreo != null) {
-            _uiState.update {
-                it.copy(
-                    errorNombre = errorNombre,
-                    errorTelefono = errorTelefono,
-                    errorCorreo = errorCorreo
-                )
-            }
-            return
-        }
-
-        // Simulación de guardado en segundo plano
         viewModelScope.launch {
             _uiState.update { it.copy(estaCargando = true) }
-            delay(1000) // Simulación de llamada a servidor / BD
+
+            val errorNombre = if (nombre.isBlank()) R.string.empleado_form_error_nombre else null
+            val errorTelefono = if (telefono.isBlank()) R.string.empleado_form_error_telefono else null
+            val errorCorreo = validarCorreo(correo)
+
+            if (errorNombre != null || errorTelefono != null || errorCorreo != null) {
+                _uiState.update {
+                    it.copy(
+                        estaCargando = false,
+                        errorNombre = errorNombre,
+                        errorTelefono = errorTelefono,
+                        errorCorreo = errorCorreo
+                    )
+                }
+                return@launch
+            }
+
+            val original = empleadoOriginal
+            val empleado = original?.copy(
+                // Edición: cambia lo del formulario y conserva el id y si está activo
+                nombre = nombre,
+                telefono = telefono,
+                correo = correo,
+                rol = state.rol,
+                turno = state.turno,
+                asignacion = state.asignacion,
+                estaActivo = state.estaActivo
+            ) ?: Empleado(
+                // Alta: empleado nuevo, activo y con id nuevo
+                id = UUID.randomUUID().toString(),
+                nombre = nombre,
+                rol = state.rol,
+                turno = state.turno,
+                asignacion = state.asignacion,
+                estaActivo = true,
+                telefono = telefono,
+                correo = correo
+            )
+
+            repositorio.guardarEmpleado(empleado)
+            actualizarMesasDelEmpleado(empleado)
+
             _uiState.update { it.copy(estaCargando = false) }
             _events.send(EmpleadoFormEvent.EmpleadoGuardado)
+        }
+    }
+
+    // Devuelve el id del texto de error, o null si el correo es válido
+    private suspend fun validarCorreo(correo: String): Int? {
+        if (correo.isBlank()) return R.string.empleado_form_error_correo
+        if (!EMAIL_REGEX.matches(correo)) return R.string.login_error_email_invalid
+
+        // No repetido: ningún OTRO empleado puede tener ese correo
+        val empleados = repositorio.observarPersonal().first()
+        val repetido = empleados.any {
+            it.correo.equals(correo, ignoreCase = true) && it.id != empleadoOriginal?.id
+        }
+        return if (repetido) R.string.empleado_form_error_correo_repetido else null
+    }
+
+    // Si cambió de zona, de rol o se desactivó, se le quitan las mesas que ya no le corresponden
+    private suspend fun actualizarMesasDelEmpleado(empleado: Empleado) {
+        val atiendeMesas = empleado.estaActivo && empleado.atiendeMesas
+        when {
+            !atiendeMesas -> mesaRepository.liberarMesasFueraDeZona(empleado.id, null)   // se le quitan todas
+            empleado.zonaMesas != null ->
+                mesaRepository.liberarMesasFueraDeZona(empleado.id, empleado.zonaMesas)  // se le quitan las de otra zona
         }
     }
 
@@ -136,6 +197,7 @@ class EmpleadoFormViewModel : ViewModel() {
     }
 
     private companion object {
+        const val CLAVE_TEMPORAL = "Mesa2026!"
         val EMAIL_REGEX = Regex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")
     }
 }

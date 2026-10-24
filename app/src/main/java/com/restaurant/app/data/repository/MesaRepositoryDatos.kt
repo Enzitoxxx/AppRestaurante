@@ -16,34 +16,34 @@ class MesaRepositoryDatos : MesaRepository {
             // Salón
             Mesa(
                 id = "1",
-                numero = "Mesa 01",
-                zona = "Salón",
+                numero = 1,
+                zona = "Salon",
                 capacidadPersonas = 4,
                 estado = EstadoMesa.LIBRE,
                 detalleEstado = "Sin comanda"
             ),
             Mesa(
                 id = "2",
-                numero = "Mesa 02",
-                zona = "Salón",
+                numero = 2,
+                zona = "Salon",
                 capacidadPersonas = 2,
                 estado = EstadoMesa.OCUPADA,
-                mozoAsignado = "Camila G.",
+                empleadoAsignadoId = "2",
                 consumoTotal = 18200.0
             ),
             Mesa(
                 id = "3",
-                numero = "Mesa 03",
-                zona = "Salón",
+                numero = 3,
+                zona = "Salon",
                 capacidadPersonas = 4,
                 estado = EstadoMesa.OCUPADA,
-                mozoAsignado = "Camila G.",
+                empleadoAsignadoId = "2",
                 consumoTotal = 28600.0
             ),
             Mesa(
                 id = "4",
-                numero = "Mesa 04",
-                zona = "Salón",
+                numero = 4,
+                zona = "Salon",
                 capacidadPersonas = 4,
                 estado = EstadoMesa.CUENTA,
                 detalleEstado = "Esperando ticket",
@@ -53,14 +53,14 @@ class MesaRepositoryDatos : MesaRepository {
             // Patio
             Mesa(
                 id = "5",
-                numero = "Mesa 05",
+                numero = 5,
                 zona = "Patio",
                 capacidadPersonas = 2,
                 estado = EstadoMesa.LIBRE
             ),
             Mesa(
                 id = "6",
-                numero = "Mesa 06",
+                numero = 6,
                 zona = "Patio",
                 capacidadPersonas = 6,
                 estado = EstadoMesa.OCUPADA,
@@ -86,5 +86,27 @@ class MesaRepositoryDatos : MesaRepository {
 
     override suspend fun eliminarMesa(id: String) {
         mesas.update { lista -> lista.filterNot { it.id == id } }
+    }
+
+    override suspend fun asignarMesas(empleadoId: String, idsMesas: Set<String>) {
+        mesas.update { lista ->
+            lista.map { mesa ->
+                when {
+                    mesa.id in idsMesas -> mesa.copy(empleadoAsignadoId = empleadoId)  // queda con este camarero
+                    mesa.empleadoAsignadoId == empleadoId -> mesa.copy(empleadoAsignadoId = null)  // se la sacamos
+                    else -> mesa                                                        // no se toca
+                }
+            }
+        }
+    }
+
+    override suspend fun liberarMesasFueraDeZona(empleadoId: String, zonaPermitida: String?) {
+        mesas.update { lista ->
+            lista.map { mesa ->
+                val esDeEsteEmpleado = mesa.empleadoAsignadoId == empleadoId
+                val fueraDeZona = zonaPermitida == null || !mesa.zona.equals(zonaPermitida, ignoreCase = true)
+                if (esDeEsteEmpleado && fueraDeZona) mesa.copy(empleadoAsignadoId = null) else mesa
+            }
+        }
     }
 }

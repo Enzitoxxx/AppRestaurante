@@ -41,6 +41,7 @@ fun MesaCard(
     onMesaClick: (Mesa) -> Unit,
     onEditarClick: (Mesa) -> Unit = {},
     onBajaClick: (Mesa) -> Unit = {},
+    nombreMozo: String? = null,
     modifier: Modifier = Modifier
 ) {
     val (colorBorde, colorFondoCard, colorBadgeFondo, textoBadge) = obtenerEstiloMesa(mesa.estado)
@@ -65,7 +66,7 @@ fun MesaCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = mesa.numero,
+                    text = mesa.nombre,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
@@ -88,7 +89,7 @@ fun MesaCard(
 
             Spacer(Modifier.height(10.dp))
 
-            // Fila Inferior: Detalles + Acciones (Lápiz y X / Tacho) en la esquina inferior derecha
+            // Fila Inferior: Detalles + Acciones (Lápiz y X) en la esquina inferior derecha
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -121,21 +122,13 @@ fun MesaCard(
                         }
 
                         EstadoMesa.OCUPADA -> {
-                            if (mesa.mozoAsignado != null) {
-                                Row(verticalAlignment = Alignment.CenterVertically) {
-                                    Icon(
-                                        imageVector = Icons.Outlined.Person,
-                                        contentDescription = null,
-                                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                        modifier = Modifier.padding(end = 4.dp)
-                                    )
-                                    Text(
-                                        text = mesa.mozoAsignado,
-                                        style = MaterialTheme.typography.bodySmall,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                                    )
-                                }
-                            } else {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Person,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    modifier = Modifier.padding(end = 4.dp)
+                                )
                                 Text(
                                     text = "${mesa.capacidadPersonas} personas",
                                     style = MaterialTheme.typography.bodySmall,
@@ -181,6 +174,16 @@ fun MesaCard(
                                 )
                             }
                         }
+                    }
+
+                    // Camarero a cargo: se muestra en cualquier estado de la mesa
+                    if (nombreMozo != null) {
+                        Spacer(Modifier.height(2.dp))
+                        Text(
+                            text = stringResource(R.string.salon_a_cargo_formato, nombreMozo),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                        )
                     }
                 }
 

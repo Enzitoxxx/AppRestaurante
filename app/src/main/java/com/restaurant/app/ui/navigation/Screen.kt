@@ -50,9 +50,7 @@ sealed interface Screen : NavKey {
 
     @Serializable
     data class AsignacionMesas(
-        val empleadoId: String? = null,
-        val nombreEmpleado: String = "Camila Gómez",
-        val rolEmpleado: String = "Camarera"
+        val empleadoId: String
     ) : Screen
 }
 

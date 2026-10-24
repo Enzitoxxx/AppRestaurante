@@ -24,26 +24,33 @@ import androidx.compose.ui.unit.dp
 import com.restaurant.app.R
 import com.restaurant.app.domain.model.Mesa
 
-/**
- * TARJETA SELECCIONABLE DE MESA CON CHECKBOX.
+/*
+ * TARJETA SELECCIONABLE DE MESA .
  *
- * Muestra el número de mesa y su zona (ej: "Mesa 01 · Salón"), la capacidad
- * y un Checkbox naranja a la derecha para marcar o desmarcar la asignación.
+ * Si la mesa ya la tiene otro camarero (asignadaA != null), la tarjeta queda
+ * bloqueada y muestra "Asignada a (xxx).", para que no se pueda marcar.
  */
 @Composable
 fun MesaSeleccionableCard(
     mesa: Mesa,
     estaSeleccionada: Boolean,
     onToggleSeleccion: (String) -> Unit,
+    asignadaA: String? = null,
     modifier: Modifier = Modifier
 ) {
-    val colorBorde = if (estaSeleccionada) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant
+    val bloqueada = asignadaA != null
+    val colorBorde = if (estaSeleccionada) MaterialTheme.colorScheme.primary
+    else MaterialTheme.colorScheme.outlineVariant
 
     Card(
         onClick = { onToggleSeleccion(mesa.id) },
+        enabled = !bloqueada,
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(18.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+            disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
+        ),
         border = BorderStroke(1.5.dp, colorBorde),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
     ) {
@@ -54,13 +61,13 @@ fun MesaSeleccionableCard(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Información de la Mesa (Número, Zona y Capacidad)
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = "${mesa.numero} · ${mesa.zona}",
+                    text = "${mesa.nombre} · ${mesa.zona}",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = if (bloqueada) MaterialTheme.colorScheme.onSurfaceVariant
+                    else MaterialTheme.colorScheme.onSurface
                 )
 
                 Spacer(Modifier.height(4.dp))
@@ -70,12 +77,22 @@ fun MesaSeleccionableCard(
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
+
+                if (asignadaA != null) {
+                    Spacer(Modifier.height(4.dp))
+                    Text(
+                        text = stringResource(R.string.asignacion_asignada_a_formato, asignadaA),
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
             }
 
-            // Checkbox Naranja de selección
             Checkbox(
                 checked = estaSeleccionada,
                 onCheckedChange = { onToggleSeleccion(mesa.id) },
+                enabled = !bloqueada,
                 colors = CheckboxDefaults.colors(
                     checkedColor = MaterialTheme.colorScheme.primary,
                     checkmarkColor = MaterialTheme.colorScheme.onPrimary,

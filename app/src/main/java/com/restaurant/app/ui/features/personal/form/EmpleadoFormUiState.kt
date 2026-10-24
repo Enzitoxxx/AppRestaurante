@@ -18,6 +18,7 @@ data class EmpleadoFormUiState(
     // Estados de UI
     val esEdicion: Boolean = false,
     val estaCargando: Boolean = false,
+    val estaActivo : Boolean = true,
 
     // Errores de validación
     @StringRes val errorNombre: Int? = null,

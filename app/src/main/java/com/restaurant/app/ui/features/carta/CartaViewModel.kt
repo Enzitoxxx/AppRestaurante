@@ -2,7 +2,8 @@ package com.restaurant.app.ui.features.carta
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.restaurant.app.data.repository.ProductoRepositoryDatos
+import com.restaurant.app.data.Repositorios
+//import com.restaurant.app.data.repository.ProductoRepositoryDatos
 import com.restaurant.app.domain.model.Producto
 import com.restaurant.app.domain.repository.ProductoRepository
 import kotlinx.coroutines.channels.Channel
@@ -14,7 +15,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class CartaViewModel(
-    private val productoRepository: ProductoRepository = ProductoRepositoryDatos()
+    //private val productoRepository: ProductoRepository = ProductoRepositoryDatos()
+    private val productoRepository: ProductoRepository = Repositorios.productos
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(CartaUiState())
@@ -43,7 +45,11 @@ class CartaViewModel(
     fun onToggleDisponibilidadProducto(productoId: String) {
         viewModelScope.launch {
             val producto = productoRepository.obtenerProducto(productoId) ?: return@launch
-            val productoActualizado = producto.copy(estadoDisponible = !producto.estadoDisponible)
+            val nuevo = !producto.estadoDisponible
+            val productoActualizado = producto.copy(
+                estadoDisponible = nuevo,
+                estadoTexto = if (nuevo) null else "Pausado"
+            )
             productoRepository.guardarProducto(productoActualizado)
         }
     }

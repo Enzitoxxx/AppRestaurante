@@ -9,6 +9,7 @@ data class Producto (
     val area : String, // bar, cocina
     val precio : Double,
     val estadoDisponible : Boolean,
-    val estadoTexto : String? = null // "Ej: Pausado por stock"
+    val estadoTexto : String? = null, // "Ej: Pausado por stock"
+    val descripcion : String = ""
 
 )

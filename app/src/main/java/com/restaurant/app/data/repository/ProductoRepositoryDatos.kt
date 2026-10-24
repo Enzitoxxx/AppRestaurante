@@ -18,7 +18,8 @@ class ProductoRepositoryDatos : ProductoRepository {
                 categoria = "Entradas",
                 area = "Cocina",
                 precio = 2200.0,
-                estadoDisponible = true
+                estadoDisponible = true,
+                descripcion = "Carne cortada a cuchillo con cebolla de verdeo, huevo y aceitunas."
             ),
             Producto(
                 id = "2",
@@ -26,7 +27,8 @@ class ProductoRepositoryDatos : ProductoRepository {
                 categoria = "Platos principales",
                 area = "Cocina",
                 precio = 14800.0,
-                estadoDisponible = true
+                estadoDisponible = true,
+                descripcion = "Carne cortada a cuchillo con cebolla de verdeo, huevo y aceitunas."
             ),
             Producto(
                 id = "3",
@@ -35,7 +37,8 @@ class ProductoRepositoryDatos : ProductoRepository {
                 area = "Bar",
                 precio = 3500.0,
                 estadoDisponible = false,
-                estadoTexto = "Pausado por stock"
+                estadoTexto = "Pausado por stock",
+                descripcion = "Carne cortada a cuchillo con cebolla de verdeo, huevo y aceitunas."
             ),
             Producto(
                 id = "4",
@@ -43,7 +46,8 @@ class ProductoRepositoryDatos : ProductoRepository {
                 categoria = "Postres",
                 area = "Cocina",
                 precio = 3200.0,
-                estadoDisponible = true
+                estadoDisponible = true,
+                descripcion = "Carne cortada a cuchillo con cebolla de verdeo, huevo y aceitunas."
             )
         )
     )

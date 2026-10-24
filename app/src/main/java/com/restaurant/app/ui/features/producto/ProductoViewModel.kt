@@ -3,23 +3,28 @@ package com.restaurant.app.ui.features.producto
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.restaurant.app.R
+import com.restaurant.app.data.Repositorios
+import com.restaurant.app.domain.model.Producto
+import com.restaurant.app.domain.repository.ProductoRepository
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 /*
-    1.Recibir los cambios de cada campo mientras el usuario escribe.
-    2.Permitir solo números en el campo Precio (value.all { it.isDigit() }).
-    3.Cargar los datos existentes si se entra en modo Edición.
-    4.Validar que Nombre y Precio no estén vacíos al presionar "Guardar".
-    5.Emitir el evento ProductoEvent.ProductoGuardado o ProductoEvent.Volver.
+    1. Recibir los cambios de cada campo mientras el usuario escribe.
+    2. Permitir solo números en el campo Precio.
+    3. En modo Edición, cargar el producto desde el repositorio.
+    4. Validar nombre y precio al presionar "Guardar".
+    5. Guardar en el repositorio (alta o edición) y avisar con ProductoEvent.
 */
-class ProductoViewModel : ViewModel() {
+class ProductoViewModel(
+    private val repositorio: ProductoRepository = Repositorios.productos
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ProductoUiState())
     val uiState: StateFlow<ProductoUiState> = _uiState.asStateFlow()
@@ -27,29 +32,28 @@ class ProductoViewModel : ViewModel() {
     private val _events = Channel<ProductoEvent>(Channel.BUFFERED)
     val events = _events.receiveAsFlow()
 
-    // Si viene un producto existente, se precargan los datos para MODO EDICIÓN
-    fun cargarProductoParaEdicion(
-        nombre: String,
-        descripcion: String,
-        precio: Double,
-        categoria: String,
-        area: String,
-        disponible: Boolean
-    ) {
-        _uiState.update {
-            it.copy(
-                nombre = nombre,
-                descripcion = descripcion,
-                precio = precio.toInt().toString(),
-                categoria = categoria,
-                areaPreparacion = area,
-                disponibleParaVenta = disponible,
-                esEdicion = true
-            )
+    // null = estamos creando un producto nuevo. Con valor = editando ese producto.
+    private var productoId: String? = null
+
+    // MODO EDICIÓN: busca el producto en el repositorio y precarga el formulario
+    fun cargarProducto(id: String) {
+        if (productoId == id) return   // ya se cargó: no pisar lo que el usuario esté editando
+        viewModelScope.launch {
+            val producto = repositorio.obtenerProducto(id) ?: return@launch
+            productoId = producto.id
+            _uiState.update {
+                it.copy(
+                    nombre = producto.nombre,
+                    descripcion = producto.descripcion,
+                    precio = producto.precio.toInt().toString(),
+                    categoria = producto.categoria,
+                    areaPreparacion = producto.area,
+                    disponibleParaVenta = producto.estadoDisponible,
+                    esEdicion = true
+                )
+            }
         }
     }
-
-    // funciones para actualizar el estado según lo que escribe o elige el usuario:
 
     fun onNombreChange(value: String) {
         _uiState.update { it.copy(nombre = value, errorNombre = null) }
@@ -87,26 +91,37 @@ class ProductoViewModel : ViewModel() {
         if (state.estaCargando) return
 
         val nombre = state.nombre.trim()
-        val precio = state.precio.trim()
+        val precio = state.precio.trim().toDoubleOrNull()
 
-        // Validaciones del formulario
+        // Validaciones (RF07: nombre obligatorio y precio mayor a cero)
         val errorNombre = if (nombre.isBlank()) R.string.producto_error_nombre_requerido else null
-        val errorPrecio = if (precio.isBlank()) R.string.producto_error_precio_requerido else null
+        val errorPrecio = when {
+            state.precio.isBlank() -> R.string.producto_error_precio_requerido
+            precio == null || precio <= 0 -> R.string.producto_error_precio_mayor_cero
+            else -> null
+        }
 
         if (errorNombre != null || errorPrecio != null) {
-            _uiState.update {
-                it.copy(
-                    errorNombre = errorNombre,
-                    errorPrecio = errorPrecio
-                )
-            }
+            _uiState.update { it.copy(errorNombre = errorNombre, errorPrecio = errorPrecio) }
             return
         }
 
-        // Simulación de guardado en segundo plano
         viewModelScope.launch {
             _uiState.update { it.copy(estaCargando = true) }
-            delay(1000) // Simulación de llamada a BD o servidor
+
+            val producto = Producto(
+                // Si estamos editando, conserva el id. Si es nuevo, genera uno.
+                id = productoId ?: UUID.randomUUID().toString(),
+                nombre = nombre,
+                descripcion = state.descripcion.trim(),
+                categoria = state.categoria,
+                area = state.areaPreparacion,
+                precio = precio!!,
+                estadoDisponible = state.disponibleParaVenta,
+                estadoTexto = if (state.disponibleParaVenta) null else "Pausado"
+            )
+            repositorio.guardarProducto(producto)
+
             _uiState.update { it.copy(estaCargando = false) }
             _events.send(ProductoEvent.ProductoGuardado)
         }

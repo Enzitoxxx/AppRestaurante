@@ -143,7 +143,7 @@ fun SalonContent(
                 }
 
                 // 2. Mesas de ZONA PRINCIPAL (SALÓN)
-                val mesasSalon = state.mesasFiltradas.filter { it.zona.equals("Salón", ignoreCase = true) }
+                val mesasSalon = state.mesasFiltradas.filter { it.zona.equals("Salon", ignoreCase = true) }
                 if (mesasSalon.isNotEmpty()) {
                     item {
                         ZonaHeader(tituloZona = stringResource(R.string.salon_zona_principal))
@@ -160,6 +160,7 @@ fun SalonContent(
                         ) {
                             MesaCard(
                                 mesa = par[0],
+                                nombreMozo = state.nombreMozo(par[0]),
                                 onMesaClick = onMesaClick,
                                 onEditarClick = onEditarMesaClick,
                                 onBajaClick = onSolicitarBajaMesa,
@@ -168,6 +169,7 @@ fun SalonContent(
                             if (par.size > 1) {
                                 MesaCard(
                                     mesa = par[1],
+                                    nombreMozo = state.nombreMozo(par[1]),
                                     onMesaClick = onMesaClick,
                                     onEditarClick = onEditarMesaClick,
                                     onBajaClick = onSolicitarBajaMesa,
@@ -200,6 +202,7 @@ fun SalonContent(
                         ) {
                             MesaCard(
                                 mesa = par[0],
+                                nombreMozo = state.nombreMozo(par[0]),
                                 onMesaClick = onMesaClick,
                                 onEditarClick = onEditarMesaClick,
                                 onBajaClick = onSolicitarBajaMesa,
@@ -208,6 +211,7 @@ fun SalonContent(
                             if (par.size > 1) {
                                 MesaCard(
                                     mesa = par[1],
+                                    nombreMozo = state.nombreMozo(par[1]),
                                     onMesaClick = onMesaClick,
                                     onEditarClick = onEditarMesaClick,
                                     onBajaClick = onSolicitarBajaMesa,
@@ -234,7 +238,7 @@ fun SalonContent(
                     },
                     text = {
                         Text(
-                            text = "¿Estás seguro de dar de baja la ${mesa.numero}? Dejará de mostrarse en el mapa del salón.",
+                            text = "¿Estás seguro de dar de baja la ${mesa.nombre}? Dejará de mostrarse en el mapa del salón.",
                             style = MaterialTheme.typography.bodyMedium
                         )
                     },
@@ -264,13 +268,14 @@ private fun SalonScreenPreview() {
     AppTheme {
         SalonContent(
             state = SalonUiState(
+                nombresEmpleados = mapOf("2" to "Camila G."),
                 mesas = listOf(
-                    Mesa("1", "Mesa 01", "Salón", 4, EstadoMesa.LIBRE, detalleEstado = "Sin comanda"),
-                    Mesa("2", "Mesa 02", "Salón", 2, EstadoMesa.OCUPADA, mozoAsignado = "Camila G.", consumoTotal = 18200.0),
-                    Mesa("3", "Mesa 03", "Salón", 4, EstadoMesa.OCUPADA, mozoAsignado = "Camila G.", consumoTotal = 28600.0),
-                    Mesa("4", "Mesa 04", "Salón", 4, EstadoMesa.CUENTA, detalleEstado = "Esperando ticket", consumoTotal = 34100.0),
-                    Mesa("5", "Mesa 05", "Patio", 2, EstadoMesa.LIBRE),
-                    Mesa("6", "Mesa 06", "Patio", 6, EstadoMesa.OCUPADA, consumoTotal = 42000.0)
+                    Mesa("1", 1, "Salon", 4, EstadoMesa.LIBRE, detalleEstado = "Sin comanda"),
+                    Mesa("2", 2, "Salon", 2, EstadoMesa.OCUPADA, empleadoAsignadoId = "Camila G.", consumoTotal = 18200.0),
+                    Mesa("3", 3, "Salon", 4, EstadoMesa.OCUPADA, empleadoAsignadoId = "Camila G.", consumoTotal = 28600.0),
+                    Mesa("4", 4, "Salon", 4, EstadoMesa.CUENTA, detalleEstado = "Esperando ticket", consumoTotal = 34100.0),
+                    Mesa("5", 5, "Patio", 2, EstadoMesa.LIBRE),
+                    Mesa("6", 6, "Patio", 6, EstadoMesa.OCUPADA, consumoTotal = 42000.0)
                 )
             ),
             onZonaSeleccionada = {},

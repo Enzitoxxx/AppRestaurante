@@ -43,17 +43,10 @@ fun ProductoScreen(
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
-    // Si viene un productoId (modo edición), cargamos los datos existentes:
+    // Si viene un productoId (modo edición), cargamos ese producto desde el repositorio
     LaunchedEffect(productoId) {
         if (productoId != null) {
-            viewModel.cargarProductoParaEdicion(
-                nombre = "Empanadas de carne",
-                descripcion = "Carne cortada a cuchillo con cebolla de verdeo, huevo y aceitunas. Masa criolla frita.",
-                precio = 2200.0,
-                categoria = "Entradas",
-                area = "Cocina",
-                disponible = true
-            )
+            viewModel.cargarProducto(productoId)
         }
     }
 
