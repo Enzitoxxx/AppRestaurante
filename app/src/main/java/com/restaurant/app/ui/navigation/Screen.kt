@@ -36,8 +36,23 @@ sealed interface Screen : NavKey {
     data object Salon : Screen
 
     @Serializable
+    data object Personal : Screen
+
+    @Serializable
     data class MesaForm(
         val mesaId: String? = null
+    ) : Screen
+
+    @Serializable
+    data class EmpleadoForm(
+        val empleadoId: String? = null
+    ) : Screen
+
+    @Serializable
+    data class AsignacionMesas(
+        val empleadoId: String? = null,
+        val nombreEmpleado: String = "Camila Gómez",
+        val rolEmpleado: String = "Camarera"
     ) : Screen
 }
 

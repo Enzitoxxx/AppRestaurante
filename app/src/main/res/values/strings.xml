@@ -118,5 +118,35 @@
     <string name="home_units_sold">%1$d unidades vendidas</string>
     <string name="cd_notifications">Notificaciones</string>
 
+    <!-- Personal -->
+    <string name="personal_titulo">Equipo de trabajo</string>
+    <string name="personal_resumen_formato">%1$d empleados registrados</string>
+    <string name="personal_estado_activo">Activo</string>
+    <string name="personal_estado_inactivo">Inactivo</string>
+    <string name="personal_cd_agregar">Agregar empleado</string>
 
+    <!-- Alta / Edición Empleado -->
+    <string name="empleado_form_titulo_nuevo">Registrar Empleado</string>
+    <string name="empleado_form_titulo_editar">Editar Empleado</string>
+    <string name="empleado_form_label_nombre">NOMBRE Y APELLIDO</string>
+    <string name="empleado_form_label_telefono">TELÉFONO MÓVIL</string>
+    <string name="empleado_form_label_correo">CORREO ELECTRÓNICO</string>
+    <string name="empleado_form_label_rol">ROL ASIGNADO</string>
+    <string name="empleado_form_label_turno">TURNO DE TRABAJO</string>
+    <string name="empleado_form_label_asignacion">ZONA / ESTACIÓN DE TRABAJO</string>
+    <string name="empleado_form_boton_guardar">Registrar empleado</string>
+    <string name="empleado_form_credenciales_titulo">Credenciales temporales generadas</string>
+    <string name="empleado_form_credenciales_whatsapp">Se envió una copia al WhatsApp del empleado.</string>
+    <string name="empleado_form_error_nombre">Ingresá el nombre y apellido</string>
+    <string name="empleado_form_error_telefono">Ingresá el teléfono móvil</string>
+    <string name="empleado_form_error_correo">Ingresá un correo electrónico válido</string>
+
+    <!-- Asignación de Mesas -->
+    <string name="asignacion_titulo">Asignación de Mesas</string>
+    <string name="asignacion_subtitulo_formato">%1$s: %2$s</string>
+    <string name="asignacion_seccion_label">SELECCIONAR MESAS A CARGO</string>
+    <string name="asignacion_capacidad_formato">Capacidad: %1$d personas</string>
+    <string name="asignacion_boton_confirmar_cero">Confirmar asignación</string>
+    <string name="asignacion_boton_confirmar_uno">Confirmar asignación (1 mesa)</string>
+    <string name="asignacion_boton_confirmar_varias">Confirmar asignación (%1$d mesas)</string>
 </resources>

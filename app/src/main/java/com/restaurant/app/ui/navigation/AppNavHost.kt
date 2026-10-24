@@ -1,7 +1,5 @@
 package com.restaurant.app.ui.navigation
 
-
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.entryProvider
@@ -11,13 +9,16 @@ import androidx.navigation3.ui.NavDisplay
 import com.restaurant.app.core.designsystem.NavegacionItem
 import com.restaurant.app.ui.features.carta.CartaScreen
 import com.restaurant.app.ui.features.forgotpassword.ForgotPasswordScreen
+import com.restaurant.app.ui.features.home.HomeScreen
 import com.restaurant.app.ui.features.login.LoginScreen
 import com.restaurant.app.ui.features.mesa.MesaFormScreen
+import com.restaurant.app.ui.features.personal.PersonalScreen
+import com.restaurant.app.ui.features.personal.asignacion.AsignacionMesasScreen
+import com.restaurant.app.ui.features.personal.form.EmpleadoFormScreen
 import com.restaurant.app.ui.features.producto.ProductoScreen
 import com.restaurant.app.ui.features.registro.RegistroScreen
 import com.restaurant.app.ui.features.salon.SalonScreen
 import com.restaurant.app.ui.features.splash.SplashScreen
-import com.restaurant.app.ui.features.home.HomeScreen
 
 /*
    NAVIGATION 3 y BACKSTACK :
@@ -32,7 +33,7 @@ import com.restaurant.app.ui.features.home.HomeScreen
       funciona exactamente como una pila de cartas (LIFO: Last In, First Out) que guarda la historia de pantallas que el usuario tiene abiertas:
       - backStack.add(Screen.X): Agrega/Apila una nueva pantalla arriba.
       - backStack.removeLastOrNull(): Quita la pantalla actual para volver a la anterior.
-      - backStack.clear(): Vacía tod el historial (ej: al hacer Login para no regresar atrás).
+      - backStack.clear(): Vacía todo el historial (ej: al hacer Login para no regresar atrás).
 */
 
 @Composable
@@ -42,7 +43,11 @@ fun AppNavHost() {
 
     NavDisplay(
         backStack = backStack,
-        onBack = { backStack.removeLastOrNull() },
+        onBack = {
+            if (backStack.size > 1) {
+                backStack.removeLastOrNull()
+            }
+        },
         entryDecorators = listOf(
             rememberSaveableStateHolderNavEntryDecorator(),
             rememberViewModelStoreNavEntryDecorator()
@@ -76,17 +81,10 @@ fun AppNavHost() {
                     // Maneja las opciones seleccionadas en la barra de navegación
                     onNavegarA = { item ->
                         when (item) {
-
-                            // Abre la pantalla de carta y productos
                             NavegacionItem.Carta -> backStack.add(Screen.Carta)
-
-                            // Abre el mapa del salón y sus mesas
                             NavegacionItem.Salon -> backStack.add(Screen.Salon)
-
-                            // Ya estamos en Inicio, por eso no hacemos nada
+                            NavegacionItem.Personal -> backStack.add(Screen.Personal)
                             NavegacionItem.Inicio -> { /* Ya estamos en Home */ }
-
-                            // Opciones todavía no implementadas
                             else -> { }
                         }
                     }
@@ -126,6 +124,7 @@ fun AppNavHost() {
                     onNavegarA = { item ->
                         when (item) {
                             NavegacionItem.Salon -> backStack.add(Screen.Salon)
+                            NavegacionItem.Personal -> backStack.add(Screen.Personal)
                             NavegacionItem.Carta -> { /* Ya estamos aquí */ }
                             NavegacionItem.Inicio -> backStack.add(Screen.Home)
                             else -> { /* Otros ítems */ }
@@ -158,6 +157,7 @@ fun AppNavHost() {
                     onNavegarA = { item ->
                         when (item) {
                             NavegacionItem.Carta -> backStack.add(Screen.Carta)
+                            NavegacionItem.Personal -> backStack.add(Screen.Personal)
                             NavegacionItem.Salon -> { /* Ya estamos aquí */ }
                             NavegacionItem.Inicio -> backStack.add(Screen.Home)
                             else -> { /* Otros ítems */ }
@@ -171,6 +171,53 @@ fun AppNavHost() {
                 MesaFormScreen(
                     onVolverClick = { backStack.removeLastOrNull() },
                     onMesaGuardada = { backStack.removeLastOrNull() }
+                )
+            }
+
+            // Pantalla Equipo de Trabajo (Personal)
+            entry<Screen.Personal> {
+                PersonalScreen(
+                    onAgregarEmpleadoClick = {
+                        backStack.add(Screen.EmpleadoForm()) // Navega a Alta Empleado
+                    },
+                    onEditarEmpleadoClick = { empleado ->
+                        backStack.add(Screen.EmpleadoForm(empleadoId = empleado.id)) // Navega a Editar Datos Empleado
+                    },
+                    onAsignarMesasClick = { empleado ->
+                        backStack.add(Screen.AsignacionMesas(
+                            empleadoId = empleado.id,
+                            nombreEmpleado = empleado.nombre,
+                            rolEmpleado = empleado.rol
+                        )) // Navega a Asignación de Mesas
+                    },
+                    onNavegarA = { item ->
+                        when (item) {
+                            NavegacionItem.Carta -> backStack.add(Screen.Carta)
+                            NavegacionItem.Salon -> backStack.add(Screen.Salon)
+                            NavegacionItem.Inicio -> backStack.add(Screen.Home)
+                            NavegacionItem.Personal -> { /* Ya estamos aquí */ }
+                            else -> { }
+                        }
+                    }
+                )
+            }
+
+            // Pantalla Alta / Edición de Empleado
+            entry<Screen.EmpleadoForm> { key ->
+                EmpleadoFormScreen(
+                    empleadoId = key.empleadoId,
+                    onVolverClick = { backStack.removeLastOrNull() },
+                    onEmpleadoGuardado = { backStack.removeLastOrNull() }
+                )
+            }
+
+            // Pantalla Asignación de Mesas a Camarero/Mozo
+            entry<Screen.AsignacionMesas> { key ->
+                AsignacionMesasScreen(
+                    nombreEmpleado = key.nombreEmpleado,
+                    rolEmpleado = key.rolEmpleado,
+                    onVolverClick = { backStack.removeLastOrNull() },
+                    onAsignacionGuardada = { backStack.removeLastOrNull() }
                 )
             }
         }
