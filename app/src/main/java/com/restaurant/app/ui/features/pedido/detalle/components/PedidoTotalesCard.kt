@@ -1,6 +1,5 @@
-package com.restaurant.app.ui.features.comanda.detalle.components
+package com.restaurant.app.ui.features.pedido.detalle.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,7 +24,7 @@ import java.util.Locale
 //SUBTOTAL Y TOTAL
 
 @Composable
-fun ComandaTotalesCard(
+fun PedidoTotalesCard(
     subtotal: Double,
     total: Double,
     modifier: Modifier = Modifier

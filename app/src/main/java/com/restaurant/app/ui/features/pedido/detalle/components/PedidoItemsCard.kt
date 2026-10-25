@@ -1,4 +1,4 @@
-package com.restaurant.app.ui.features.comanda.detalle.components
+package com.restaurant.app.ui.features.pedido.detalle.components
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -19,13 +19,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.restaurant.app.R
-import com.restaurant.app.domain.model.ComandaItemModel
+import com.restaurant.app.domain.model.ItemPedido
 import java.text.NumberFormat
 import java.util.Locale
 
 @Composable
-fun ComandaItemsCard(
-    items: List<ComandaItemModel>,
+fun PedidoItemsCard(
+    items: List<ItemPedido>,
     modifier: Modifier = Modifier
 ) {
     val currencyFormatter = NumberFormat.getCurrencyInstance(Locale("es", "AR")).apply {

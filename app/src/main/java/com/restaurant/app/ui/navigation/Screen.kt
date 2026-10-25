@@ -54,11 +54,11 @@ sealed interface Screen : NavKey {
     ) : Screen
 
     @Serializable
-    data object Comandas : Screen
+    data object Pedidos : Screen
 
     @Serializable
-    data class DetalleComanda(
-        val comandaId: String = "124"
+    data class DetallePedido(
+        val pedidoId: String
     ) : Screen
 }
 

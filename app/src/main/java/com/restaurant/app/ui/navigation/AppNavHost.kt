@@ -19,9 +19,11 @@ import com.restaurant.app.ui.features.producto.ProductoScreen
 import com.restaurant.app.ui.features.registro.RegistroScreen
 import com.restaurant.app.ui.features.salon.SalonScreen
 import com.restaurant.app.ui.features.splash.SplashScreen
-import com.restaurant.app.ui.features.comanda.ComandaScreen
-import com.restaurant.app.ui.features.comanda.detalle.DetalleComandaScreen
-import com.restaurant.app.domain.model.ComandaModel
+import com.restaurant.app.ui.features.pedido.PedidoContent
+import com.restaurant.app.ui.features.pedido.PedidoScreen
+import com.restaurant.app.ui.features.pedido.detalle.DetallePedidoContent
+import com.restaurant.app.ui.features.pedido.detalle.DetallePedidoScreen
+
 /*
    NAVIGATION 3 y BACKSTACK :
 
@@ -86,8 +88,9 @@ fun AppNavHost() {
                             NavegacionItem.Carta -> backStack.add(Screen.Carta)
                             NavegacionItem.Salon -> backStack.add(Screen.Salon)
                             NavegacionItem.Personal -> backStack.add(Screen.Personal)
-                            NavegacionItem.Mas -> backStack.add(Screen.Comandas)
-                            NavegacionItem.Inicio -> { /* Ya estamos en Home */ }
+                            NavegacionItem.Mas -> backStack.add(Screen.Pedidos)
+                            NavegacionItem.Inicio -> { /* Ya estamos en Home */
+                            }
                         }
                     }
                 )
@@ -127,9 +130,12 @@ fun AppNavHost() {
                         when (item) {
                             NavegacionItem.Salon -> backStack.add(Screen.Salon)
                             NavegacionItem.Personal -> backStack.add(Screen.Personal)
-                            NavegacionItem.Carta -> { /* Ya estamos aquí */ }
+                            NavegacionItem.Carta -> { /* Ya estamos aquí */
+                            }
+
                             NavegacionItem.Inicio -> backStack.add(Screen.Home)
-                            else -> { /* Otros ítems */ }
+                            else -> { /* Otros ítems */
+                            }
                         }
                     }
                 )
@@ -160,9 +166,12 @@ fun AppNavHost() {
                         when (item) {
                             NavegacionItem.Carta -> backStack.add(Screen.Carta)
                             NavegacionItem.Personal -> backStack.add(Screen.Personal)
-                            NavegacionItem.Salon -> { /* Ya estamos aquí */ }
+                            NavegacionItem.Salon -> { /* Ya estamos aquí */
+                            }
+
                             NavegacionItem.Inicio -> backStack.add(Screen.Home)
-                            else -> { /* Otros ítems */ }
+                            else -> { /* Otros ítems */
+                            }
                         }
                     }
                 )
@@ -194,8 +203,10 @@ fun AppNavHost() {
                             NavegacionItem.Carta -> backStack.add(Screen.Carta)
                             NavegacionItem.Salon -> backStack.add(Screen.Salon)
                             NavegacionItem.Inicio -> backStack.add(Screen.Home)
-                            NavegacionItem.Personal -> { /* Ya estamos aquí */ }
-                            else -> { }
+                            NavegacionItem.Personal -> { /* Ya estamos aquí */
+                            }
+
+                            else -> {}
                         }
                     }
                 )
@@ -219,12 +230,12 @@ fun AppNavHost() {
                 )
             }
 
-            // Pantalla Gestión de Comandas
-            // Pantalla Gestión de Comandas
-            entry<Screen.Comandas> {
-                ComandaScreen(
-                    onComandaClick = { comanda ->
-                        backStack.add(Screen.DetalleComanda(comandaId = comanda.id)) // 👈 Aquí va
+            // Pantalla Gestión de Pedidos
+
+            entry<Screen.Pedidos> {
+                PedidoScreen(
+                    onPedidoClick = { pedido ->
+                        backStack.add(Screen.DetallePedido(pedidoId = pedido.id))
                     },
                     onNavegarA = { item ->
                         when (item) {
@@ -238,14 +249,15 @@ fun AppNavHost() {
                 )
             }
 
-            // Pantalla Detalle de Pedido (y Anular Pedido)
-            entry<Screen.DetalleComanda> { key ->
-                DetalleComandaScreen(
-                    comandaId = key.comandaId,
+            entry<Screen.DetallePedido> { key ->
+                DetallePedidoScreen(
+                    pedidoId = key.pedidoId,
                     onVolverClick = { backStack.removeLastOrNull() },
-                    onComandaFinalizada = { backStack.removeLastOrNull() }
+                    onPedidoFinalizado = { backStack.removeLastOrNull() }
                 )
             }
+
+
         }
     )
 }

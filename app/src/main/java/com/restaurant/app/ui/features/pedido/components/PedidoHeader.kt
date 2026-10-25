@@ -1,4 +1,4 @@
-package com.restaurant.app.ui.features.comanda.components
+package com.restaurant.app.ui.features.pedido.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -13,7 +13,7 @@ import androidx.compose.ui.text.font.FontWeight
 import com.restaurant.app.R
 
 @Composable
-fun ComandaHeader(
+fun PedidoHeader(
     cantidadActivas: Int,
     modifier: Modifier = Modifier
 ) {

@@ -1,9 +1,11 @@
 package com.restaurant.app.data
 
 import com.restaurant.app.data.repository.MesaRepositoryDatos
+import com.restaurant.app.data.repository.PedidoRepositoryDatos
 import com.restaurant.app.data.repository.PersonalRepositoryDatos
 import com.restaurant.app.data.repository.ProductoRepositoryDatos
 import com.restaurant.app.domain.repository.MesaRepository
+import com.restaurant.app.domain.repository.PedidoRepository
 import com.restaurant.app.domain.repository.PersonalRepository
 import com.restaurant.app.domain.repository.ProductoRepository
 
@@ -15,4 +17,5 @@ object Repositorios {
     val productos: ProductoRepository by lazy { ProductoRepositoryDatos() }
     val mesas: MesaRepository by lazy { MesaRepositoryDatos() }
     val personal: PersonalRepository by lazy { PersonalRepositoryDatos() }
+    val pedidos: PedidoRepository by lazy { PedidoRepositoryDatos() }
 }

@@ -1,4 +1,4 @@
-package com.restaurant.app.ui.features.comanda.components
+package com.restaurant.app.ui.features.pedido.components
 
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -12,13 +12,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.restaurant.app.ui.features.pedido.FiltroPedido
 
 @Composable
-fun ComandaFilterChips(
-    filtros: List<String>,
-    filtroSeleccionado: String,
-    onFiltroSelected: (String) -> Unit,
+fun PedidoFilterChips(
+    filtros: List<FiltroPedido>,
+    filtroSeleccionado: FiltroPedido,
+    onFiltroSelected: (FiltroPedido) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -28,11 +30,10 @@ fun ComandaFilterChips(
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         filtros.forEach { filtro ->
-            val isSelected = filtro == filtroSeleccionado
             FilterChip(
-                selected = isSelected,
+                selected = filtro == filtroSeleccionado,
                 onClick = { onFiltroSelected(filtro) },
-                label = { Text(filtro) },
+                label = { Text(stringResource(filtro.etiqueta)) },
                 shape = CircleShape,
                 colors = FilterChipDefaults.filterChipColors(
                     selectedContainerColor = MaterialTheme.colorScheme.primary,

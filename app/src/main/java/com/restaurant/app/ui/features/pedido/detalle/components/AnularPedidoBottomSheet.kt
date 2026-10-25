@@ -1,4 +1,4 @@
-package com.restaurant.app.ui.features.comanda.detalle.components
+package com.restaurant.app.ui.features.pedido.detalle.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -39,10 +39,10 @@ import com.restaurant.app.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AnularPedidoBottomSheet(
-    comandaId: String,
-    numeroMesa: String,
+    pedidoId: String,                      // antes: comandaId
+    nombreMesa: String,                    // antes: numeroMesa
     motivos: List<String>,
-    motivoSeleccionado: String,
+    motivoSeleccionado: String?,           // antes: String (ahora puede no haber motivo)
     onMotivoSelected: (String) -> Unit,
     onConfirmarAnulacion: () -> Unit,
     onDismiss: () -> Unit
@@ -79,7 +79,7 @@ fun AnularPedidoBottomSheet(
 
             // Título
             Text(
-                text = stringResource(R.string.anular_pedido_titulo, comandaId),
+                text = stringResource(R.string.anular_pedido_titulo, pedidoId),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -89,7 +89,7 @@ fun AnularPedidoBottomSheet(
 
             // Subtítulo
             Text(
-                text = stringResource(R.string.anular_pedido_subtitulo, numeroMesa),
+                text = stringResource(R.string.anular_pedido_subtitulo, nombreMesa),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -137,13 +137,16 @@ fun AnularPedidoBottomSheet(
             // Botón Confirmar Anulación
             Button(
                 onClick = onConfirmarAnulacion,
+                enabled = motivoSeleccionado != null,                    // ← NUEVO
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),
                 shape = MaterialTheme.shapes.large,
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFFE53935),
-                    contentColor = Color.White
+                    contentColor = Color.White,
+                    disabledContainerColor = Color(0xFFE53935).copy(alpha = 0.35f),   // ← NUEVO
+                    disabledContentColor = Color.White
                 )
             ) {
                 Text(
