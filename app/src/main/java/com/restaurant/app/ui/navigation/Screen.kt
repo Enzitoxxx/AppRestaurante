@@ -52,6 +52,14 @@ sealed interface Screen : NavKey {
     data class AsignacionMesas(
         val empleadoId: String
     ) : Screen
+
+    @Serializable
+    data object Comandas : Screen
+
+    @Serializable
+    data class DetalleComanda(
+        val comandaId: String = "124"
+    ) : Screen
 }
 
 /*

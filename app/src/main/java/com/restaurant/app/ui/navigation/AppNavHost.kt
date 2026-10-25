@@ -19,7 +19,9 @@ import com.restaurant.app.ui.features.producto.ProductoScreen
 import com.restaurant.app.ui.features.registro.RegistroScreen
 import com.restaurant.app.ui.features.salon.SalonScreen
 import com.restaurant.app.ui.features.splash.SplashScreen
-
+import com.restaurant.app.ui.features.comanda.ComandaScreen
+import com.restaurant.app.ui.features.comanda.detalle.DetalleComandaScreen
+import com.restaurant.app.domain.model.ComandaModel
 /*
    NAVIGATION 3 y BACKSTACK :
 
@@ -84,8 +86,8 @@ fun AppNavHost() {
                             NavegacionItem.Carta -> backStack.add(Screen.Carta)
                             NavegacionItem.Salon -> backStack.add(Screen.Salon)
                             NavegacionItem.Personal -> backStack.add(Screen.Personal)
+                            NavegacionItem.Mas -> backStack.add(Screen.Comandas)
                             NavegacionItem.Inicio -> { /* Ya estamos en Home */ }
-                            else -> { }
                         }
                     }
                 )
@@ -214,6 +216,34 @@ fun AppNavHost() {
                     empleadoId = key.empleadoId,
                     onVolverClick = { backStack.removeLastOrNull() },
                     onAsignacionGuardada = { backStack.removeLastOrNull() }
+                )
+            }
+
+            // Pantalla Gestión de Comandas
+            // Pantalla Gestión de Comandas
+            entry<Screen.Comandas> {
+                ComandaScreen(
+                    onComandaClick = { comanda ->
+                        backStack.add(Screen.DetalleComanda(comandaId = comanda.id)) // 👈 Aquí va
+                    },
+                    onNavegarA = { item ->
+                        when (item) {
+                            NavegacionItem.Inicio -> backStack.add(Screen.Home)
+                            NavegacionItem.Salon -> backStack.add(Screen.Salon)
+                            NavegacionItem.Carta -> backStack.add(Screen.Carta)
+                            NavegacionItem.Personal -> backStack.add(Screen.Personal)
+                            NavegacionItem.Mas -> { /* Ya estamos aquí */ }
+                        }
+                    }
+                )
+            }
+
+            // Pantalla Detalle de Pedido (y Anular Pedido)
+            entry<Screen.DetalleComanda> { key ->
+                DetalleComandaScreen(
+                    comandaId = key.comandaId,
+                    onVolverClick = { backStack.removeLastOrNull() },
+                    onComandaFinalizada = { backStack.removeLastOrNull() }
                 )
             }
         }

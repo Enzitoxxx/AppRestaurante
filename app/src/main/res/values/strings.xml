@@ -158,4 +158,35 @@
     <string name="asignacion_boton_confirmar_varias">Confirmar asignación (%1$d mesas)</string>
     <string name="salon_a_cargo_formato">A cargo: %1$s</string>
     <string name="asignacion_asignada_a_formato">Asignada a %1$s</string>
+
+
+    <!-- Gestión de Comandas -->
+    <string name="comandas_titulo">Gestión de Comandas</string>
+    <string name="comandas_activas_count">%1$d activas</string>
+    <string name="comandas_filtro_todos">Todos</string>
+    <string name="comandas_filtro_en_preparacion">En preparación</string>
+    <string name="comandas_filtro_cobrados">Cobrados</string>
+    <string name="comandas_pedido_mesa">Pedido #%1$s · Mesa %2$s</string>
+    <string name="comandas_camarero">Camarero/a: %1$s</string>
+    <string name="comandas_items_hora">%1$d ítems - %2$s hs</string>
+    <string name="comandas_estado_en_preparacion">En preparación</string>
+    <string name="comandas_estado_entregado">Entregado</string>
+    <string name="comandas_estado_cobrado">Cobrado</string>
+
+    <!-- Detalle de Pedido / Anular Pedido -->
+    <string name="detalle_comanda_header_title">Pedido #%1$s</string>
+    <string name="detalle_comanda_header_subtitle">Mesa %1$s · %2$s · %3$d comensales</string>
+    <string name="detalle_comanda_seccion_items">COMANDA</string>
+    <string name="detalle_comanda_obs">Obs: %1$s</string>
+    <string name="detalle_comanda_subtotal">Subtotal</string>
+    <string name="detalle_comanda_total">TOTAL A COBRAR</string>
+    <string name="detalle_comanda_btn_cobrar">Cobrar comanda (%1$s)</string>
+    <string name="detalle_comanda_btn_anular">Anular pedido</string>
+
+    <!-- Modal Anular Pedido -->
+    <string name="anular_pedido_titulo">Anular Pedido #%1$s</string>
+    <string name="anular_pedido_subtitulo">Mesa %1$s · Seleccioná el motivo correspondiente para registrar en auditoría.</string>
+    <string name="anular_pedido_btn_confirmar">Confirmar anulación</string>
+    <string name="anular_pedido_btn_volver">Volver atrás</string>
+
 </resources>
