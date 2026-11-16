@@ -238,4 +238,27 @@
     <string name="mas_dialog_cerrar_sesion_confirmar">Cerrar sesión</string>
     <string name="mas_dialog_cerrar_sesion_cancelar">Cancelar</string>
 
+    <!-- Categorías -->
+    <string name="categoria_titulo">Categorías</string>
+    <string name="categoria_resumen_formato">%1$d categorías registradas</string>
+    <string name="categoria_cd_agregar">Agregar categoría</string>
+    <string name="categoria_vacio">No hay categorías registradas</string>
+    <string name="categoria_productos_formato">%1$d productos</string>
+    <string name="categoria_producto_singular">1 producto</string>
+    <string name="categoria_cd_editar">Editar categoría</string>
+    <string name="categoria_cd_eliminar">Eliminar categoría</string>
+    <string name="categoria_dialog_eliminar_titulo">¿Eliminar categoría?</string>
+    <string name="categoria_dialog_eliminar_mensaje">¿Estás seguro de eliminar la categoría \"%1$s\"?</string>
+    <string name="categoria_dialog_eliminar_confirmar">Eliminar</string>
+    <string name="categoria_dialog_eliminar_cancelar">Cancelar</string>
+
+    <!-- Alta / Edición Categoría -->
+    <string name="categoria_form_titulo_nueva">Nueva categoría</string>
+    <string name="categoria_form_titulo_editar">Editar categoría</string>
+    <string name="categoria_form_label_nombre">NOMBRE DE LA CATEGORÍA</string>
+    <string name="categoria_form_label_descripcion">DESCRIPCIÓN (OPCIONAL)</string>
+    <string name="categoria_form_boton_guardar">Guardar categoría</string>
+    <string name="categoria_form_error_nombre_requerido">Ingresá el nombre de la categoría</string>
+    <string name="categoria_form_error_nombre_repetido">Ya existe una categoría con ese nombre</string>
+
 </resources>

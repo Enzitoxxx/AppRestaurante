@@ -8,6 +8,8 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.restaurant.app.core.designsystem.NavegacionItem
 import com.restaurant.app.ui.features.carta.CartaScreen
+import com.restaurant.app.ui.features.categoria.CategoriaScreen
+import com.restaurant.app.ui.features.categoria.form.CategoriaFormScreen
 import com.restaurant.app.ui.features.recuperarcontrasena.RecuperarContrasenaScreen
 import com.restaurant.app.ui.features.home.HomeScreen
 import com.restaurant.app.ui.features.login.LoginScreen
@@ -232,9 +234,7 @@ fun AppNavHost() {
             entry<Screen.Mas> {
                 MasScreen(
                     onPedidosClick = { backStack.add(Screen.Pedidos) },
-                    onCategoriasClick = {
-                        // TODO: Navegar a Screen.Categorias en Fase 2
-                    },
+                    onCategoriasClick = { backStack.add(Screen.Categorias) },
                     onSesionCerrada = {
                         // TODO: llamar a AuthRepository.cerrarSesion() cuando exista
                         backStack.clear()
@@ -249,6 +249,32 @@ fun AppNavHost() {
                             NavegacionItem.Mas -> { /* Ya estamos aquí */ }
                         }
                     }
+                )
+            }
+
+            // Pantalla Categorías (Lista)
+            entry<Screen.Categorias> {
+                CategoriaScreen(
+                    onNuevaCategoriaClick = { backStack.add(Screen.CategoriaForm()) },
+                    onEditarCategoriaClick = { id -> backStack.add(Screen.CategoriaForm(categoriaId = id)) },
+                    onNavegarA = { item ->
+                        when (item) {
+                            NavegacionItem.Inicio -> backStack.add(Screen.Home)
+                            NavegacionItem.Salon -> backStack.add(Screen.Salon)
+                            NavegacionItem.Carta -> backStack.add(Screen.Carta)
+                            NavegacionItem.Personal -> backStack.add(Screen.Personal)
+                            NavegacionItem.Mas -> backStack.removeLastOrNull()
+                        }
+                    }
+                )
+            }
+
+            // Pantalla Alta / Edición de Categoría
+            entry<Screen.CategoriaForm> { key ->
+                CategoriaFormScreen(
+                    categoriaId = key.categoriaId,
+                    onVolverClick = { backStack.removeLastOrNull() },
+                    onCategoriaGuardada = { backStack.removeLastOrNull() }
                 )
             }
 

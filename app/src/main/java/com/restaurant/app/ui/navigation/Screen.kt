@@ -29,6 +29,11 @@ sealed interface Screen : NavKey {
     data object Categorias : Screen
 
     @Serializable
+    data class CategoriaForm(
+        val categoriaId: String? = null
+    ) : Screen
+
+    @Serializable
     data object Carta : Screen
 
     /*
