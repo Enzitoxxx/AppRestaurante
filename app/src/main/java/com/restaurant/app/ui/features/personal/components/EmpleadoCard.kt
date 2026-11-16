@@ -130,7 +130,7 @@ fun EmpleadoCard(
                         ) {
                             Icon(
                                 imageVector = Icons.Outlined.Chair,
-                                contentDescription = "Asignar mesas",
+                                contentDescription = stringResource(R.string.personal_cd_asignar_mesas),
                                 tint = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.size(18.dp)
                             )
@@ -144,7 +144,7 @@ fun EmpleadoCard(
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.Edit,
-                            contentDescription = "Editar datos empleado",
+                            contentDescription = stringResource(R.string.personal_cd_editar_empleado),
                             tint = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.size(18.dp)
                         )
@@ -157,7 +157,7 @@ fun EmpleadoCard(
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.Delete,
-                            contentDescription = "Dar de baja empleado",
+                            contentDescription = stringResource(R.string.personal_cd_baja_empleado),
                             tint = MaterialTheme.colorScheme.error,
                             modifier = Modifier.size(18.dp)
                         )

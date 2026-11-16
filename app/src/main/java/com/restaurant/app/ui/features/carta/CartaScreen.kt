@@ -19,10 +19,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.restaurant.app.R
 import com.restaurant.app.core.designsystem.AppBottomBar
 import com.restaurant.app.core.designsystem.NavegacionItem
 import com.restaurant.app.domain.model.Producto
@@ -148,27 +150,27 @@ fun CartaContent(
                 onDismissRequest = onCancelarBajaProducto,
                 title = {
                     Text(
-                        text = "¿Dar de baja producto?",
+                        text = stringResource(R.string.carta_dialog_baja_titulo),
                         style = MaterialTheme.typography.titleLarge
                     )
                 },
                 text = {
                     Text(
-                        text = "¿Estás seguro de dar de baja \"${producto.nombre}\"? Dejará de mostrarse en la carta y comandas.",
+                        text = stringResource(R.string.carta_dialog_baja_mensaje, producto.nombre),
                         style = MaterialTheme.typography.bodyMedium
                     )
                 },
                 confirmButton = {
                     TextButton(onClick = onConfirmarBajaProducto) {
                         Text(
-                            text = "Dar de baja",
+                            text = stringResource(R.string.carta_dialog_baja_confirmar),
                             color = MaterialTheme.colorScheme.error
                         )
                     }
                 },
                 dismissButton = {
                     TextButton(onClick = onCancelarBajaProducto) {
-                        Text(text = "Cancelar")
+                        Text(text = stringResource(R.string.carta_dialog_baja_cancelar))
                     }
                 }
             )

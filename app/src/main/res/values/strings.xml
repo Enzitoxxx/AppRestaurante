@@ -12,8 +12,6 @@
     <string name="splash_description">Más tiempo para lo que importa.\nEl sabor de hacer las cosas bien.</string>
     <string name="splash_footer_seal">HECHO PARA TU RESTAURANTE</string>
     <string name="splash_version">Versión %1$s</string>
-    <string name="cd_brand_logo">Logo del restaurante</string>
-    <string name="cd_eco_seal">Sello ecológico</string>
 
     <!-- Login -->
     <string name="login_title">Iniciar sesión</string>
@@ -73,8 +71,6 @@
     <string name="producto_label_precio">PRECIO ($ ARS)</string>
     <string name="producto_label_categoria">CATEGORÍA</string>
     <string name="producto_label_area">ÁREA DE PREPARACIÓN</string>
-    <string name="producto_area_cocina">Cocina</string>
-    <string name="producto_area_barra">Barra</string>
     <string name="producto_disponible_titulo">Disponible para la venta</string>
     <string name="producto_disponible_subtitulo">Aparecerá en la carta digital y comandas</string>
     <string name="producto_error_nombre_requerido">Ingresá el nombre del producto</string>
@@ -84,7 +80,6 @@
     <!-- Mapa del Salón -->
     <string name="salon_titulo">Mapa del Salón</string>
     <string name="salon_resumen_formato">%1$d ocupadas · %2$d libres · %3$d cuenta</string>
-    <string name="salon_zona_todas">Todas</string>
     <string name="salon_zona_salon">Salón</string>
     <string name="salon_zona_patio">Patio</string>
     <string name="salon_zona_principal">ZONA PRINCIPAL (SALÓN)</string>
@@ -92,8 +87,15 @@
     <string name="salon_estado_libre">LIBRE</string>
     <string name="salon_estado_ocupada">OCUPADA</string>
     <string name="salon_estado_cuenta">CUENTA</string>
-    <string name="salon_sin_comanda">Sin comanda</string>
     <string name="salon_esperando_ticket">Esperando ticket</string>
+    <string name="salon_capacidad_personas">%1$d personas</string>
+    <string name="salon_cd_editar_mesa">Editar mesa</string>
+    <string name="salon_cd_baja_mesa">Dar de baja mesa</string>
+    <string name="salon_cd_agregar_mesa">Agregar mesa</string>
+    <string name="salon_dialog_baja_titulo">¿Dar de baja mesa?</string>
+    <string name="salon_dialog_baja_mensaje">¿Estás seguro de dar de baja la %1$s? Dejará de mostrarse en el mapa del salón.</string>
+    <string name="salon_dialog_baja_confirmar">Dar de baja</string>
+    <string name="salon_dialog_baja_cancelar">Cancelar</string>
 
 
     <!-- Mesa -->
@@ -160,12 +162,30 @@
     <string name="asignacion_asignada_a_formato">Asignada a %1$s</string>
 
 
+    <!-- Dialogs y CD adicionales -->
+    <string name="carta_dialog_baja_titulo">¿Dar de baja producto?</string>
+    <string name="carta_dialog_baja_mensaje">¿Estás seguro de dar de baja \"%1$s\"? Dejará de mostrarse en la carta y comandas.</string>
+    <string name="carta_dialog_baja_confirmar">Dar de baja</string>
+    <string name="carta_dialog_baja_cancelar">Cancelar</string>
+    <string name="carta_cd_editar_producto">Editar producto</string>
+    <string name="carta_cd_baja_producto">Dar de baja producto</string>
+
+    <string name="personal_dialog_baja_titulo">¿Dar de baja empleado?</string>
+    <string name="personal_dialog_baja_mensaje">¿Estás seguro de dar de baja a \"%1$s\"? Dejará de aparecer en la lista del equipo de trabajo.</string>
+    <string name="personal_dialog_baja_confirmar">Dar de baja</string>
+    <string name="personal_dialog_baja_cancelar">Cancelar</string>
+    <string name="personal_cd_asignar_mesas">Asignar mesas</string>
+    <string name="personal_cd_editar_empleado">Editar datos empleado</string>
+    <string name="personal_cd_baja_empleado">Dar de baja empleado</string>
+
+    <string name="empleado_credenciales_usuario">Usuario: </string>
+    <string name="empleado_credenciales_clave">Clave temporal: </string>
+    <string name="mesa_stepper_cd_restar">Restar capacidad</string>
+    <string name="mesa_stepper_cd_sumar">Sumar capacidad</string>
+
     <!-- Gestión de Comandas -->
     <string name="comandas_titulo">Pedidos</string>
     <string name="comandas_activas_count">%1$d abiertos</string>
-    <string name="comandas_filtro_todos">Todos</string>
-    <string name="comandas_filtro_en_preparacion">En preparación</string>
-    <string name="comandas_filtro_cobrados">Cobrados</string>
     <string name="comandas_pedido_mesa">Pedido #%1$s · %2$s</string>
     <string name="comandas_camarero">Camarero/a: %1$s</string>
     <string name="comandas_items_hora">%1$d ítems · %2$s hs</string>
@@ -204,5 +224,18 @@
     <string name="anular_pedido_subtitulo">%1$s · Seleccioná el motivo para registrar la anulación.</string>
     <string name="anular_pedido_btn_confirmar">Confirmar anulación</string>
     <string name="anular_pedido_btn_volver">Volver atrás</string>
+
+    <!-- Menú Más y Cierre de Sesión -->
+    <string name="mas_titulo">Más</string>
+    <string name="mas_opcion_pedidos_titulo">Pedidos</string>
+    <string name="mas_opcion_pedidos_subtitulo">Gestión de comandas y estado de ventas</string>
+    <string name="mas_opcion_categorias_titulo">Categorías</string>
+    <string name="mas_opcion_categorias_subtitulo">Administrar categorías del menú</string>
+    <string name="mas_opcion_cerrar_sesion_titulo">Cerrar sesión</string>
+    <string name="mas_opcion_cerrar_sesion_subtitulo">Salir de la cuenta administradora actual</string>
+    <string name="mas_dialog_cerrar_sesion_titulo">¿Cerrar sesión?</string>
+    <string name="mas_dialog_cerrar_sesion_mensaje">¿Estás seguro de que querés cerrar la sesión?</string>
+    <string name="mas_dialog_cerrar_sesion_confirmar">Cerrar sesión</string>
+    <string name="mas_dialog_cerrar_sesion_cancelar">Cancelar</string>
 
 </resources>

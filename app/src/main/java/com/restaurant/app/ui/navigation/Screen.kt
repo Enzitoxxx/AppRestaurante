@@ -3,6 +3,8 @@ package com.restaurant.app.ui.navigation
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 
+//Las rutas se definen como data class o data object
+// data class ->
 @Serializable
 sealed interface Screen : NavKey {
 
@@ -16,9 +18,15 @@ sealed interface Screen : NavKey {
     data object Registro : Screen //Le dice a la app que existe una pantalla mas, en este caso la pantalla del registro
 
     @Serializable
-    data object ForgotPassword : Screen
+    data object RecuperarContrasena : Screen
     @Serializable
     data object Home : Screen   // provisorio, hasta armar el panel del administrador
+
+    @Serializable
+    data object Mas : Screen
+
+    @Serializable
+    data object Categorias : Screen
 
     @Serializable
     data object Carta : Screen

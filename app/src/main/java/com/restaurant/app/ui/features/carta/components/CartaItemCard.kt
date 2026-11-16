@@ -34,8 +34,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.restaurant.app.R
 import com.restaurant.app.domain.model.Producto
 
 @Composable
@@ -142,7 +144,7 @@ fun CartaItemCard(
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.Edit,
-                            contentDescription = "Editar producto",
+                            contentDescription = stringResource(R.string.carta_cd_editar_producto),
                             tint = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.size(20.dp)
                         )
@@ -155,7 +157,7 @@ fun CartaItemCard(
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.Delete,
-                            contentDescription = "Dar de baja producto",
+                            contentDescription = stringResource(R.string.carta_cd_baja_producto),
                             tint = MaterialTheme.colorScheme.error,
                             modifier = Modifier.size(20.dp)
                         )

@@ -8,9 +8,10 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.restaurant.app.core.designsystem.NavegacionItem
 import com.restaurant.app.ui.features.carta.CartaScreen
-import com.restaurant.app.ui.features.forgotpassword.ForgotPasswordScreen
+import com.restaurant.app.ui.features.recuperarcontrasena.RecuperarContrasenaScreen
 import com.restaurant.app.ui.features.home.HomeScreen
 import com.restaurant.app.ui.features.login.LoginScreen
+import com.restaurant.app.ui.features.mas.MasScreen
 import com.restaurant.app.ui.features.mesa.MesaFormScreen
 import com.restaurant.app.ui.features.personal.PersonalScreen
 import com.restaurant.app.ui.features.personal.asignacion.AsignacionMesasScreen
@@ -19,9 +20,7 @@ import com.restaurant.app.ui.features.producto.ProductoScreen
 import com.restaurant.app.ui.features.registro.RegistroScreen
 import com.restaurant.app.ui.features.salon.SalonScreen
 import com.restaurant.app.ui.features.splash.SplashScreen
-import com.restaurant.app.ui.features.pedido.PedidoContent
 import com.restaurant.app.ui.features.pedido.PedidoScreen
-import com.restaurant.app.ui.features.pedido.detalle.DetallePedidoContent
 import com.restaurant.app.ui.features.pedido.detalle.DetallePedidoScreen
 
 /*
@@ -34,7 +33,8 @@ import com.restaurant.app.ui.features.pedido.detalle.DetallePedidoScreen
       Si cambias el nombre o propiedad de una pantalla, el compilador de Kotlin te avisa inmediatamente antes de ejecutar la app.
 
    2. backStack (Pila de Navegación / Historial):
-      funciona exactamente como una pila de cartas (LIFO: Last In, First Out) que guarda la historia de pantallas que el usuario tiene abiertas:
+      funciona exactamente como una pila de cartas (LIFO: Last In, First Out) que guarda la historia de pantallas que el usuario tiene abiertas.
+      Las operacion del BackStack son:
       - backStack.add(Screen.X): Agrega/Apila una nueva pantalla arriba.
       - backStack.removeLastOrNull(): Quita la pantalla actual para volver a la anterior.
       - backStack.clear(): Vacía todo el historial (ej: al hacer Login para no regresar atrás).
@@ -42,7 +42,12 @@ import com.restaurant.app.ui.features.pedido.detalle.DetallePedidoScreen
 
 @Composable
 fun AppNavHost() {
-    // Inicializa la pila de navegación comenzando en la pantalla Splash
+    /*
+        rememberNavBackStack: funcion composable de navigation3. crea, guarda y recuerda el historial de pantallas
+            Soporta rotaciones de pantallas.
+            Maneja la pila BackStack de forma automática: Funciona como una lista Kotlin mutable en la que puedes agregar (.add()), quitar (.removeLastOrNull()) o limpiar (.clear()) pantallas tipadas.
+    */
+
     val backStack = rememberNavBackStack(Screen.Splash)
 
     NavDisplay(
@@ -56,6 +61,8 @@ fun AppNavHost() {
             rememberSaveableStateHolderNavEntryDecorator(),
             rememberViewModelStoreNavEntryDecorator()
         ),
+
+        // entryProvider es el encargado de crear las pantallas
         entryProvider = entryProvider {
             // Pantalla Splash
             entry<Screen.Splash> {
@@ -75,7 +82,7 @@ fun AppNavHost() {
                         backStack.add(Screen.Home)
                     },
                     onRegisterClick = { backStack.add(Screen.Registro) },
-                    onForgotPasswordClick = { backStack.add(Screen.ForgotPassword) }
+                    onForgotPasswordClick = { backStack.add(Screen.RecuperarContrasena) }
                 )
             }
 
@@ -88,9 +95,8 @@ fun AppNavHost() {
                             NavegacionItem.Carta -> backStack.add(Screen.Carta)
                             NavegacionItem.Salon -> backStack.add(Screen.Salon)
                             NavegacionItem.Personal -> backStack.add(Screen.Personal)
-                            NavegacionItem.Mas -> backStack.add(Screen.Pedidos)
-                            NavegacionItem.Inicio -> { /* Ya estamos en Home */
-                            }
+                            NavegacionItem.Mas -> backStack.add(Screen.Mas)
+                            NavegacionItem.Inicio -> { /* Ya estamos en Home */ }
                         }
                     }
                 )
@@ -110,8 +116,8 @@ fun AppNavHost() {
             }
 
             // Pantalla Recuperar Contraseña
-            entry<Screen.ForgotPassword> {
-                ForgotPasswordScreen(
+            entry<Screen.RecuperarContrasena> {
+                RecuperarContrasenaScreen(
                     onBackClick = { backStack.removeLastOrNull() },
                     onEmailSent = { backStack.removeLastOrNull() }
                 )
@@ -130,12 +136,9 @@ fun AppNavHost() {
                         when (item) {
                             NavegacionItem.Salon -> backStack.add(Screen.Salon)
                             NavegacionItem.Personal -> backStack.add(Screen.Personal)
-                            NavegacionItem.Carta -> { /* Ya estamos aquí */
-                            }
-
+                            NavegacionItem.Mas -> backStack.add(Screen.Mas)
                             NavegacionItem.Inicio -> backStack.add(Screen.Home)
-                            else -> { /* Otros ítems */
-                            }
+                            NavegacionItem.Carta -> { /* Ya estamos aquí */ }
                         }
                     }
                 )
@@ -166,12 +169,9 @@ fun AppNavHost() {
                         when (item) {
                             NavegacionItem.Carta -> backStack.add(Screen.Carta)
                             NavegacionItem.Personal -> backStack.add(Screen.Personal)
-                            NavegacionItem.Salon -> { /* Ya estamos aquí */
-                            }
-
+                            NavegacionItem.Mas -> backStack.add(Screen.Mas)
                             NavegacionItem.Inicio -> backStack.add(Screen.Home)
-                            else -> { /* Otros ítems */
-                            }
+                            NavegacionItem.Salon -> { /* Ya estamos aquí */ }
                         }
                     }
                 )
@@ -202,11 +202,9 @@ fun AppNavHost() {
                         when (item) {
                             NavegacionItem.Carta -> backStack.add(Screen.Carta)
                             NavegacionItem.Salon -> backStack.add(Screen.Salon)
+                            NavegacionItem.Mas -> backStack.add(Screen.Mas)
                             NavegacionItem.Inicio -> backStack.add(Screen.Home)
-                            NavegacionItem.Personal -> { /* Ya estamos aquí */
-                            }
-
-                            else -> {}
+                            NavegacionItem.Personal -> { /* Ya estamos aquí */ }
                         }
                     }
                 )
@@ -230,8 +228,31 @@ fun AppNavHost() {
                 )
             }
 
-            // Pantalla Gestión de Pedidos
+            // Pantalla Menú Más
+            entry<Screen.Mas> {
+                MasScreen(
+                    onPedidosClick = { backStack.add(Screen.Pedidos) },
+                    onCategoriasClick = {
+                        // TODO: Navegar a Screen.Categorias en Fase 2
+                    },
+                    onSesionCerrada = {
+                        // TODO: llamar a AuthRepository.cerrarSesion() cuando exista
+                        backStack.clear()
+                        backStack.add(Screen.Login)
+                    },
+                    onNavegarA = { item ->
+                        when (item) {
+                            NavegacionItem.Inicio -> backStack.add(Screen.Home)
+                            NavegacionItem.Salon -> backStack.add(Screen.Salon)
+                            NavegacionItem.Carta -> backStack.add(Screen.Carta)
+                            NavegacionItem.Personal -> backStack.add(Screen.Personal)
+                            NavegacionItem.Mas -> { /* Ya estamos aquí */ }
+                        }
+                    }
+                )
+            }
 
+            // Pantalla Gestión de Pedidos
             entry<Screen.Pedidos> {
                 PedidoScreen(
                     onPedidoClick = { pedido ->
@@ -243,7 +264,7 @@ fun AppNavHost() {
                             NavegacionItem.Salon -> backStack.add(Screen.Salon)
                             NavegacionItem.Carta -> backStack.add(Screen.Carta)
                             NavegacionItem.Personal -> backStack.add(Screen.Personal)
-                            NavegacionItem.Mas -> { /* Ya estamos aquí */ }
+                            NavegacionItem.Mas -> backStack.removeLastOrNull()
                         }
                     }
                 )

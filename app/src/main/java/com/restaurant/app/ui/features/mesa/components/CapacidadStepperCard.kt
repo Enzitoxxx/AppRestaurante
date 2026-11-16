@@ -76,7 +76,7 @@ fun CapacidadStepperCard(
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.RemoveCircleOutline,
-                            contentDescription = "Restar capacidad",
+                            contentDescription = stringResource(R.string.mesa_stepper_cd_restar),
                             tint = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.size(24.dp)
                         )
@@ -88,7 +88,7 @@ fun CapacidadStepperCard(
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.AddCircleOutline,
-                            contentDescription = "Sumar capacidad",
+                            contentDescription = stringResource(R.string.mesa_stepper_cd_sumar),
                             tint = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.size(24.dp)
                         )

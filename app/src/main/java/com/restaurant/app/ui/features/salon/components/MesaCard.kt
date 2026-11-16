@@ -106,7 +106,7 @@ fun MesaCard(
                                     modifier = Modifier.padding(end = 4.dp)
                                 )
                                 Text(
-                                    text = "${mesa.capacidadPersonas} personas",
+                                    text = stringResource(R.string.salon_capacidad_personas, mesa.capacidadPersonas),
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
@@ -130,7 +130,7 @@ fun MesaCard(
                                     modifier = Modifier.padding(end = 4.dp)
                                 )
                                 Text(
-                                    text = "${mesa.capacidadPersonas} personas",
+                                    text = stringResource(R.string.salon_capacidad_personas, mesa.capacidadPersonas),
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
@@ -157,7 +157,7 @@ fun MesaCard(
                                     modifier = Modifier.padding(end = 4.dp)
                                 )
                                 Text(
-                                    text = mesa.detalleEstado ?: "Esperando ticket",
+                                    text = mesa.detalleEstado ?: stringResource(R.string.salon_esperando_ticket),
                                     style = MaterialTheme.typography.bodySmall,
                                     color = Color(0xFFD97706)
                                 )
@@ -198,7 +198,7 @@ fun MesaCard(
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.Edit,
-                            contentDescription = "Editar mesa",
+                            contentDescription = stringResource(R.string.salon_cd_editar_mesa),
                             tint = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.size(18.dp)
                         )
@@ -210,7 +210,7 @@ fun MesaCard(
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.Close,
-                            contentDescription = "Dar de baja mesa",
+                            contentDescription = stringResource(R.string.salon_cd_baja_mesa),
                             tint = MaterialTheme.colorScheme.error,
                             modifier = Modifier.size(20.dp)
                         )

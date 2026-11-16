@@ -83,7 +83,7 @@ fun CredencialesCard(
                 ) {
                     Row {
                         Text(
-                            text = "Usuario: ",
+                            text = stringResource(R.string.empleado_credenciales_usuario),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -100,7 +100,7 @@ fun CredencialesCard(
 
                     Row {
                         Text(
-                            text = "Clave temporal: ",
+                            text = stringResource(R.string.empleado_credenciales_clave),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )

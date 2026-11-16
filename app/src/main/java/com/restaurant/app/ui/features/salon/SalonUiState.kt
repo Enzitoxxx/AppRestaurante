@@ -4,7 +4,7 @@ import com.restaurant.app.domain.model.EstadoMesa
 import com.restaurant.app.domain.model.Mesa
 
 data class SalonUiState(
-    val zonaSeleccionada: String = "Todas", // "Todas", "Salón", "Patio"
+    val zonaSeleccionada: String = "Todas", // "Todas", "Salon", "Patio"
     val mesas: List<Mesa> = emptyList(),
     val estaCargando: Boolean = false,
     val mesaADarDeBaja: Mesa? = null, // Si no es null, abre el AlertDialog de confirmación

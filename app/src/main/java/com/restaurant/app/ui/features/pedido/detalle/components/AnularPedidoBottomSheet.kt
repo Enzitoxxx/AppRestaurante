@@ -39,10 +39,10 @@ import com.restaurant.app.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AnularPedidoBottomSheet(
-    pedidoId: String,                      // antes: comandaId
-    nombreMesa: String,                    // antes: numeroMesa
+    pedidoId: String,
+    nombreMesa: String,
     motivos: List<String>,
-    motivoSeleccionado: String?,           // antes: String (ahora puede no haber motivo)
+    motivoSeleccionado: String?,
     onMotivoSelected: (String) -> Unit,
     onConfirmarAnulacion: () -> Unit,
     onDismiss: () -> Unit

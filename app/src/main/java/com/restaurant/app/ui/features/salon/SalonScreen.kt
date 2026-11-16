@@ -112,7 +112,7 @@ fun SalonContent(
             ) {
                 Icon(
                     imageVector = Icons.Default.Add,
-                    contentDescription = "Agregar mesa",
+                    contentDescription = stringResource(R.string.salon_cd_agregar_mesa),
                     modifier = Modifier.size(26.dp)
                 )
             }
@@ -232,27 +232,27 @@ fun SalonContent(
                     onDismissRequest = onCancelarBajaMesa,
                     title = {
                         Text(
-                            text = "¿Dar de baja mesa?",
+                            text = stringResource(R.string.salon_dialog_baja_titulo),
                             style = MaterialTheme.typography.titleLarge
                         )
                     },
                     text = {
                         Text(
-                            text = "¿Estás seguro de dar de baja la ${mesa.nombre}? Dejará de mostrarse en el mapa del salón.",
+                            text = stringResource(R.string.salon_dialog_baja_mensaje, mesa.nombre),
                             style = MaterialTheme.typography.bodyMedium
                         )
                     },
                     confirmButton = {
                         TextButton(onClick = onConfirmarBajaMesa) {
                             Text(
-                                text = "Dar de baja",
+                                text = stringResource(R.string.salon_dialog_baja_confirmar),
                                 color = MaterialTheme.colorScheme.error
                             )
                         }
                     },
                     dismissButton = {
                         TextButton(onClick = onCancelarBajaMesa) {
-                            Text(text = "Cancelar")
+                            Text(text = stringResource(R.string.salon_dialog_baja_cancelar))
                         }
                     }
                 )
@@ -271,8 +271,8 @@ private fun SalonScreenPreview() {
                 nombresEmpleados = mapOf("2" to "Camila G."),
                 mesas = listOf(
                     Mesa("1", 1, "Salon", 4, EstadoMesa.LIBRE, detalleEstado = "Sin comanda"),
-                    Mesa("2", 2, "Salon", 2, EstadoMesa.OCUPADA, empleadoAsignadoId = "Camila G.", consumoTotal = 18200.0),
-                    Mesa("3", 3, "Salon", 4, EstadoMesa.OCUPADA, empleadoAsignadoId = "Camila G.", consumoTotal = 28600.0),
+                    Mesa("2", 2, "Salon", 2, EstadoMesa.OCUPADA, empleadoAsignadoId = "2", consumoTotal = 18200.0),
+                    Mesa("3", 3, "Salon", 4, EstadoMesa.OCUPADA, empleadoAsignadoId = "2", consumoTotal = 28600.0),
                     Mesa("4", 4, "Salon", 4, EstadoMesa.CUENTA, detalleEstado = "Esperando ticket", consumoTotal = 34100.0),
                     Mesa("5", 5, "Patio", 2, EstadoMesa.LIBRE),
                     Mesa("6", 6, "Patio", 6, EstadoMesa.OCUPADA, consumoTotal = 42000.0)

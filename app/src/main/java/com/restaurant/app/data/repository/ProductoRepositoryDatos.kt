@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.update
 
 class ProductoRepositoryDatos : ProductoRepository {
 
-    // La lista vive acá. Es un StateFlow: cuando cambia, avisa a quien la esté mirando.
+    // La lista vive acá. Es un StateFlow: cuando cambia, le  avisa a quien la esté mirando.
     private val productos = MutableStateFlow(
         listOf(
             Producto(
@@ -52,6 +52,12 @@ class ProductoRepositoryDatos : ProductoRepository {
         )
     )
 
+
+    // Flow nos emite nuevos valores de forma continua cada vez que los datos cambian:
+    //1. Agregamos, editamos o eliminamos un producto en la BD o en memoria.
+    //2. Flow detecta el cambio automaticamente.
+    //3. la interfaz de usuario (ViewModel) recibe la lista actualizada y y redibuja la pantalla sin que tengamos que resfrecar manualmente.
+    // asStateFlow() expone la lista como solo lectura para que la UI/ViewModel escuche cambios sin poder modificarla directamente.
     override fun observarProductos(): Flow<List<Producto>> = productos.asStateFlow()
 
     override suspend fun obtenerProducto(id: String): Producto? =
