@@ -42,6 +42,10 @@
     <string name="registro_error_telefono_invalido">El teléfono no es válido</string>
     <string name="registro_error_restaurante_requerido">Ingresá el nombre del restaurante</string>
     <string name="registro_error_contrasena_corta">La contraseña debe tener al menos 8 caracteres</string>
+    <string name="registro_error_contrasena_formato">La contraseña debe contener al menos una letra y un número</string>
+    <string name="registro_confirmacion_titulo">Cuenta creada</string>
+    <string name="registro_confirmacion_mensaje">Tu cuenta de administrador y tu restaurante se crearon correctamente.</string>
+    <string name="registro_confirmacion_boton">Continuar</string>
 
     <!-- Recuperar Contraseña -->
     <string name="forgot_password_title">Recuperar contraseña</string>
@@ -50,6 +54,9 @@
     <string name="forgot_password_button">Enviar enlace de recuperación</string>
     <string name="forgot_password_error_email_required">Ingresá tu correo electrónico</string>
     <string name="forgot_password_error_email_invalid">El correo no es válido</string>
+    <string name="recuperar_contrasena_dialog_exito_titulo">Instrucciones enviadas</string>
+    <string name="recuperar_contrasena_dialog_exito_mensaje">Si el correo está registrado, vas a recibir las instrucciones para restablecer tu contraseña.</string>
+    <string name="recuperar_contrasena_dialog_exito_boton">Entendido</string>
     <string name="cd_back">Volver</string>
 
     <!-- Carta & Menú -->

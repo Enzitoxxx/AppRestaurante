@@ -7,5 +7,6 @@ import androidx.annotation.StringRes
 data class RecuperarContrasenaUiState(
     val email: String = "",
     val isLoading: Boolean = false,
+    val mostrarMensajeExito: Boolean = false,
     @StringRes val emailError: Int? = null
 )

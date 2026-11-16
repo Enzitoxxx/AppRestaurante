@@ -111,6 +111,7 @@ class RegistroViewModel : ViewModel(){
         val errorContrasena = when {
             contrasena.isBlank() -> R.string.login_error_password_required
             contrasena.length < 8 -> R.string.registro_error_contrasena_corta
+            !contrasena.any { it.isLetter() } || !contrasena.any { it.isDigit() } -> R.string.registro_error_contrasena_formato
             else -> null
         }
 
@@ -134,8 +135,15 @@ class RegistroViewModel : ViewModel(){
         viewModelScope.launch {
             _uiState.update { it.copy(estaCargado = true) } // Activa el loader en el botón
             delay(1000) // Simulación de llamada al servidor / API / Base de datos
-            _uiState.update { it.copy(estaCargado = false) } // Apaga el loader
-            _events.send(RegistroEvent.RegistroSuccess) // Notifica a la pantalla para que navegue
+            // TODO: RF02 - Validar si el correo ya está registrado cuando exista la capa de datos / AuthRepository
+            _uiState.update { it.copy(estaCargado = false, mostrarConfirmacion = true) } // Muestra diálogo de confirmación
+        }
+    }
+
+    fun onConfirmarRegistro() {
+        _uiState.update { it.copy(mostrarConfirmacion = false) }
+        viewModelScope.launch {
+            _events.send(RegistroEvent.RegistroSuccess) // Notifica a la pantalla para que navegue a Home
         }
     }
 

@@ -45,7 +45,13 @@ class RecuperarContrasenaViewModel : ViewModel() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             delay(1000) // TODO: luego reemplazar por la llamada real a repositorio de autenticacion
-            _uiState.update { it.copy(isLoading = false) }
+            _uiState.update { it.copy(isLoading = false, mostrarMensajeExito = true) }
+        }
+    }
+
+    fun onConfirmarExito() {
+        _uiState.update { it.copy(mostrarMensajeExito = false) }
+        viewModelScope.launch {
             _events.send(RecuperarContrasenaEvent.ResetPasswordEmailSent)
         }
     }

@@ -13,6 +13,7 @@ data class RegistroUiState(
     //El estado de la interfaz
     val contrasenaVisible : Boolean = false,
     val estaCargado : Boolean = false,
+    val mostrarConfirmacion: Boolean = false,
 
     //Los errores de cada campo
     @StringRes val errorNombre: Int? = null,

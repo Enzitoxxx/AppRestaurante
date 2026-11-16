@@ -23,10 +23,12 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.outlined.Send
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.MarkEmailRead
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -66,6 +68,7 @@ fun RecuperarContrasenaScreen(
         state = state,
         onEmailChange = viewModel::onEmailChange,
         onSendClick = viewModel::onSendClick,
+        onConfirmarExito = viewModel::onConfirmarExito,
         onBackClick = onBackClick
     )
 }
@@ -75,6 +78,7 @@ fun RecuperarContrasenaContent(
     state: RecuperarContrasenaUiState,
     onEmailChange: (String) -> Unit,
     onSendClick: () -> Unit,
+    onConfirmarExito: () -> Unit = {},
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -160,6 +164,29 @@ fun RecuperarContrasenaContent(
                 onClick = onSendClick,
                 isLoading = state.isLoading,
                 trailingIcon = Icons.AutoMirrored.Outlined.Send
+            )
+        }
+
+        if (state.mostrarMensajeExito) {
+            AlertDialog(
+                onDismissRequest = {},
+                title = {
+                    Text(
+                        text = stringResource(R.string.recuperar_contrasena_dialog_exito_titulo),
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                },
+                text = {
+                    Text(
+                        text = stringResource(R.string.recuperar_contrasena_dialog_exito_mensaje),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                },
+                confirmButton = {
+                    TextButton(onClick = onConfirmarExito) {
+                        Text(text = stringResource(R.string.recuperar_contrasena_dialog_exito_boton))
+                    }
+                }
             )
         }
     }

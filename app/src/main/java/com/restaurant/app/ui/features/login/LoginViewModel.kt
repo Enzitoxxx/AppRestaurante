@@ -52,7 +52,7 @@ class LoginViewModel : ViewModel() {
 
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
-            delay(1000) // TODO: reemplazar por la llamada real (AuthRepository.login)
+            delay(1000) // TODO: RF01 - Validar cuenta inexistente o inactiva cuando exista la capa de datos / AuthRepository.login
             _uiState.update { it.copy(isLoading = false) }
             _events.send(LoginEvent.LoginSuccess)
         }

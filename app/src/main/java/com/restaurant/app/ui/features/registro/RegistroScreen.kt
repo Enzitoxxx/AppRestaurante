@@ -15,15 +15,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.restaurant.app.R
 import com.restaurant.app.ui.features.registro.components.RegistroFooter
 import com.restaurant.app.ui.features.registro.components.RegistroForm
 import com.restaurant.app.ui.features.registro.components.RegistroHeader
@@ -64,6 +69,7 @@ fun RegistroScreen(
         onContrasenaChange = viewModel::onContrasenaChange,
         onToggleContrasenaVisibility = viewModel::onToggleContrasenaVisibility,
         onRegistroClick = viewModel::onRegistroClick,
+        onConfirmarRegistro = viewModel::onConfirmarRegistro,
         onLoginClick = onLoginClick
     )
 }
@@ -84,6 +90,7 @@ fun RegistroContent(
     onContrasenaChange: (String) -> Unit,
     onToggleContrasenaVisibility: () -> Unit,
     onRegistroClick: () -> Unit,
+    onConfirmarRegistro: () -> Unit = {},
     onLoginClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -127,6 +134,30 @@ fun RegistroContent(
             RegistroFooter(
                 onLoginClick = onLoginClick,
                 modifier = Modifier.fillMaxWidth()
+            )
+        }
+
+        // Diálogo de confirmación "Cuenta creada" (RF02)
+        if (state.mostrarConfirmacion) {
+            AlertDialog(
+                onDismissRequest = {},
+                title = {
+                    Text(
+                        text = stringResource(R.string.registro_confirmacion_titulo),
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                },
+                text = {
+                    Text(
+                        text = stringResource(R.string.registro_confirmacion_mensaje),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                },
+                confirmButton = {
+                    TextButton(onClick = onConfirmarRegistro) {
+                        Text(text = stringResource(R.string.registro_confirmacion_boton))
+                    }
+                }
             )
         }
     }
