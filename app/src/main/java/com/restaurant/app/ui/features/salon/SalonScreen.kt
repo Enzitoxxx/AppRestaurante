@@ -20,11 +20,14 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -48,17 +51,21 @@ import com.restaurant.app.ui.theme.AppTheme
 @Composable
 fun SalonScreen(
     onMesaClick: (Mesa) -> Unit = {},
+    onAbrirDetallePedido: (String) -> Unit = {},
     onEditarMesaClick: (Mesa) -> Unit = {},
     onNuevaMesaClick: () -> Unit = {},
     onNavegarA: (NavegacionItem) -> Unit = {},
     viewModel: SalonViewModel = viewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when (event) {
                 is SalonEvent.AbrirMesa -> onMesaClick(event.mesa)
+                is SalonEvent.AbrirDetallePedido -> onAbrirDetallePedido(event.pedidoId)
+                is SalonEvent.MostrarSnackbar -> snackbarHostState.showSnackbar(event.mensaje)
                 is SalonEvent.EditarMesa -> onEditarMesaClick(event.mesa)
                 SalonEvent.NuevaMesa -> onNuevaMesaClick()
             }
@@ -67,6 +74,7 @@ fun SalonScreen(
 
     SalonContent(
         state = state,
+        snackbarHostState = snackbarHostState,
         onZonaSeleccionada = viewModel::onZonaSeleccionada,
         onMesaClick = viewModel::onMesaClick,
         onEditarMesaClick = viewModel::onEditarMesaClick,
@@ -85,6 +93,7 @@ fun SalonScreen(
 @Composable
 fun SalonContent(
     state: SalonUiState,
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
     onZonaSeleccionada: (String) -> Unit,
     onMesaClick: (Mesa) -> Unit,
     onEditarMesaClick: (Mesa) -> Unit = {},
@@ -96,6 +105,7 @@ fun SalonContent(
     modifier: Modifier = Modifier
 ) {
     Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         bottomBar = {
             AppBottomBar(
                 rutaActual = "salon",

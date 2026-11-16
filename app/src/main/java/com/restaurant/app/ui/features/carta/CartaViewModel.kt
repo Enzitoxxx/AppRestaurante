@@ -3,20 +3,21 @@ package com.restaurant.app.ui.features.carta
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.restaurant.app.data.Repositorios
-//import com.restaurant.app.data.repository.ProductoRepositoryDatos
 import com.restaurant.app.domain.model.Producto
+import com.restaurant.app.domain.repository.PedidoRepository
 import com.restaurant.app.domain.repository.ProductoRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class CartaViewModel(
-    //private val productoRepository: ProductoRepository = ProductoRepositoryDatos()
-    private val productoRepository: ProductoRepository = Repositorios.productos
+    private val productoRepository: ProductoRepository = Repositorios.productos,
+    private val pedidoRepository: PedidoRepository = Repositorios.pedidos
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(CartaUiState())
@@ -26,10 +27,15 @@ class CartaViewModel(
     val events = _events.receiveAsFlow()
 
     init {
-        // Escuchamos los productos del repositorio en tiempo real
+        // Escuchamos los productos y pedidos en tiempo real
         viewModelScope.launch {
-            productoRepository.observarProductos().collect { lista ->
-                _uiState.update { it.copy(productos = lista) }
+            combine(
+                productoRepository.observarProductos(),
+                pedidoRepository.observarPedidos()
+            ) { productos, pedidos ->
+                productos to pedidos
+            }.collect { (productos, pedidos) ->
+                _uiState.update { it.copy(productos = productos, pedidos = pedidos) }
             }
         }
     }
@@ -72,9 +78,25 @@ class CartaViewModel(
 
     fun onConfirmarBajaProducto() {
         val productoAEliminar = _uiState.value.productoADarDeBaja ?: return
-        viewModelScope.launch {
-            productoRepository.eliminarProducto(productoAEliminar.id)
-            _uiState.update { it.copy(productoADarDeBaja = null) }
+        _uiState.update { it.copy(productoADarDeBaja = null) }
+
+        val figuraEnPedidos = _uiState.value.pedidos.any { pedido ->
+            pedido.items.any { item -> item.productoId == productoAEliminar.id }
+        }
+
+        if (figuraEnPedidos) {
+            viewModelScope.launch {
+                val productoActualizado = productoAEliminar.copy(
+                    estadoDisponible = false,
+                    estadoTexto = "Pausado"
+                )
+                productoRepository.guardarProducto(productoActualizado)
+                _events.send(CartaEvent.MostrarSnackbar("El producto figura en pedidos registrados: se pausó en lugar de eliminarse"))
+            }
+        } else {
+            viewModelScope.launch {
+                productoRepository.eliminarProducto(productoAEliminar.id)
+            }
         }
     }
 }

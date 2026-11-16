@@ -2,10 +2,12 @@ package com.restaurant.app.ui.features.salon
 
 import com.restaurant.app.domain.model.EstadoMesa
 import com.restaurant.app.domain.model.Mesa
+import com.restaurant.app.domain.model.Pedido
 
 data class SalonUiState(
     val zonaSeleccionada: String = "Todas", // "Todas", "Salon", "Patio"
     val mesas: List<Mesa> = emptyList(),
+    val pedidos: List<Pedido> = emptyList(),
     val estaCargando: Boolean = false,
     val mesaADarDeBaja: Mesa? = null, // Si no es null, abre el AlertDialog de confirmación
     val nombresEmpleados: Map<String, String> = emptyMap(),   // id -> nombre corto

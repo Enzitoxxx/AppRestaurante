@@ -5,4 +5,5 @@ import com.restaurant.app.domain.model.Producto
 sealed interface CartaEvent {
     data object NavegarAAgregarProducto : CartaEvent
     data class NavegarAEditarProducto(val producto: Producto) : CartaEvent
+    data class MostrarSnackbar(val mensaje: String) : CartaEvent
 }

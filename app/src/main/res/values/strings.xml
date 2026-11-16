@@ -103,6 +103,9 @@
     <string name="salon_dialog_baja_mensaje">¿Estás seguro de dar de baja la %1$s? Dejará de mostrarse en el mapa del salón.</string>
     <string name="salon_dialog_baja_confirmar">Dar de baja</string>
     <string name="salon_dialog_baja_cancelar">Cancelar</string>
+    <string name="salon_error_eliminar_mesa_pedido_abierto">No se puede eliminar la %1$s: tiene un pedido abierto</string>
+    <string name="salon_error_mesa_sin_pedido_abierto">La mesa no tiene un pedido abierto</string>
+    <string name="carta_producto_pausado_por_pedidos">El producto figura en pedidos registrados: se pausó en lugar de eliminarse</string>
 
 
     <!-- Mesa -->

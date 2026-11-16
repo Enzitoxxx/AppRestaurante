@@ -3,9 +3,9 @@ package com.restaurant.app.ui.features.salon
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.restaurant.app.data.Repositorios
-//import com.restaurant.app.data.repository.MesaRepositoryDatos
 import com.restaurant.app.domain.model.Mesa
 import com.restaurant.app.domain.repository.MesaRepository
+import com.restaurant.app.domain.repository.PedidoRepository
 import com.restaurant.app.domain.repository.PersonalRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,9 +17,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class SalonViewModel(
-    //private val mesaRepository: MesaRepository = MesaRepositoryDatos()
     private val mesaRepository: MesaRepository = Repositorios.mesas,
-    private val personalRepository: PersonalRepository = Repositorios.personal
+    private val personalRepository: PersonalRepository = Repositorios.personal,
+    private val pedidoRepository: PedidoRepository = Repositorios.pedidos
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SalonUiState())
@@ -29,15 +29,22 @@ class SalonViewModel(
     val events = _events.receiveAsFlow()
 
     init {
-        // Escuchamos mesas y personal juntos: si cambia cualquiera de los dos, se actualiza el Salón
+        // Escuchamos mesas, personal y pedidos juntos: si cambia cualquiera, se actualiza el Salón
         viewModelScope.launch {
             combine(
                 mesaRepository.observarMesas(),
-                personalRepository.observarPersonal()
-            ) { mesas, personal ->
-                mesas to personal.associate { it.id to it.nombreCorto }
-            }.collect { (mesas, nombres) ->
-                _uiState.update { it.copy(mesas = mesas, nombresEmpleados = nombres) }
+                personalRepository.observarPersonal(),
+                pedidoRepository.observarPedidos()
+            ) { mesas, personal, pedidos ->
+                Triple(mesas, personal.associate { it.id to it.nombreCorto }, pedidos)
+            }.collect { (mesas, nombres, pedidos) ->
+                _uiState.update {
+                    it.copy(
+                        mesas = mesas,
+                        nombresEmpleados = nombres,
+                        pedidos = pedidos
+                    )
+                }
             }
         }
     }
@@ -47,7 +54,12 @@ class SalonViewModel(
     }
 
     fun onMesaClick(mesa: Mesa) {
-        _events.trySend(SalonEvent.AbrirMesa(mesa))
+        val pedidoAbierto = _uiState.value.pedidos.find { it.mesaId == mesa.id && it.estado.estaAbierto }
+        if (pedidoAbierto != null) {
+            _events.trySend(SalonEvent.AbrirDetallePedido(pedidoAbierto.id))
+        } else {
+            _events.trySend(SalonEvent.MostrarSnackbar("La mesa no tiene un pedido abierto"))
+        }
     }
 
     fun onNuevaMesaClick() {
@@ -68,9 +80,16 @@ class SalonViewModel(
 
     fun onConfirmarBajaMesa() {
         val mesaAEliminar = _uiState.value.mesaADarDeBaja ?: return
+        _uiState.update { it.copy(mesaADarDeBaja = null) }
+
+        val tienePedidoAbierto = _uiState.value.pedidos.any { it.mesaId == mesaAEliminar.id && it.estado.estaAbierto }
+        if (tienePedidoAbierto) {
+            _events.trySend(SalonEvent.MostrarSnackbar("No se puede eliminar la ${mesaAEliminar.nombre}: tiene un pedido abierto"))
+            return
+        }
+
         viewModelScope.launch {
             mesaRepository.eliminarMesa(mesaAEliminar.id)
-            _uiState.update { it.copy(mesaADarDeBaja = null) }
         }
     }
 }

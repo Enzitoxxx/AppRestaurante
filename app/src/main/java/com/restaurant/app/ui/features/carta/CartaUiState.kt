@@ -1,11 +1,13 @@
 package com.restaurant.app.ui.features.carta
 
+import com.restaurant.app.domain.model.Pedido
 import com.restaurant.app.domain.model.Producto
 
 data class CartaUiState(
     val busqueda: String = "",
     val categoriaSeleccionada: String = "Todas", // Todas, Entradas, Platos, Bebidas, Postres
     val productos: List<Producto> = emptyList(),
+    val pedidos: List<Pedido> = emptyList(),
     val estaCargando: Boolean = false,
     val productoADarDeBaja: Producto? = null // Si no es null, se abre el AlertDialog de confirmación
 ) {

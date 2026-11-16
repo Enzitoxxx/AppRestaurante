@@ -4,6 +4,8 @@ import com.restaurant.app.domain.model.Mesa
 
 sealed interface SalonEvent {
     data class AbrirMesa(val mesa: Mesa) : SalonEvent
+    data class AbrirDetallePedido(val pedidoId: String) : SalonEvent
+    data class MostrarSnackbar(val mensaje: String) : SalonEvent
     data class EditarMesa(val mesa: Mesa) : SalonEvent
     data object NuevaMesa : SalonEvent
 }

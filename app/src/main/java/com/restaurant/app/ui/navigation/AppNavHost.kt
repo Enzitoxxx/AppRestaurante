@@ -159,7 +159,10 @@ fun AppNavHost() {
             entry<Screen.Salon> {
                 SalonScreen(
                     onMesaClick = { mesa ->
-                        // TODO: Navegar a la comanda/detalle de la mesa
+                        // Al tocar mesa, si tiene pedido abierto SalonScreen emite SalonEvent.AbrirDetallePedido
+                    },
+                    onAbrirDetallePedido = { pedidoId ->
+                        backStack.add(Screen.DetallePedido(pedidoId = pedidoId))
                     },
                     onEditarMesaClick = { mesa ->
                         backStack.add(Screen.MesaForm(mesaId = mesa.id)) // Editar mesa

@@ -13,11 +13,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -46,18 +49,21 @@ fun CartaScreen(
     viewModel: CartaViewModel = viewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when (event) {
                 CartaEvent.NavegarAAgregarProducto -> onAgregarProductoClick()
                 is CartaEvent.NavegarAEditarProducto -> onEditarProductoClick(event.producto)
+                is CartaEvent.MostrarSnackbar -> snackbarHostState.showSnackbar(event.mensaje)
             }
         }
     }
 
     CartaContent(
         state = state,
+        snackbarHostState = snackbarHostState,
         onBusquedaChange = viewModel::onBusquedaChange,
         onCategoriaSeleccionada = viewModel::onCategoriaChange,
         onToggleDisponibilidadProducto = viewModel::onToggleDisponibilidadProducto,
@@ -77,6 +83,7 @@ fun CartaScreen(
 @Composable
 fun CartaContent(
     state: CartaUiState,
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
     onBusquedaChange: (String) -> Unit,
     onCategoriaSeleccionada: (String) -> Unit,
     onToggleDisponibilidadProducto: (String) -> Unit,
@@ -89,6 +96,7 @@ fun CartaContent(
     modifier: Modifier = Modifier
 ) {
     Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         bottomBar = {
             AppBottomBar(
                 rutaActual = "carta",
