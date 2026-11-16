@@ -132,6 +132,9 @@
     <string name="home_top_dishes_title">Platos más vendidos del día</string>
     <string name="home_top_dishes_badge">Top Ventas</string>
     <string name="home_units_sold">%1$d unidades vendidas</string>
+    <string name="home_stock_alerts_title">Alertas de stock bajo</string>
+    <string name="home_stock_units_left_formato">quedan %1$d unidades</string>
+    <string name="home_stock_no_alerts">Sin alertas de stock</string>
     <string name="cd_notifications">Notificaciones</string>
 
     <!-- Personal -->

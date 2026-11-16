@@ -24,6 +24,7 @@ import com.restaurant.app.core.designsystem.NavegacionItem
 import com.restaurant.app.ui.features.home.components.HomeHeader
 import com.restaurant.app.ui.features.home.components.SalesSummaryCard
 import com.restaurant.app.ui.features.home.components.StatusMetricsRow
+import com.restaurant.app.ui.features.home.components.StockAlertsCard
 import com.restaurant.app.ui.features.home.components.TopSellingDishesCard
 import com.restaurant.app.ui.theme.AppTheme
 
@@ -102,6 +103,10 @@ fun HomeContent(
             Spacer(Modifier.height(16.dp))
 
             TopSellingDishesCard(platos = state.topPlatos)
+
+            Spacer(Modifier.height(16.dp))
+
+            StockAlertsCard(alertas = state.alertasStock)
         }
     }
 }
