@@ -14,13 +14,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.restaurant.app.ui.features.pedido.FiltroFecha
 import com.restaurant.app.ui.features.pedido.FiltroPedido
 
 @Composable
-fun PedidoFilterChips(
-    filtros: List<FiltroPedido>,
-    filtroSeleccionado: FiltroPedido,
-    onFiltroSelected: (FiltroPedido) -> Unit,
+fun <T> FilterChipsRow(
+    opciones: List<T>,
+    opcionSeleccionada: T,
+    onOpcionSelected: (T) -> Unit,
+    getEtiquetaRes: (T) -> Int,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -29,11 +31,11 @@ fun PedidoFilterChips(
             .horizontalScroll(rememberScrollState()),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        filtros.forEach { filtro ->
+        opciones.forEach { opcion ->
             FilterChip(
-                selected = filtro == filtroSeleccionado,
-                onClick = { onFiltroSelected(filtro) },
-                label = { Text(stringResource(filtro.etiqueta)) },
+                selected = opcion == opcionSeleccionada,
+                onClick = { onOpcionSelected(opcion) },
+                label = { Text(stringResource(getEtiquetaRes(opcion))) },
                 shape = CircleShape,
                 colors = FilterChipDefaults.filterChipColors(
                     selectedContainerColor = MaterialTheme.colorScheme.primary,
@@ -45,4 +47,36 @@ fun PedidoFilterChips(
             )
         }
     }
+}
+
+@Composable
+fun PedidoFilterChips(
+    filtros: List<FiltroPedido>,
+    filtroSeleccionado: FiltroPedido,
+    onFiltroSelected: (FiltroPedido) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    FilterChipsRow(
+        opciones = filtros,
+        opcionSeleccionada = filtroSeleccionado,
+        onOpcionSelected = onFiltroSelected,
+        getEtiquetaRes = { it.etiqueta },
+        modifier = modifier
+    )
+}
+
+@Composable
+fun PedidoFechaFilterChips(
+    filtros: List<FiltroFecha>,
+    filtroSeleccionado: FiltroFecha,
+    onFiltroSelected: (FiltroFecha) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    FilterChipsRow(
+        opciones = filtros,
+        opcionSeleccionada = filtroSeleccionado,
+        onOpcionSelected = onFiltroSelected,
+        getEtiquetaRes = { it.etiqueta },
+        modifier = modifier
+    )
 }

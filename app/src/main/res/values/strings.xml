@@ -204,6 +204,9 @@
     <string name="pedidos_filtro_esperando_cuenta">Esperando cuenta</string>
     <string name="pedidos_filtro_cobrados">Cobrados</string>
     <string name="pedidos_filtro_anulados">Anulados</string>
+    <string name="pedidos_filtro_fecha_hoy">Hoy</string>
+    <string name="pedidos_filtro_fecha_ultimos_7_dias">Últimos 7 días</string>
+    <string name="pedidos_filtro_fecha_todas">Todas las fechas</string>
 
     <string name="pedidos_estado_en_preparacion">En preparación</string>
     <string name="pedidos_estado_listo">Listo para servir</string>

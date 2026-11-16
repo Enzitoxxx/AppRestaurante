@@ -31,6 +31,7 @@ import com.restaurant.app.core.designsystem.AppTextField
 import com.restaurant.app.core.designsystem.NavegacionItem
 import com.restaurant.app.domain.model.Pedido
 import com.restaurant.app.ui.features.pedido.components.PedidoCard
+import com.restaurant.app.ui.features.pedido.components.PedidoFechaFilterChips
 import com.restaurant.app.ui.features.pedido.components.PedidoFilterChips
 import com.restaurant.app.ui.features.pedido.components.PedidoHeader
 import com.restaurant.app.ui.theme.AppTheme
@@ -46,6 +47,7 @@ fun PedidoScreen(
     PedidoContent(
         state = state,
         onFiltroSelected = viewModel::onFiltroSelected,
+        onFiltroFechaSelected = viewModel::onFiltroFechaSelected,
         onBusquedaChange = viewModel::onBusquedaChange,
         onPedidoClick = onPedidoClick,
         onNavegarA = onNavegarA
@@ -56,6 +58,7 @@ fun PedidoScreen(
 fun PedidoContent(
     state: PedidoUiState,
     onFiltroSelected: (FiltroPedido) -> Unit,
+    onFiltroFechaSelected: (FiltroFecha) -> Unit,
     onBusquedaChange: (String) -> Unit,
     onPedidoClick: (Pedido) -> Unit,
     onNavegarA: (NavegacionItem) -> Unit,
@@ -101,6 +104,15 @@ fun PedidoContent(
                 onFiltroSelected = onFiltroSelected
             )
 
+            Spacer(Modifier.height(8.dp))
+
+            // Filtros por fecha (RF13)
+            PedidoFechaFilterChips(
+                filtros = FiltroFecha.entries,
+                filtroSeleccionado = state.filtroFecha,
+                onFiltroSelected = onFiltroFechaSelected
+            )
+
             Spacer(Modifier.height(16.dp))
 
             if (state.pedidosFiltrados.isEmpty()) {
@@ -136,6 +148,7 @@ private fun PedidoScreenPreview() {
         PedidoContent(
             state = PedidoUiState(),
             onFiltroSelected = {},
+            onFiltroFechaSelected = {},
             onBusquedaChange = {},
             onPedidoClick = {},
             onNavegarA = {}

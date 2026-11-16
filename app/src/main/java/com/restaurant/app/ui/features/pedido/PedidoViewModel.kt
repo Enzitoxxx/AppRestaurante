@@ -51,6 +51,10 @@ class PedidoViewModel(
         _uiState.update { it.copy(filtro = filtro) }
     }
 
+    fun onFiltroFechaSelected(filtroFecha: FiltroFecha) {
+        _uiState.update { it.copy(filtroFecha = filtroFecha) }
+    }
+
     fun onBusquedaChange(texto: String) {
         _uiState.update { it.copy(busqueda = texto) }
     }

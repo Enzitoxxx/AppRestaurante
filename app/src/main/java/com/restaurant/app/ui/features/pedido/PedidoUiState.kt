@@ -8,17 +8,20 @@ data class PedidoUiState(
     val nombresMesa: Map<String, String> = emptyMap(),       // mesaId -> "Mesa 03"
     val nombresEmpleados: Map<String, String> = emptyMap(),  // empleadoId -> "Camila Gómez"
     val filtro: FiltroPedido = FiltroPedido.ABIERTOS,
+    val filtroFecha: FiltroFecha = FiltroFecha.TODAS,
     val busqueda: String = ""
 ) {
     fun nombreMesa(pedido: Pedido): String = nombresMesa[pedido.mesaId].orEmpty()
     fun nombreCamarero(pedido: Pedido): String = nombresEmpleados[pedido.empleadoId].orEmpty()
 
-    /** Aplica el filtro de estado y la búsqueda por mesa o camarero; los más nuevos primero. */
+    /** Aplica el filtro de estado, filtro de fecha y la búsqueda por mesa o camarero; los más nuevos primero. */
     val pedidosFiltrados: List<Pedido>
         get() {
             val texto = busqueda.trim()
+            val ahora = System.currentTimeMillis()
             return pedidos
                 .filter { filtro.acepta(it) }
+                .filter { filtroFecha.acepta(it, ahora) }
                 .filter {
                     texto.isEmpty() ||
                             nombreMesa(it).contains(texto, ignoreCase = true) ||
