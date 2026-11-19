@@ -1,6 +1,6 @@
 package com.restaurant.app.ui.features.home
 
-/** TODO: pasar a domain/data cuando exista el modulo/repositorio de insumos */
+/** TODO: pasar a domain/data cuando exista el módulo/repositorio de insumos */
 data class InsumoAlertaUi(
     val id: String,
     val nombre: String,
@@ -18,6 +18,7 @@ data class TopPlatoModel(
 /** Estado observable de la pantalla principal / Dashboard del Administrador. */
 data class HomeUiState(
     val nombreRestaurante: String = "La Buena Mesa",
+    val inicialesUsuario: String = "LF",
     val fechaHoy: String = "",
     val totalVentasHoy: Double = 0.0,
     val porcentajeComparativa: String? = null,

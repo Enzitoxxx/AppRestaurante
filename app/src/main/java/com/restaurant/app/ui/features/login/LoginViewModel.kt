@@ -3,8 +3,10 @@ package com.restaurant.app.ui.features.login
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.restaurant.app.R
+import com.restaurant.app.data.Repositorios
+import com.restaurant.app.domain.repository.AuthRepository
+import com.restaurant.app.domain.repository.ResultadoLogin
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -12,7 +14,20 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class LoginViewModel : ViewModel() {
+/*
+ * VIEWMODEL DE INICIO DE SESIÓN (LoginViewModel).
+ *
+ * El ViewModel coordina las acciones de la pantalla de Login conectándose con `AuthRepository`.
+ * Recibe el repositorio por constructor con un valor por defecto (= Repositorios.auth), facilitando
+ * la inyección de dependencias y las pruebas unitarias.
+ *
+ * Mantiene la regla del proyecto:
+ * 1. UiState inmutable con StateFlow para mantener el estado gráfico.
+ * 2. Channel BUFFERED expuesto como Flow para los eventos únicos de navegación (LoginSuccess).
+ */
+class LoginViewModel(
+    private val authRepository: AuthRepository = Repositorios.auth
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(LoginUiState())
     val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
@@ -52,9 +67,27 @@ class LoginViewModel : ViewModel() {
 
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
-            delay(1000) // TODO: RF01 - Validar cuenta inexistente o inactiva cuando exista la capa de datos / AuthRepository.login
+
+            // Llamada real al repositorio de autenticación (AuthRepository)
+            val resultado = authRepository.iniciarSesion(email, state.password)
+
             _uiState.update { it.copy(isLoading = false) }
-            _events.send(LoginEvent.LoginSuccess)
+
+            when (resultado) {
+                is ResultadoLogin.Exito -> {
+                    _events.send(LoginEvent.LoginSuccess)
+                }
+                ResultadoLogin.CredencialesInvalidas -> {
+                    _uiState.update {
+                        it.copy(emailError = R.string.login_error_credenciales_invalidas)
+                    }
+                }
+                ResultadoLogin.CuentaInactiva -> {
+                    _uiState.update {
+                        it.copy(emailError = R.string.login_error_cuenta_inactiva)
+                    }
+                }
+            }
         }
     }
 

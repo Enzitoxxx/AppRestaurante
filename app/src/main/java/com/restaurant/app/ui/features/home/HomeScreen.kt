@@ -80,7 +80,10 @@ fun HomeContent(
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 20.dp, vertical = 16.dp)
         ) {
-            HomeHeader(nombreRestaurante = state.nombreRestaurante)
+            HomeHeader(
+                nombreRestaurante = state.nombreRestaurante,
+                inicialesUsuario = state.inicialesUsuario
+            )
 
             Spacer(Modifier.height(20.dp))
 

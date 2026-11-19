@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.restaurant.app.data.Repositorios
 import com.restaurant.app.domain.model.EstadoMesa
 import com.restaurant.app.domain.model.EstadoPedido
+import com.restaurant.app.domain.repository.AuthRepository
 import com.restaurant.app.domain.repository.MesaRepository
 import com.restaurant.app.domain.repository.PedidoRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,7 +21,8 @@ import java.util.Locale
 
 class HomeViewModel(
     private val pedidoRepository: PedidoRepository = Repositorios.pedidos,
-    private val mesaRepository: MesaRepository = Repositorios.mesas
+    private val mesaRepository: MesaRepository = Repositorios.mesas,
+    private val authRepository: AuthRepository = Repositorios.auth
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(
@@ -34,10 +36,11 @@ class HomeViewModel(
         viewModelScope.launch {
             combine(
                 pedidoRepository.observarPedidos(),
-                mesaRepository.observarMesas()
-            ) { pedidos, mesas ->
-                pedidos to mesas
-            }.collect { (pedidos, mesas) ->
+                mesaRepository.observarMesas(),
+                authRepository.usuarioActual
+            ) { pedidos, mesas, usuario ->
+                Triple(pedidos, mesas, usuario)
+            }.collect { (pedidos, mesas, usuario) ->
                 val ahora = System.currentTimeMillis()
                 val inicioHoy = Calendar.getInstance().apply {
                     timeInMillis = ahora
@@ -47,7 +50,6 @@ class HomeViewModel(
                     set(Calendar.MILLISECOND, 0)
                 }.timeInMillis
 
-                // Pedidos cobrados hoy (excluye anulados y de fechas anteriores)
                 val cobradosHoy = pedidos.filter {
                     it.estado == EstadoPedido.COBRADO && it.fecha >= inicioHoy
                 }
@@ -61,7 +63,6 @@ class HomeViewModel(
                 }
                 val totalMesas = mesas.size
 
-                // Unidades vendidas hoy por cada producto en los pedidos cobrados hoy
                 val unidadesPorPlato = mutableMapOf<String, Pair<Int, Double>>()
                 cobradosHoy.flatMap { it.items }.forEach { item ->
                     val actual = unidadesPorPlato.getOrDefault(item.nombre, Pair(0, 0.0))
@@ -83,8 +84,14 @@ class HomeViewModel(
                         )
                     }
 
+                val iniciales = usuario?.nombre?.trim()?.split("\\s+".toRegex())
+                    ?.mapNotNull { it.firstOrNull()?.toString() }
+                    ?.take(2)?.joinToString("")?.uppercase() ?: "LF"
+
                 _uiState.update { state ->
                     state.copy(
+                        nombreRestaurante = usuario?.restauranteNombre ?: "La Buena Mesa",
+                        inicialesUsuario = iniciales,
                         fechaHoy = obtenerFechaActualFormateada(),
                         totalVentasHoy = totalVentasHoy,
                         totalTransacciones = totalTransacciones,

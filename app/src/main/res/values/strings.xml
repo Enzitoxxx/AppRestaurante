@@ -25,6 +25,8 @@
     <string name="login_error_email_required">Ingresá tu correo electrónico</string>
     <string name="login_error_email_invalid">El correo no es válido</string>
     <string name="login_error_password_required">Ingresá tu contraseña</string>
+    <string name="login_error_credenciales_invalidas">Correo o contraseña incorrectos</string>
+    <string name="login_error_cuenta_inactiva">Tu cuenta se encuentra inactiva. Contactá al administrador</string>
     <string name="cd_show_password">Mostrar contraseña</string>
     <string name="cd_hide_password">Ocultar contraseña</string>
 
@@ -43,6 +45,7 @@
     <string name="registro_error_restaurante_requerido">Ingresá el nombre del restaurante</string>
     <string name="registro_error_contrasena_corta">La contraseña debe tener al menos 8 caracteres</string>
     <string name="registro_error_contrasena_formato">La contraseña debe contener al menos una letra y un número</string>
+    <string name="registro_error_correo_existente">El correo electrónico ya se encuentra registrado</string>
     <string name="registro_confirmacion_titulo">Cuenta creada</string>
     <string name="registro_confirmacion_mensaje">Tu cuenta de administrador y tu restaurante se crearon correctamente.</string>
     <string name="registro_confirmacion_boton">Continuar</string>
@@ -54,6 +57,8 @@
     <string name="forgot_password_button">Enviar enlace de recuperación</string>
     <string name="forgot_password_error_email_required">Ingresá tu correo electrónico</string>
     <string name="forgot_password_error_email_invalid">El correo no es válido</string>
+    <string name="forgot_password_error_email_not_found">No encontramos ninguna cuenta asociada a este correo electrónico</string>
+    <string name="recuperar_contrasena_error_correo_no_existe">No encontramos ninguna cuenta asociada a este correo electrónico</string>
     <string name="recuperar_contrasena_dialog_exito_titulo">Instrucciones enviadas</string>
     <string name="recuperar_contrasena_dialog_exito_mensaje">Si el correo está registrado, vas a recibir las instrucciones para restablecer tu contraseña.</string>
     <string name="recuperar_contrasena_dialog_exito_boton">Entendido</string>
