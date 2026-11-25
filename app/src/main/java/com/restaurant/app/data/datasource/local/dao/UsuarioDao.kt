@@ -1,14 +1,14 @@
-package com.restaurant.app.data.local.dao
+package com.restaurant.app.data.datasource.local.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.restaurant.app.data.local.entity.UsuarioEntity
+import com.restaurant.app.data.datasource.local.entity.UsuarioEntity
 import kotlinx.coroutines.flow.Flow
 
 /*
- * DAO (Data Access Object) PARA LA TABLA DE USUARIOS (Capa data/local).
+ * DAO (Data Access Object) PARA LA TABLA DE USUARIOS (Capa data/datasource/local/dao).
  *
  * Un DAO es una interfaz donde declaramos las consultas SQL de forma tipada y segura mediante anotaciones de Room.
  * Room genera automáticamente en tiempo de compilación el código de implementación que interactúa con SQLite.
@@ -31,8 +31,4 @@ interface UsuarioDao {
     // Observa en tiempo real los datos del usuario logueado mediante un Flow reactivo.
     @Query("SELECT * FROM usuarios WHERE id = :id LIMIT 1")
     fun observarPorId(id: String): Flow<UsuarioEntity?>
-
-    // Cuenta la cantidad total de usuarios registrados en la base local (para verificar si hace falta insertar usuarios iniciales).
-    @Query("SELECT COUNT(*) FROM usuarios")
-    suspend fun contar(): Int
 }

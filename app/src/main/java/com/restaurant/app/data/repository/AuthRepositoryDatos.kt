@@ -1,15 +1,14 @@
 package com.restaurant.app.data.repository
 
-import com.restaurant.app.data.local.dao.UsuarioDao
-import com.restaurant.app.data.local.entity.UsuarioEntity
-import com.restaurant.app.data.local.mapper.toDomain
-import com.restaurant.app.data.local.sesion.SesionPreferencias
+import com.restaurant.app.data.datasource.local.dao.UsuarioDao
+import com.restaurant.app.data.datasource.local.entity.UsuarioEntity
 import com.restaurant.app.domain.model.Usuario
 import com.restaurant.app.domain.repository.AuthRepository
 import com.restaurant.app.domain.repository.ResultadoLogin
 import com.restaurant.app.domain.repository.ResultadoRegistro
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -18,51 +17,20 @@ import java.util.UUID
 /*
  * IMPLEMENTACIÓN CONCRETA DEL REPOSITORIO DE AUTENTICACIÓN (Capa data/repository).
  *
- * Esta clase implementa la interfaz `AuthRepository` definida en la capa de dominio.
- * Se encarga de orquestar la fuente de datos local compuesta por:
- * 1. `UsuarioDao`: para la persistencia en la base de datos de Room.
- * 2. `SesionPreferencias`: para almacenar el usuario activo en SharedPreferences.
- *
- * Además, inicializa cuentas de prueba al abrir la aplicación por primera vez si la base de datos está vacía.
+ * GESTIÓN DE SESIÓN EN MEMORIA:
+ * La sesión del usuario se mantiene activa en memoria mediante `usuarioActualId` (StateFlow) mientras la app está abierta.
+ * Los usuarios iniciales se cargan automáticamente desde `DatosIniciales.kt` mediante el callback `onCreate` de Room.
  */
 class AuthRepositoryDatos(
-    private val usuarioDao: UsuarioDao,
-    private val sesionPreferencias: SesionPreferencias
+    private val usuarioDao: UsuarioDao
 ) : AuthRepository {
 
-    // Inicialización síncrona/perezosa de usuarios de prueba cuando la tabla está vacía
-    private suspend fun asegurarUsuariosEjemplo() {
-        if (usuarioDao.contar() == 0) {
-            val usuarioActivo = UsuarioEntity(
-                id = "1",
-                nombre = "Lucía Fernández",
-                correo = "lucia@labuenamesa.com.ar",
-                telefono = "+54 9 11 1234-5678",
-                restauranteNombre = "La Buena Mesa",
-                estaActivo = true,
-                contrasenaHash = UsuarioEntity.generarHash("Mesa1234")
-            )
-            val usuarioInactivo = UsuarioEntity(
-                id = "2",
-                nombre = "Usuario Inactivo",
-                correo = "inactivo@labuenamesa.com.ar",
-                telefono = "+54 9 11 0000-0000",
-                restauranteNombre = "La Buena Mesa",
-                estaActivo = false,
-                contrasenaHash = UsuarioEntity.generarHash("Mesa1234")
-            )
-            try {
-                usuarioDao.insertar(usuarioActivo)
-                usuarioDao.insertar(usuarioInactivo)
-            } catch (_: Exception) {
-                // Si ocurre una colisión al sembrar datos, se ignora
-            }
-        }
-    }
+    // Guarda la ID del usuario que inició sesión en la corrida actual de la aplicación
+    private val usuarioActualId = MutableStateFlow<String?>(null)
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override val usuarioActual: Flow<Usuario?> =
-        sesionPreferencias.usuarioActualId.flatMapLatest { id ->
+        usuarioActualId.flatMapLatest { id ->
             if (id == null) {
                 flowOf(null)
             } else {
@@ -73,7 +41,6 @@ class AuthRepositoryDatos(
         }
 
     override suspend fun iniciarSesion(correo: String, contrasena: String): ResultadoLogin {
-        asegurarUsuariosEjemplo()
         val correoLimpio = correo.trim().lowercase()
         val entity = usuarioDao.buscarPorCorreo(correoLimpio)
 
@@ -90,7 +57,7 @@ class AuthRepositoryDatos(
             return ResultadoLogin.CuentaInactiva
         }
 
-        sesionPreferencias.guardarSesion(entity.id)
+        usuarioActualId.value = entity.id
         return ResultadoLogin.Exito(entity.toDomain())
     }
 
@@ -101,7 +68,6 @@ class AuthRepositoryDatos(
         restauranteNombre: String,
         contrasena: String
     ): ResultadoRegistro {
-        asegurarUsuariosEjemplo()
         val correoLimpio = correo.trim().lowercase()
 
         val usuarioExistente = usuarioDao.buscarPorCorreo(correoLimpio)
@@ -121,7 +87,7 @@ class AuthRepositoryDatos(
 
         return try {
             usuarioDao.insertar(nuevoUsuario)
-            sesionPreferencias.guardarSesion(nuevoUsuario.id)
+            usuarioActualId.value = nuevoUsuario.id
             ResultadoRegistro.Exito(nuevoUsuario.toDomain())
         } catch (_: Exception) {
             ResultadoRegistro.CorreoYaRegistrado
@@ -129,13 +95,11 @@ class AuthRepositoryDatos(
     }
 
     override suspend fun recuperarContrasena(correo: String): Boolean {
-        asegurarUsuariosEjemplo()
         val correoLimpio = correo.trim().lowercase()
-        // Simulación: retorna true si el correo existe registrado en el sistema local
         return usuarioDao.buscarPorCorreo(correoLimpio) != null
     }
 
     override suspend fun cerrarSesion() {
-        sesionPreferencias.cerrarSesion()
+        usuarioActualId.value = null
     }
 }

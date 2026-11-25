@@ -15,6 +15,16 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+/*
+ * VIEWMODEL DE LA CARTA & MENÚ (CartaViewModel).
+ *
+ * DIFERENCIA ENTRE BAJA LÓGICA Y BAJA FÍSICA DE PRODUCTOS:
+ * - Baja Lógica (estaDadoDeBaja = true): Ocurre cuando se intenta eliminar un producto que ya figura en pedidos
+ *   registrados. No se elimina de la base de datos para no romper el historial de ventas del restaurante,
+ *   sino que se marca como dado de baja para ocultarlo de la Carta.
+ * - Baja Física (eliminarProducto): Se realiza cuando el producto no tiene pedidos asociados. Se borra su registro
+ *   definitivamente de SQLite.
+ */
 class CartaViewModel(
     private val productoRepository: ProductoRepository = Repositorios.productos,
     private val pedidoRepository: PedidoRepository = Repositorios.pedidos
@@ -87,11 +97,10 @@ class CartaViewModel(
         if (figuraEnPedidos) {
             viewModelScope.launch {
                 val productoActualizado = productoAEliminar.copy(
-                    estadoDisponible = false,
-                    estadoTexto = "Pausado"
+                    estaDadoDeBaja = true
                 )
                 productoRepository.guardarProducto(productoActualizado)
-                _events.send(CartaEvent.MostrarSnackbar("El producto figura en pedidos registrados: se pausó en lugar de eliminarse"))
+                _events.send(CartaEvent.MostrarSnackbar("El producto figura en pedidos registrados: se dio de baja y se conserva en el historial"))
             }
         } else {
             viewModelScope.launch {

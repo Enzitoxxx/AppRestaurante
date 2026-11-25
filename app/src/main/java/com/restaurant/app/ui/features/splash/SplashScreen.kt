@@ -22,16 +22,22 @@ import com.restaurant.app.ui.features.splash.components.SplashFooter
 import com.restaurant.app.ui.theme.AppTheme
 import com.restaurant.app.ui.theme.SplashGradientBottom
 
-/** Pantalla conectada al ViewModel: recibe el estado y avisa cuando termina. */
+/** Pantalla conectada al ViewModel: recibe el estado y avisa cuando termina según el destino del evento. */
 @Composable
 fun SplashScreen(
-    onFinished: () -> Unit,
+    onNavegarALogin: () -> Unit,
+    onNavegarAHome: () -> Unit,
     viewModel: SplashViewModel = viewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        viewModel.finished.collect { onFinished() }
+        viewModel.events.collect { event ->
+            when (event) {
+                SplashEvent.IrALogin -> onNavegarALogin()
+                SplashEvent.IrAHome -> onNavegarAHome()
+            }
+        }
     }
 
     SplashContent(state)

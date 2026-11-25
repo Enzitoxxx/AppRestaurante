@@ -79,7 +79,7 @@ class LoginViewModel(
                 }
                 ResultadoLogin.CredencialesInvalidas -> {
                     _uiState.update {
-                        it.copy(emailError = R.string.login_error_credenciales_invalidas)
+                        it.copy(passwordError = R.string.login_error_credenciales_invalidas)
                     }
                 }
                 ResultadoLogin.CuentaInactiva -> {

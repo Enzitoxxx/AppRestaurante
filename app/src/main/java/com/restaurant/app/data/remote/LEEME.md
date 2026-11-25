@@ -1,1 +1,0 @@
-Acá va Retrofit más adelante: interfaces de la API (ApiService), DTOs (modelos de red) y mappers DTO <-> modelo. Los repositorios de data/repository decidirán si leen de local/ (Room) o de remote/ (API).

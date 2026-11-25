@@ -10,6 +10,6 @@ data class Producto (
     val precio : Double,
     val estadoDisponible : Boolean,
     val estadoTexto : String? = null, // "Ej: Pausado por stock"
-    val descripcion : String = ""
-
+    val descripcion : String = "",
+    val estaDadoDeBaja : Boolean = false
 )

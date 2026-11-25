@@ -1,8 +1,7 @@
 package com.restaurant.app.data
 
 import android.content.Context
-import com.restaurant.app.data.local.database.AppDatabase
-import com.restaurant.app.data.local.sesion.SesionPreferencias
+import com.restaurant.app.data.datasource.local.AppDatabase
 import com.restaurant.app.data.repository.AuthRepositoryDatos
 import com.restaurant.app.data.repository.MesaRepositoryDatos
 import com.restaurant.app.data.repository.PedidoRepositoryDatos
@@ -20,7 +19,7 @@ import com.restaurant.app.domain.repository.ProductoRepository
  * En esta aplicación utilizamos el patrón Service Locator mediante un `object` de Kotlin.
  *
  * `Repositorios` expone instancias Singleton de cada repositorio (usando `by lazy` para inicializarlos
- * solo cuando se utilicen por primera vez). Se inicializa una vez desde `RestauranteApp` recibiendo el Context.
+ * solo cuando se utilicen por primera vez). Se inicializa una vez desde `MainActivity` recibiendo el Context.
  */
 object Repositorios {
 
@@ -34,17 +33,12 @@ object Repositorios {
     }
 
     private val database: AppDatabase by lazy {
-        check(::appContext.isInitialized) { "Repositorios.iniciar(context) debe llamarse en RestauranteApp antes de acceder a la capa de datos." }
+        check(::appContext.isInitialized) { "Repositorios.iniciar(context) debe llamarse en MainActivity antes de acceder a la capa de datos." }
         AppDatabase.obtenerInstancia(appContext)
     }
 
-    private val sesionPreferencias: SesionPreferencias by lazy {
-        check(::appContext.isInitialized) { "Repositorios.iniciar(context) debe llamarse en RestauranteApp antes de acceder a la capa de datos." }
-        SesionPreferencias(appContext)
-    }
-
     val auth: AuthRepository by lazy {
-        AuthRepositoryDatos(database.usuarioDao(), sesionPreferencias)
+        AuthRepositoryDatos(database.usuarioDao())
     }
 
     val productos: ProductoRepository by lazy { ProductoRepositoryDatos(database.productoDao()) }

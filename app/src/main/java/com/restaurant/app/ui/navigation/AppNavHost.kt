@@ -69,9 +69,13 @@ fun AppNavHost() {
             // Pantalla Splash
             entry<Screen.Splash> {
                 SplashScreen(
-                    onFinished = {
+                    onNavegarALogin = {
                         backStack.add(Screen.Login)
                         backStack.remove(Screen.Splash)
+                    },
+                    onNavegarAHome = {
+                        backStack.clear()
+                        backStack.add(Screen.Home)
                     }
                 )
             }
